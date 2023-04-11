@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class UserService : Service
+public class UserService
 {
     private readonly IMongoCollection<User> _userCollection;
 
@@ -22,18 +22,18 @@ public class UserService : Service
                     snuffDatabaseSettings.Value.SnuffCollection);
         }
     
-    public async Task<List<User>> GetAsync() => 
+    public async Task<List<User>> GetAllUsersAsync() => 
         await _userCollection.Find(_ => true).ToListAsync();
 
-    public async Task<User?> GetAsync(string id) =>
+    public async Task<User> GetUserAsync(string id) =>
         await _userCollection.Find(x => x.Uid == id).FirstOrDefaultAsync();
 
-    public async Task CreateAsync(User newUser) =>
+    public async Task CreateUserAsync(User newUser) =>
         await _userCollection.InsertOneAsync(newUser);
 
-    public async Task UpdateAsync(string id, User updatedUser) =>
+    public async Task UpdateUserAsync(string id, User updatedUser) =>
         await _userCollection.ReplaceOneAsync(x => x.Uid == id, updatedUser);
 
-    public async Task RemoveAsync(string id) =>
+    public async Task RemoveUserAsync(string id) =>
         await _userCollection.DeleteOneAsync(x => x.Uid == id);
 }

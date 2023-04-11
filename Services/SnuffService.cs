@@ -5,11 +5,11 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class Service<T> : Object
+public class SnuffService
 {
-    private readonly IMongoCollection<T> _serviceCollection;
+    private readonly IMongoCollection<Snuff> _serviceCollection;
 
-    public Service(
+    public SnuffService(
         IOptions<SnuffDatabaseSettings> snuffDatabaseSettings)
         {
             var mongoClient = new MongoClient(
@@ -18,22 +18,22 @@ public class Service<T> : Object
             var mongoDatabase = mongoClient.GetDatabase(
                     snuffDatabaseSettings.Value.DatabaseName);
 
-            _serviceCollection = mongoDatabase.GetCollection<T>(
+            _serviceCollection = mongoDatabase.GetCollection<Snuff>(
                     snuffDatabaseSettings.Value.SnuffCollection);
         }
     
-    public async Task<List<T>> GetAsync() => 
+    public async Task<List<Snuff>> GetAllSnuffAsync() => 
         await _serviceCollection.Find(_ => true).ToListAsync();
 
-    // public async Task<T?> GetAsync(string id) =>
-    //     await _serviceCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+    public async Task<Snuff> GetSnuffAsync(string id) =>
+        await _serviceCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-    // public async Task CreateAsync(T newObject) =>
-    //     await _serviceCollection.InsertOneAsync(newObject);
+    public async Task CreateSnuffAsync(Snuff newSnuff) =>
+        await _serviceCollection.InsertOneAsync(newSnuff);
 
-    // public async Task UpdateAsync(string id, T updatedObject) =>
-    //     await _serviceCollection.ReplaceOneAsync(x => x.Id == id, updatedObject);
+    public async Task UpdateSnuffAsync(string id, Snuff updatedSnuff) =>
+        await _serviceCollection.ReplaceOneAsync(x => x.Id == id, updatedSnuff);
 
-    // public async Task RemoveAsync(string id) =>
-    //     await _serviceCollection.DeleteOneAsync(x => x.Id == id);
+    public async Task RemoveSnuffAsync(string id) =>
+        await _serviceCollection.DeleteOneAsync(x => x.Id == id);
 }

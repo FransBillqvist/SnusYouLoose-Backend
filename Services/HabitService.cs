@@ -5,11 +5,11 @@ using MongoDB.Driver;
 
 namespace Services;
 
-public class Service<T> : Object
+public class HabitService
 {
-    private readonly IMongoCollection<T> _serviceCollection;
+    private readonly IMongoCollection<Habit> _serviceCollection;
 
-    public Service(
+    public HabitService(
         IOptions<SnuffDatabaseSettings> snuffDatabaseSettings)
         {
             var mongoClient = new MongoClient(
@@ -18,22 +18,22 @@ public class Service<T> : Object
             var mongoDatabase = mongoClient.GetDatabase(
                     snuffDatabaseSettings.Value.DatabaseName);
 
-            _serviceCollection = mongoDatabase.GetCollection<T>(
+            _serviceCollection = mongoDatabase.GetCollection<Habit>(
                     snuffDatabaseSettings.Value.SnuffCollection);
         }
     
-    public async Task<List<T>> GetAsync() => 
+    public async Task<List<Habit>> GetAllHabitsAsync() => 
         await _serviceCollection.Find(_ => true).ToListAsync();
 
-    // public async Task<T?> GetAsync(string id) =>
-    //     await _serviceCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+    public async Task<Habit> GetHabitAsync(string id) =>
+        await _serviceCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-    // public async Task CreateAsync(T newObject) =>
-    //     await _serviceCollection.InsertOneAsync(newObject);
+    public async Task CreateHabitAsync(Habit newHabit) =>
+        await _serviceCollection.InsertOneAsync(newHabit);
 
-    // public async Task UpdateAsync(string id, T updatedObject) =>
-    //     await _serviceCollection.ReplaceOneAsync(x => x.Id == id, updatedObject);
+    public async Task UpdateHabitAsync(string id, Habit updatedHabit) =>
+        await _serviceCollection.ReplaceOneAsync(x => x.Id == id, updatedHabit);
 
-    // public async Task RemoveAsync(string id) =>
-    //     await _serviceCollection.DeleteOneAsync(x => x.Id == id);
+    public async Task RemoveHabitAsync(string id) =>
+        await _serviceCollection.DeleteOneAsync(x => x.Id == id);
 }
