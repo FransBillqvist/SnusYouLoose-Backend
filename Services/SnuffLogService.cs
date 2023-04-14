@@ -26,14 +26,14 @@ public class SnuffLogService
         await _serviceCollection.Find(_ => true).ToListAsync();
 
     public async Task<SnuffLog> GetSnuffLogAsync(string id) =>
-        await _serviceCollection.Find(x => x.SnuffLogId == id).FirstOrDefaultAsync();
+        await _serviceCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
     public async Task CreateSnuffLogAsync(SnuffLog newSnuffLog) =>
         await _serviceCollection.InsertOneAsync(newSnuffLog);
 
     public async Task UpdateSnuffLogAsync(string id, SnuffLog updatedSnuffLog) =>
-        await _serviceCollection.ReplaceOneAsync(x => x.SnuffLogId == id, updatedSnuffLog);
+        await _serviceCollection.ReplaceOneAsync(x => x.Id == id, updatedSnuffLog);
 
     public async Task RemoveSnuffLogAsync(string id) =>
-        await _serviceCollection.DeleteOneAsync(x => x.SnuffLogId == id);
+        await _serviceCollection.DeleteOneAsync(x => x.Id == id);
 }

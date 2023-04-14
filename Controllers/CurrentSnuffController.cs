@@ -51,7 +51,7 @@ public class CurrentSnuffController : ControllerBase
             return NotFound();
         }
 
-        updatedCurrentSnuff.Id = updatedCurrentSnuff.Id;
+       updatedCurrentSnuff.Id = currentSnuff.Id;
 
         await _currentSnuffService.UpdateCurrentSnuffAsync(id, updatedCurrentSnuff);
 

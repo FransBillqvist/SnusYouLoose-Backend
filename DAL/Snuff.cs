@@ -1,7 +1,12 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace DAL;
 
 public class Snuff
 {
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
     public string Id {get; set;}
     public string Brand {get; set;}
     public string Type {get; set;}
