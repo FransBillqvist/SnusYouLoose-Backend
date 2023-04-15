@@ -3,11 +3,9 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace DAL;
 
-public class User
+[BsonCollection("Users")]
+public class User : Document
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Uid { get; set;}
     public string Email {get; set;}
     [BsonElement("Name")]
     public string Name {get; set;}

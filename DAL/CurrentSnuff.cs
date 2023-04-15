@@ -3,11 +3,9 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace DAL;
 
-public class CurrentSnuff
+[BsonCollection("CurrentSnuffs")]
+public class CurrentSnuff : Document
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
     [BsonElement("SnusId")]
     public string SnusId { get; set; }
     public DateTime PurchaseDate { get; set; }

@@ -1,5 +1,6 @@
 using DAL;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using Services;
 
 namespace Controllers;
@@ -23,7 +24,8 @@ public class UserController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<User>> Get(string id)
     {
-        var user = await _userService.GetUserAsync(id);
+        ObjectId mongoId = ObjectId.Parse(id);
+        var user = await _userService.GetUserAsync(mongoId);
 
         if (user is null)
         {
@@ -38,22 +40,23 @@ public class UserController : ControllerBase
     {
         await _userService.CreateUserAsync(newUser);
 
-        return CreatedAtAction(nameof(Get), new { id = newUser.Uid }, newUser);
+        return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
     }
 
     [HttpPut]
     public async Task<IActionResult> Update(string id, User updatedUser)
     {
-        var user = await _userService.GetUserAsync(id);
+        ObjectId mongoId = ObjectId.Parse(id);
+        var user = await _userService.GetUserAsync(mongoId);
 
         if (user is null)
         {
             return NotFound();
         }
 
-        updatedUser.Uid = user.Uid;
+        updatedUser.Id = user.Id;
 
-        await _userService.UpdateUserAsync(id, updatedUser);
+        await _userService.UpdateUserAsync(mongoId, updatedUser);
 
         return NoContent();
     }
@@ -61,14 +64,15 @@ public class UserController : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> Delete(string id)
     {
-        var user = await _userService.GetUserAsync(id);
+        ObjectId mongoId = ObjectId.Parse(id);
+        var user = await _userService.GetUserAsync(mongoId);
 
         if (user is null)
         {
             return NotFound();
         }
 
-        await _userService.RemoveUserAsync(id);
+        await _userService.RemoveUserAsync(mongoId);
 
         return NoContent();
     }
