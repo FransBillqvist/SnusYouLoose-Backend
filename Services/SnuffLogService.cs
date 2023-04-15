@@ -7,21 +7,21 @@ namespace Services;
 
 public class SnuffLogService
 {
-    private readonly IMongoCollection<SnuffLog> _serviceCollection;
+    //     private readonly IMongoCollection<SnuffLog> _serviceCollection;
 
-    public SnuffLogService(
-        IOptions<SnuffDatabaseSettings> snuffDatabaseSettings)
-        {
-            var mongoClient = new MongoClient(
-                snuffDatabaseSettings.Value.ConnectionString);
+    //     public SnuffLogService(
+    //         IOptions<SnuffDatabaseSettings> snuffDatabaseSettings)
+    //         {
+    //             var mongoClient = new MongoClient(
+    //                 snuffDatabaseSettings.Value.ConnectionString);
 
-            var mongoDatabase = mongoClient.GetDatabase(
-                    snuffDatabaseSettings.Value.DatabaseName);
+    //             var mongoDatabase = mongoClient.GetDatabase(
+    //                     snuffDatabaseSettings.Value.DatabaseName);
 
-            _serviceCollection = mongoDatabase.GetCollection<SnuffLog>(
-                    snuffDatabaseSettings.Value.SnuffCollection);
-        }
-    
+    //             _serviceCollection = mongoDatabase.GetCollection<SnuffLog>(
+    //                     snuffDatabaseSettings.Value.SnuffCollection);
+    //         }
+
     // public async Task<List<SnuffLog>> GetAllSnuffLogsAsync() => 
     //     await _serviceCollection.Find(_ => true).ToListAsync();
 

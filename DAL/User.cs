@@ -6,7 +6,8 @@ namespace DAL;
 [BsonCollection("Users")]
 public class User : Document
 {
-    public string Email {get; set;}
+    [BsonElement("Email")]
+    public string Email { get; set; }
     [BsonElement("Name")]
-    public string Name {get; set;}
+    public string Name { get; set; }
 }

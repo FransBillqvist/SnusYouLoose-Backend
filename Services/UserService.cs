@@ -1,40 +1,29 @@
 using DAL;
-using DAL.Models;
-using Microsoft.Extensions.Options;
+using DAL.Interfaces;
 using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace Services;
 
 public class UserService
 {
-    private readonly IMongoCollection<User> _userCollection;
+    private readonly IGenericMongoRepository<User> _userRepository;
+    // private readonly IServiceProvider _serviceProvider;
+    public UserService(IGenericMongoRepository<User> userRepository)
+    {
+        _userRepository = userRepository;
+    }
 
-    public UserService(
-        IOptions<SnuffDatabaseSettings> snuffDatabaseSettings)
-        {
-            var mongoClient = new MongoClient(
-                snuffDatabaseSettings.Value.ConnectionString);
-
-            var mongoDatabase = mongoClient.GetDatabase(
-                    snuffDatabaseSettings.Value.DatabaseName);
-
-            _userCollection = mongoDatabase.GetCollection<User>(
-                    snuffDatabaseSettings.Value.SnuffCollection);
-        }
-    
-    // public async Task<List<User>> GetAllUsersAsync() => 
-    //     await _userCollection.Find(_ => true).ToListAsync();
-
-    // public async Task<User> GetUserAsync(ObjectId id) =>
-    //     await _userCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
-
-    // public async Task CreateUserAsync(User newUser) =>
-    //     await _userCollection.InsertOneAsync(newUser);
-
-    // public async Task UpdateUserAsync(ObjectId id, User updatedUser) =>
-    //     await _userCollection.ReplaceOneAsync(x => x.Id == id, updatedUser);
-
-    // public async Task RemoveUserAsync(ObjectId id) =>
-    //     await _userCollection.DeleteOneAsync(x => x.Id == id);
+    // public async Task<List<User>> GetAllUsersAsync()
+    // {
+    //     var dummy = new DateTime(2022, 1, 1);
+    //      var repsone =  await _userRepo.FilterBy(o => o.CreatedAtUtc > dummy);
+    // }
+    public async Task<User> GetUserAsync(string id) => await _userRepository.FindByIdAsync(id);
+    public async Task CreateUserAsync(User newUser) => await _userRepository.InsertOneAsync(newUser);
+    public async Task UpdateUserAsync(User updatedUser) => await _userRepository.ReplaceOneAsync(updatedUser);
+    public async Task RemoveUserAsync(string id)
+    {
+        ObjectId mongoId = ObjectId.Parse(id);
+        await _userRepository.DeleteOneAsync(x => x.Id == mongoId);
+    }
 }

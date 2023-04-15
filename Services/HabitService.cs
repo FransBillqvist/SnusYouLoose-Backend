@@ -7,21 +7,21 @@ namespace Services;
 
 public class HabitService
 {
-    private readonly IMongoCollection<Habit> _serviceCollection;
+    //     private readonly IMongoCollection<Habit> _serviceCollection;
 
-    public HabitService(
-        IOptions<SnuffDatabaseSettings> snuffDatabaseSettings)
-        {
-            var mongoClient = new MongoClient(
-                snuffDatabaseSettings.Value.ConnectionString);
+    //     public HabitService(
+    //         IOptions<SnuffDatabaseSettings> snuffDatabaseSettings)
+    //         {
+    //             var mongoClient = new MongoClient(
+    //                 snuffDatabaseSettings.Value.ConnectionString);
 
-            var mongoDatabase = mongoClient.GetDatabase(
-                    snuffDatabaseSettings.Value.DatabaseName);
+    //             var mongoDatabase = mongoClient.GetDatabase(
+    //                     snuffDatabaseSettings.Value.DatabaseName);
 
-            _serviceCollection = mongoDatabase.GetCollection<Habit>(
-                    snuffDatabaseSettings.Value.SnuffCollection);
-        }
-    
+    //             _serviceCollection = mongoDatabase.GetCollection<Habit>(
+    //                     snuffDatabaseSettings.Value.SnuffCollection);
+    //         }
+
     // public async Task<List<Habit>> GetAllHabitsAsync() => 
     //     await _serviceCollection.Find(_ => true).ToListAsync();
 

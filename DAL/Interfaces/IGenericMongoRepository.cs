@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using MongoDB.Bson;
 
 namespace DAL.Interfaces;
 
@@ -23,7 +24,7 @@ public interface IGenericMongoRepository<TDocument> where TDocument : IDocument
     void DeleteOne(Expression<Func<TDocument, bool>> filter);
     Task DeleteOneAsync(Expression<Func<TDocument, bool>> filter);
     void DeleteById(string id);
-    Task DeleteByIdAsync (string id);
+    Task DeleteByIdAsync(string id);
     void DeleteMany(Expression<Func<TDocument, bool>> filter);
     Task DeleteManyAsync(Expression<Func<TDocument, bool>> filter);
 }

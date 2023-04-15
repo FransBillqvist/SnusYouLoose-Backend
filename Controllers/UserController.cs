@@ -1,4 +1,5 @@
 using DAL;
+using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using Services;
@@ -10,72 +11,73 @@ namespace Controllers;
 public class UserController : ControllerBase
 {
     private readonly ILogger<UserController> _logger;
-    private readonly UserService _userService;
+    private readonly IGenericMongoRepository<User> _userRepository;
 
-    public UserController(ILogger<UserController> logger, UserService userService)
+    public UserController(ILogger<UserController> logger, IGenericMongoRepository<User> userRepository)
     {
         _logger = logger;
-        _userService = userService;
+        _userRepository = userRepository;
     }
 
-    [HttpGet]
-    public async Task<List<User>> Get() => await _userService.GetAllUsersAsync();
+    // [HttpGet]
+    // public async Task<List<User>> Get() => await _userService.GetAllUsersAsync();
 
-    [HttpGet]
-    public async Task<ActionResult<User>> Get(string id)
-    {
-        ObjectId mongoId = ObjectId.Parse(id);
-        var user = await _userService.GetUserAsync(mongoId);
+    // [HttpGet]
+    // [Route("user/{id}")]
+    // public async Task<ActionResult<User>> Get(string id)
+    // {
+    //     var user = await _userRepository.GetUserAsync(id);
 
-        if (user is null)
-        {
-            return NotFound();
-        }
+    //     if (user is null)
+    //     {
+    //         return NotFound();
+    //     }
 
-        return user;
-    }
+    //     return user;
+    // }
 
     [HttpPost]
+    [Route("user/new")]
     public async Task<IActionResult> Post(User newUser)
     {
-        await _userService.CreateUserAsync(newUser);
+        await _userRepository.InsertOneAsync(newUser);
 
-        return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+        return CreatedAtAction(nameof(User), new { id = newUser.Id }, newUser);
     }
 
-    [HttpPut]
-    public async Task<IActionResult> Update(string id, User updatedUser)
-    {
-        ObjectId mongoId = ObjectId.Parse(id);
-        var user = await _userService.GetUserAsync(mongoId);
+    // [HttpPut]
+    // [Route("user/update/{id}")]
+    // public async Task<IActionResult> Update(string id, User updatedUser)
+    // {
+    //     var user = await _userRepository.GetUserAsync(id);
 
-        if (user is null)
-        {
-            return NotFound();
-        }
+    //     if (user is null)
+    //     {
+    //         return NotFound();
+    //     }
 
-        updatedUser.Id = user.Id;
+    //     updatedUser.Id = user.Id;
 
-        await _userService.UpdateUserAsync(mongoId, updatedUser);
+    //     await _userRepository.UpdateUserAsync(updatedUser);
 
-        return NoContent();
-    }
+    //     return NoContent();
+    // }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete(string id)
-    {
-        ObjectId mongoId = ObjectId.Parse(id);
-        var user = await _userService.GetUserAsync(mongoId);
+    // [HttpDelete]
+    // [Route("user/delete/{id}")]
+    // public async Task<IActionResult> Delete(string id)
+    // {
+    //     var user = await _userRepository.GetUserAsync(id);
 
-        if (user is null)
-        {
-            return NotFound();
-        }
+    //     if (user is null)
+    //     {
+    //         return NotFound();
+    //     }
 
-        await _userService.RemoveUserAsync(mongoId);
+    //     await _userRepository.RemoveUserAsync(id);
 
-        return NoContent();
-    }
+    //     return NoContent();
+    // }
 
-   
+
 }

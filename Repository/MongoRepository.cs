@@ -10,7 +10,7 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
 {
     private readonly IMongoCollection<TDocument> _collection;
 
-    public MongoRepository(SnuffDatabaseSettings settings)
+    public MongoRepository(MongoDbSettings settings)
     {
         var database = new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
         _collection = database.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
@@ -18,7 +18,7 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
 
     private protected string GetCollectionName(Type documentType)
     {
-        return ((BsonCollectionAttribute) documentType.GetCustomAttributes(
+        return ((BsonCollectionAttribute)documentType.GetCustomAttributes(
             typeof(BsonCollectionAttribute),
             true)
             .FirstOrDefault())?.CollectionName;
@@ -48,7 +48,7 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
 
     public virtual Task<TDocument> FindByIdAsync(string id)
     {
-        return Task.Run(() => 
+        return Task.Run(() =>
         {
             var objectId = new ObjectId(id);
             var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
@@ -117,7 +117,7 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
 
     public Task DeleteByIdAsync(string id)
     {
-        return Task.Run(() => 
+        return Task.Run(() =>
         {
             var objectId = new ObjectId(id);
             var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
