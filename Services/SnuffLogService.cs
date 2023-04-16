@@ -1,4 +1,5 @@
 using DAL;
+using DAL.Interfaces;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -7,21 +8,19 @@ namespace Services;
 
 public class SnuffLogService
 {
-    //     private readonly IMongoCollection<SnuffLog> _serviceCollection;
+    private readonly IGenericMongoRepository<SnuffLog> _snuffLogRepository;
 
-    //     public SnuffLogService(
-    //         IOptions<SnuffDatabaseSettings> snuffDatabaseSettings)
-    //         {
-    //             var mongoClient = new MongoClient(
-    //                 snuffDatabaseSettings.Value.ConnectionString);
+    public SnuffLogService(
+        IOptions<MongoDbSettings> Settings)
+    {
+        var mongoClient = new MongoClient(
+            Settings.Value.ConnectionString);
 
-    //             var mongoDatabase = mongoClient.GetDatabase(
-    //                     snuffDatabaseSettings.Value.DatabaseName);
-
-    //             _serviceCollection = mongoDatabase.GetCollection<SnuffLog>(
-    //                     snuffDatabaseSettings.Value.SnuffCollection);
-    //         }
-
+        var mongoDatabase = mongoClient.GetDatabase(
+                Settings.Value.DatabaseName);
+    }
+    public async Task CreateSnuffLogAsync(SnuffLog newSnuffLog) =>
+        await _snuffLogRepository.InsertOneAsync(newSnuffLog);
     // public async Task<List<SnuffLog>> GetAllSnuffLogsAsync() => 
     //     await _serviceCollection.Find(_ => true).ToListAsync();
 
