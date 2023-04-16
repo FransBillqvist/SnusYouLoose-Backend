@@ -28,6 +28,12 @@ public class CurrentSnuffService
     {
         var req = await _currentSnuffRepository.FindOneAsync(x => x.Id == boxId);
         var result = req.CurrentAmount;
+
+        if (result == null)
+        {
+            return 0;
+        }
+
         return result;
     }
 
