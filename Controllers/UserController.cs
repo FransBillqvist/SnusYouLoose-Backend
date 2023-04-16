@@ -23,25 +23,22 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("TEST")]
-    public IEnumerable<string> GetUserData(string id)
+    public async Task<ActionResult<User>> GetUserData(string id)
     {
-        var users = _userRepository.FilterBy(
-            filter => filter.Id == id,
-            projection => projection.Id
-        );
+        var response = await _userRepository.FindOneAsync(x => x.Id == id);
 
-        if (users is null)
+        if (response is null)
         {
             return null;
         }
 
-        return users;
+        return response;
     }
 
 
     [HttpGet]
     [Route("Get/{Id}")]
-     public IEnumerable<string> GetUserDataById(string id)
+    public IEnumerable<string> GetUserDataById(string id)
     {
         var hej = ObjectId.Parse(id);
         var users = _userRepository.FilterBy(
@@ -69,7 +66,7 @@ public class UserController : ControllerBase
         catch
         {
             return BadRequest();
-        }      
+        }
     }
 
     [HttpPut]
@@ -82,7 +79,7 @@ public class UserController : ControllerBase
 
             if (user is null)
             {
-            return NotFound();
+                return NotFound();
             }
 
             updatedUser.Id = user.Id;
