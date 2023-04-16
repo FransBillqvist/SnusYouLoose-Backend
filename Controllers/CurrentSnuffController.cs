@@ -1,7 +1,5 @@
-using Services;
 using Microsoft.AspNetCore.Mvc;
 using DAL;
-using MongoDB.Bson;
 using DAL.Interfaces;
 
 namespace Controllers;
@@ -20,12 +18,9 @@ public class CurrentSnuffController : ControllerBase
         _csRepository = CSRepository;
     }
 
-    //     [HttpGet]
-    //     public async Task<List<CurrentSnuff>> Get() => await _currentSnuffService.GetAllCurrentSnuffAsync();
-
     [HttpGet]
-    [Route("get/{id}")]
-    public async Task<ActionResult<CurrentSnuff>> Get(string id)
+    [Route("Get/{id}")]
+    public async Task<ActionResult<CurrentSnuff>> GetCurrentSnuff(string id)
     {
         var currentSnuff = await _csRepository.FindOneAsync(x => x.Id == id);
 
@@ -38,45 +33,68 @@ public class CurrentSnuffController : ControllerBase
     }
 
     [HttpPost]
-    [Route("post")]
+    [Route("Create")]
     public async Task<IActionResult> Post(CurrentSnuff newCurrentSnuff)
     {
-        await _csRepository.InsertOneAsync(newCurrentSnuff);
+        try
+        {
+            await _csRepository.InsertOneAsync(newCurrentSnuff);
+            return CreatedAtAction(nameof(CurrentSnuff), new { id = newCurrentSnuff.Id }, newCurrentSnuff);
+        }
 
-        return CreatedAtAction(nameof(Get), new { id = newCurrentSnuff.Id }, newCurrentSnuff);
+        catch
+        {
+            return BadRequest();
+        }
     }
 
-    //     [HttpPut]
-    //     public async Task<IActionResult> Update(string id, CurrentSnuff updatedCurrentSnuff)
-    //     {
-    //         ObjectId mongoId = ObjectId.Parse(id);
-    //         var currentSnuff = await _currentSnuffService.GetCurrentSnuffAsync(mongoId);
+    [HttpPut]
+    [Route("Update/{id}")]
+        public async Task<IActionResult> Update(string id, CurrentSnuff updatedCurrentSnuff)
+        {
+    
+            try
+        {
+            var currentSnuff = await _csRepository.FindByIdAsync(id);
 
-    //         if (currentSnuff is null)
-    //         {
-    //             return NotFound();
-    //         }
+            if (currentSnuff is null)
+            {
+                return NotFound();
+            }
 
-    //        updatedCurrentSnuff.Id = currentSnuff.Id;
+            updatedCurrentSnuff.Id = currentSnuff.Id;
 
-    //         await _currentSnuffService.UpdateCurrentSnuffAsync(mongoId, updatedCurrentSnuff);
+            await _csRepository.ReplaceOneAsync(updatedCurrentSnuff);
 
-    //         return NoContent();
-    //     }
+            return Ok();
+        }
 
-    //     [HttpDelete]
-    //     public async Task<IActionResult> Delete(string id)
-    //     {
-    //         ObjectId mongoId = ObjectId.Parse(id);
-    //         var currentSnuff = await _currentSnuffService.GetCurrentSnuffAsync(mongoId);
+        catch
+        {
+            return BadRequest();
+        }
+        }
 
-    //         if (currentSnuff is null)
-    //         {
-    //             return NotFound();
-    //         }
+    [HttpDelete]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        try
+        {
+            var currentSnuff = await _csRepository.FindByIdAsync(id);
 
-    //         await _currentSnuffService.RemoveCurrentSnuffAsync(mongoId);
+            if (currentSnuff is null)
+            {
+                return NotFound();
+            }
 
-    //         return NoContent();
-    //     }
+            await _csRepository.DeleteByIdAsync(id);
+            return NoContent();
+            }
+        
+        catch
+        {
+            return BadRequest();
+        }
+    }
 }

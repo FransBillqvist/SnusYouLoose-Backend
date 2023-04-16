@@ -1,7 +1,6 @@
 using DAL;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 
 namespace Controllers;
 
@@ -18,40 +17,25 @@ public class UserController : ControllerBase
         _userRepository = userRepository;
     }
 
-    // [HttpGet]
-    // public async Task<List<User>> Get() => await _userService.GetAllUsersAsync();
-
     [HttpGet]
-    [Route("TEST")]
-    public async Task<ActionResult<User>> GetUserData(string id)
+    [Route("Get/{id}")]
+    public async Task<ActionResult<User>> GetUser(string id)
     {
-        var response = await _userRepository.FindOneAsync(x => x.Id == id);
-
-        if (response is null)
+        try
         {
-            return null;
+            var response = await _userRepository.FindOneAsync(x => x.Id == id);
+
+            if (response is null)
+            {
+                return null;
+            }
+
+            return response;
         }
-
-        return response;
-    }
-
-
-    [HttpGet]
-    [Route("Get/{Id}")]
-    public IEnumerable<string> GetUserDataById(string id)
-    {
-        var hej = ObjectId.Parse(id);
-        var users = _userRepository.FilterBy(
-            filter => filter.Id == "id",
-            projection => projection.Name
-        );
-
-        if (users is null)
+        catch
         {
-            return null;
+            return NotFound();
         }
-
-        return users;
     }
 
     [HttpPost]
@@ -110,6 +94,4 @@ public class UserController : ControllerBase
 
         return NoContent();
     }
-
-
 }
