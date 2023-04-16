@@ -24,7 +24,7 @@ public class CurrentSnuffService
         _currentSnuffRepository = currentSnuffRepository;
     }
 
-    public async Task<int> NumberOfAvilableSnuffInBox(string boxId)
+    public async Task<int> NumberOfAvailableSnuffInBox(string boxId)
     {
         var req = await _currentSnuffRepository.FindOneAsync(x => x.Id == boxId);
         var result = req.CurrentAmount;
