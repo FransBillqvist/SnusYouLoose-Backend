@@ -39,7 +39,7 @@ public class CurrentSnuffController : ControllerBase
         try
         {
             await _csRepository.InsertOneAsync(newCurrentSnuff);
-            return CreatedAtAction(nameof(CurrentSnuff), new { id = newCurrentSnuff.Id }, newCurrentSnuff);
+            return Ok();
         }
 
         catch
@@ -50,10 +50,10 @@ public class CurrentSnuffController : ControllerBase
 
     [HttpPut]
     [Route("Update/{id}")]
-        public async Task<IActionResult> Update(string id, CurrentSnuff updatedCurrentSnuff)
-        {
-    
-            try
+    public async Task<IActionResult> Update(string id, CurrentSnuff updatedCurrentSnuff)
+    {
+
+        try
         {
             var currentSnuff = await _csRepository.FindByIdAsync(id);
 
@@ -73,7 +73,7 @@ public class CurrentSnuffController : ControllerBase
         {
             return BadRequest();
         }
-        }
+    }
 
     [HttpDelete]
     [Route("Delete")]
@@ -90,8 +90,8 @@ public class CurrentSnuffController : ControllerBase
 
             await _csRepository.DeleteByIdAsync(id);
             return NoContent();
-            }
-        
+        }
+
         catch
         {
             return BadRequest();
