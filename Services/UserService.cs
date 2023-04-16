@@ -24,6 +24,6 @@ public class UserService
     public async Task RemoveUserAsync(string id)
     {
         ObjectId mongoId = ObjectId.Parse(id);
-        await _userRepository.DeleteOneAsync(x => x.Id == mongoId);
+        await _userRepository.DeleteOneAsync(x => x.Id == mongoId.ToString());
     }
 }

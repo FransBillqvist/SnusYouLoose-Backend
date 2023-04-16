@@ -2,7 +2,6 @@ using DAL;
 using DAL.Interfaces;
 using Microsoft.Extensions.Options;
 using Repository;
-using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

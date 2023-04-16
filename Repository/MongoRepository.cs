@@ -41,8 +41,9 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
 
     public virtual TDocument FindById(string id)
     {
-        var objectId = new ObjectId(id);
-        var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+        ObjectId objectId;
+        ObjectId.TryParse(id, out objectId);
+        var filter = Builders<TDocument>.Filter.Eq(id, objectId);
         return _collection.Find(filter).SingleOrDefault();
     }
 
@@ -50,8 +51,9 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
     {
         return Task.Run(() =>
         {
-            var objectId = new ObjectId(id);
-            var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+            ObjectId objectId;
+            ObjectId.TryParse(id, out objectId);
+            var filter = Builders<TDocument>.Filter.Eq(id, objectId);
             return _collection.Find(filter).SingleOrDefaultAsync();
         });
     }
@@ -111,7 +113,7 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
     public void DeleteById(string id)
     {
         var objectId = new ObjectId(id);
-        var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+        var filter = Builders<TDocument>.Filter.Eq(id, objectId.ToString);
         _collection.FindOneAndDelete(filter);
     }
 
@@ -120,7 +122,7 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
         return Task.Run(() =>
         {
             var objectId = new ObjectId(id);
-            var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+            var filter = Builders<TDocument>.Filter.Eq(id, objectId.ToString);
             _collection.FindOneAndDeleteAsync(filter);
         });
     }

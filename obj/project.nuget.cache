@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xpM5cfa08dwZuE7dBu+/oozzT5zn607D+0edHVnFL4dPnOg/XxZoZVgOhw6B4cc1bSlliaR5qjszO4EMEmBv1w==",
+  "dgSpecHash": "dS+FDgYeZ/5CSmrXdn0QAqgDG0ctaPdKMNv+zLKGrgJd6wUCVG/hpK5hIcQV/1nDBAet84Z+dERT6m+s8gIaXw==",
   "success": true,
-  "projectFilePath": "c:\\C# projects\\Övriga uppgifter\\SUL-Backend\\SUL-Backend.csproj",
+  "projectFilePath": "C:\\C# projects\\Övriga uppgifter\\SUL-Backend\\SUL-Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Daniel\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\Daniel\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",

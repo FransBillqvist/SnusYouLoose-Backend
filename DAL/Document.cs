@@ -8,6 +8,7 @@ public abstract class Document : IDocument
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public ObjectId Id {get; set;}
-    public DateTime CreatedAtUtc => Id.CreationTime;
+    public string Id {get; set; } = null;
+     [BsonElement("CreatedAtUtc")]
+    public DateTime CreatedAtUtc => DateTime.UtcNow;
 }

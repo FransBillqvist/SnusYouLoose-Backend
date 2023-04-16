@@ -7,6 +7,6 @@ public interface IDocument
 {
     [BsonId]
     [BsonRepresentation(BsonType.String)]
-    ObjectId Id {get; set; }
+    public string Id { get; set; }
     DateTime CreatedAtUtc {get;}
 }

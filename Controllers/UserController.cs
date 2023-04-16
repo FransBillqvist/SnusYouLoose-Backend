@@ -2,7 +2,6 @@ using DAL;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using Services;
 
 namespace Controllers;
 
@@ -22,62 +21,98 @@ public class UserController : ControllerBase
     // [HttpGet]
     // public async Task<List<User>> Get() => await _userService.GetAllUsersAsync();
 
-    // [HttpGet]
-    // [Route("user/{id}")]
-    // public async Task<ActionResult<User>> Get(string id)
-    // {
-    //     var user = await _userRepository.GetUserAsync(id);
-
-    //     if (user is null)
-    //     {
-    //         return NotFound();
-    //     }
-
-    //     return user;
-    // }
-
-    [HttpPost]
-    [Route("user/new")]
-    public async Task<IActionResult> Post(User newUser)
+    [HttpGet]
+    [Route("TEST")]
+    public IEnumerable<string> GetUserData(string id)
     {
-        await _userRepository.InsertOneAsync(newUser);
+        var users = _userRepository.FilterBy(
+            filter => filter.Id == id,
+            projection => projection.Id
+        );
 
-        return CreatedAtAction(nameof(User), new { id = newUser.Id }, newUser);
+        if (users is null)
+        {
+            return null;
+        }
+
+        return users;
     }
 
-    // [HttpPut]
-    // [Route("user/update/{id}")]
-    // public async Task<IActionResult> Update(string id, User updatedUser)
-    // {
-    //     var user = await _userRepository.GetUserAsync(id);
 
-    //     if (user is null)
-    //     {
-    //         return NotFound();
-    //     }
+    [HttpGet]
+    [Route("Get/{Id}")]
+     public IEnumerable<string> GetUserDataById(string id)
+    {
+        var hej = ObjectId.Parse(id);
+        var users = _userRepository.FilterBy(
+            filter => filter.Id == "id",
+            projection => projection.Name
+        );
 
-    //     updatedUser.Id = user.Id;
+        if (users is null)
+        {
+            return null;
+        }
 
-    //     await _userRepository.UpdateUserAsync(updatedUser);
+        return users;
+    }
 
-    //     return NoContent();
-    // }
+    [HttpPost]
+    [Route("Create")]
+    public async Task<IActionResult> Post(User newUser)
+    {
+        try
+        {
+            await _userRepository.InsertOneAsync(newUser);
+            return Ok();
+        }
+        catch
+        {
+            return BadRequest();
+        }      
+    }
 
-    // [HttpDelete]
-    // [Route("user/delete/{id}")]
-    // public async Task<IActionResult> Delete(string id)
-    // {
-    //     var user = await _userRepository.GetUserAsync(id);
+    [HttpPut]
+    [Route("Update/{id}")]
+    public async Task<IActionResult> Update(string id, User updatedUser)
+    {
+        try
+        {
+            var user = await _userRepository.FindByIdAsync(id);
 
-    //     if (user is null)
-    //     {
-    //         return NotFound();
-    //     }
+            if (user is null)
+            {
+            return NotFound();
+            }
 
-    //     await _userRepository.RemoveUserAsync(id);
+            updatedUser.Id = user.Id;
 
-    //     return NoContent();
-    // }
+            await _userRepository.ReplaceOneAsync(updatedUser);
+
+            return Ok();
+        }
+
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [HttpDelete]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var user = await _userRepository.FindByIdAsync(id);
+
+        if (user is null)
+        {
+            return NotFound();
+        }
+
+        await _userRepository.DeleteByIdAsync(id);
+
+        return NoContent();
+    }
 
 
 }
