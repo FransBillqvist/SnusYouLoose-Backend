@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class HabitController : ControllerBase
 {
     private readonly ILogger<HabitController> _logger;
@@ -23,7 +23,7 @@ public class HabitController : ControllerBase
         try
         {
             var habit = await _habitRepository.FindOneAsync(x => x.Id == id);
-        
+
             if (habit is null)
             {
                 return null;
@@ -64,8 +64,8 @@ public class HabitController : ControllerBase
             {
                 return NotFound();
             }
-        
-        
+
+
             updatedHabit.Id = habit.Id;
 
             await _habitRepository.ReplaceOneAsync(updatedHabit);

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class SnuffController : ControllerBase
 {
     private readonly ILogger<SnuffController> _logger;

@@ -7,7 +7,7 @@ using Services;
 namespace Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class SnuffLogController : ControllerBase
 {
     private readonly ILogger<SnuffLogController> _logger;
