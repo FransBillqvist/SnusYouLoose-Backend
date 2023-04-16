@@ -1,8 +1,6 @@
 using DAL;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using Services;
 
 namespace Controllers;
 

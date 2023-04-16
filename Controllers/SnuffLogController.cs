@@ -1,80 +1,100 @@
-// using DAL;
-// using Microsoft.AspNetCore.Mvc;
-// using MongoDB.Bson;
-// using Services;
+using DAL;
+using DAL.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using Services;
 
-// namespace Controllers;
+namespace Controllers;
 
-// [ApiController]
-// [Route("[controller]")]
-// public class SnuffLogController : ControllerBase
-// {
-//     private readonly ILogger<SnuffLogController> _logger;
-//     private readonly SnuffLogService _snuffLogService;
+[ApiController]
+[Route("[controller]")]
+public class SnuffLogController : ControllerBase
+{
+    private readonly ILogger<SnuffLogController> _logger;
+    private readonly IGenericMongoRepository<SnuffLog> _snuffLogRepository;
 
-//     public SnuffLogController(ILogger<SnuffLogController> logger, SnuffLogService snuffLogService)
-//     {
-//         _logger = logger;
-//         _snuffLogService = snuffLogService;
-//     }
+    public SnuffLogController(ILogger<SnuffLogController> logger, IGenericMongoRepository<SnuffLog> snuffLogRepository)
+    {
+        _logger = logger;
+        _snuffLogRepository = snuffLogRepository;
+    }
 
-//     [HttpGet]
-//     public async Task<List<SnuffLog>> Get() => await _snuffLogService.GetAllSnuffLogsAsync();
 
-//     [HttpGet]
-//     public async Task<ActionResult<SnuffLog>> Get(string id)
-//     {
-//         ObjectId mongoId = ObjectId.Parse(id);
-//         var snuffLog = await _snuffLogService.GetSnuffLogAsync(mongoId);
+    [HttpGet]
+    [Route("Get/{id}")]
+    public async Task<ActionResult<SnuffLog>> GetSnuffLog(string id)
+    {
+        try
+        {
+            var response = await _snuffLogRepository.FindOneAsync(x => x.Id == id);
 
-//         if (snuffLog is null)
-//         {
-//             return NotFound();
-//         }
+            if (response is null)
+            {
+                return null;
+            }
 
-//         return snuffLog;
-//     }
+            return response;
+        }
+        catch
+        {
+            return NotFound();
+        }
+    }
 
-//     [HttpPost]
-//     public async Task<IActionResult> Post(SnuffLog newSnuffLog)
-//     {
-//         await _snuffLogService.CreateSnuffLogAsync(newSnuffLog);
+    [HttpPost]
+    [Route("Create")]
+    public async Task<IActionResult> Post(SnuffLog newSnuffLog)
+    {
+        try
+        {
+            await _snuffLogRepository.InsertOneAsync(newSnuffLog);
+            return Ok();
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 
-//         return CreatedAtAction(nameof(Get), new { id = newSnuffLog.Id }, newSnuffLog);
-//     }
+    [HttpPut]
+    [Route("Update/{id}")]
+    public async Task<IActionResult> Update(string id, SnuffLog updatedSnuffLog)
+    {
+        try
+        {
+            var snuffLog = await _snuffLogRepository.FindByIdAsync(id);
 
-//     [HttpPut]
-//     public async Task<IActionResult> Update(string id, SnuffLog updatedSnuffLog)
-//     {
-//         ObjectId mongoId = ObjectId.Parse(id);
-//         var snuffLog = await _snuffLogService.GetSnuffLogAsync(mongoId);
+            if (snuffLog is null)
+            {
+                return NotFound();
+            }
 
-//         if (snuffLog is null)
-//         {
-//             return NotFound();
-//         }
+            updatedSnuffLog.Id = snuffLog.Id;
 
-//         updatedSnuffLog.Id = snuffLog.Id;
+            await _snuffLogRepository.ReplaceOneAsync(updatedSnuffLog);
 
-//         await _snuffLogService.UpdateSnuffLogAsync(mongoId, updatedSnuffLog);
+            return Ok();
+        }
 
-//         return NoContent();
-//     }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 
-//     [HttpDelete]
-//     public async Task<IActionResult> Delete(string id)
-//     {
-//         ObjectId mongoId = ObjectId.Parse(id);
-//         var snuffLog = await _snuffLogService.GetSnuffLogAsync(mongoId);
+    [HttpDelete]
+    [Route("Delete")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var snuffLog = await _snuffLogRepository.FindByIdAsync(id);
 
-//         if (snuffLog is null)
-//         {
-//             return NotFound();
-//         }
+        if (snuffLog is null)
+        {
+            return NotFound();
+        }
 
-//         await _snuffLogService.RemoveSnuffLogAsync(mongoId);
+        await _snuffLogRepository.DeleteByIdAsync(id);
 
-//         return NoContent();
-//     }
-   
-// }
+        return NoContent();
+    }
+}
