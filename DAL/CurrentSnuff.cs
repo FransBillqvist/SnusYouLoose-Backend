@@ -10,4 +10,5 @@ public class CurrentSnuff : Document
     public string SnusId { get; set; }
     public DateTime PurchaseDate { get; set; }
     public int CurrentAmount { get; set; }
+    public bool IsEmpty { get; set; }
 }

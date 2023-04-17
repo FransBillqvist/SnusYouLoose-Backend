@@ -2,6 +2,8 @@ using DAL;
 using DAL.Interfaces;
 using Microsoft.Extensions.Options;
 using Repository;
+using Services;
+using Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ builder.Services.AddScoped<MongoDbSettings>(serviceProvider =>
         serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
 builder.Services.AddScoped(typeof(IGenericMongoRepository<>), typeof(MongoRepository<>));
+builder.Services.AddScoped<ISnuffLogService, SnuffLogService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

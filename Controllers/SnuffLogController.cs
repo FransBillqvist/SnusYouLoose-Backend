@@ -3,8 +3,9 @@ using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using Services;
+using Services.Interfaces;
 
-namespace Controllers;
+namespace Controllers.SnuffLogController;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -12,11 +13,13 @@ public class SnuffLogController : ControllerBase
 {
     private readonly ILogger<SnuffLogController> _logger;
     private readonly IGenericMongoRepository<SnuffLog> _snuffLogRepository;
+    private readonly ISnuffLogService _snuffLogService;
 
-    public SnuffLogController(ILogger<SnuffLogController> logger, IGenericMongoRepository<SnuffLog> snuffLogRepository)
+    public SnuffLogController(ILogger<SnuffLogController> logger, IGenericMongoRepository<SnuffLog> snuffLogRepository, ISnuffLogService snuffLogService)
     {
         _logger = logger;
         _snuffLogRepository = snuffLogRepository;
+        _snuffLogService = snuffLogService;
     }
 
 
@@ -47,7 +50,7 @@ public class SnuffLogController : ControllerBase
     {
         try
         {
-            await _snuffLogRepository.InsertOneAsync(newSnuffLog);
+            await _snuffLogService.CreateSnuffLogAsync(newSnuffLog);
             return Ok();
         }
         catch

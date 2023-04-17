@@ -3,16 +3,20 @@ using DAL.Interfaces;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Services.Interfaces;
 
 namespace Services;
 
-public class SnuffLogService
+public class SnuffLogService : ISnuffLogService
 {
     private readonly IGenericMongoRepository<SnuffLog> _snuffLogRepository;
 
+
     public SnuffLogService(
-        IOptions<MongoDbSettings> Settings)
+        IOptions<MongoDbSettings> Settings, IGenericMongoRepository<SnuffLog> snuffLogRepository)
     {
+        _snuffLogRepository = snuffLogRepository;
+
         var mongoClient = new MongoClient(
             Settings.Value.ConnectionString);
 

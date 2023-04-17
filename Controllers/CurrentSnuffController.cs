@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DAL;
 using DAL.Interfaces;
+using Services.Interfaces;
 
 namespace Controllers;
 
@@ -11,6 +12,7 @@ public class CurrentSnuffController : ControllerBase
 
     private readonly ILogger<CurrentSnuffController> _logger;
     private readonly IGenericMongoRepository<CurrentSnuff> _csRepository;
+    private readonly ICurrentSnuffService _csService;
 
     public CurrentSnuffController(ILogger<CurrentSnuffController> logger, IGenericMongoRepository<CurrentSnuff> CSRepository)
     {
@@ -55,17 +57,7 @@ public class CurrentSnuffController : ControllerBase
 
         try
         {
-            var currentSnuff = await _csRepository.FindByIdAsync(id);
-
-            if (currentSnuff is null)
-            {
-                return NotFound();
-            }
-
-            updatedCurrentSnuff.Id = currentSnuff.Id;
-
-            await _csRepository.ReplaceOneAsync(updatedCurrentSnuff);
-
+            await _csService.UpdateCurrentSnuffAsync(id, updatedCurrentSnuff);
             return Ok();
         }
 
