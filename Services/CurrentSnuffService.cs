@@ -46,35 +46,40 @@ public class CurrentSnuffService : ICurrentSnuffService
         return result;
     }
 
-    public async Task<CurrentSnuff> UpdateCurrentSnuffAsync(string id, CurrentSnuff updatedCurrentSnuff)
+    public Task<CurrentSnuff> LogAdder(string id, SnuffLog updatedLog)
     {
-        var currentSnuff = await _currentSnuffRepository.FindByIdAsync(id);
-
-        if (currentSnuff is null)
-        {
-            throw new Exception("CurrentSnuff not found");
-        }
-
-        if (updatedCurrentSnuff.CurrentAmount == 0)
-        {
-            updatedCurrentSnuff.IsEmpty = true;
-        }
-
-        updatedCurrentSnuff.Id = currentSnuff.Id;
-
-        await _currentSnuffRepository.ReplaceOneAsync(updatedCurrentSnuff);
-
-        await _snuffLogService.CreateSnuffLogAsync(new SnuffLog
-        {
-            UserId = "ABABABA",
-            CurrentSnusId = id,
-            SnuffLogDate = DateTime.UtcNow,
-            Amount = currentSnuff.CurrentAmount - updatedCurrentSnuff.CurrentAmount,
-        });
-
-        return updatedCurrentSnuff;
-
+        var response = _currentSnuffRepository.FindOneAndUpdateAsync(x => x.Id == id, Builders<CurrentSnuff>.Update.Inc(x => x.Id, updatedLog));
     }
+
+    // public async Task<CurrentSnuff> UpdateCurrentSnuffAsync(string id, CurrentSnuff updatedCurrentSnuff)
+    // {
+    // var currentSnuff = await _currentSnuffRepository.FindByIdAsync(id);
+
+    // if (currentSnuff is null)
+    // {
+    //     throw new Exception("CurrentSnuff not found");
+    // }
+
+    // if (updatedCurrentSnuff.CurrentAmount == 0)
+    // {
+    //     updatedCurrentSnuff.IsEmpty = true;
+    // }
+
+    // updatedCurrentSnuff.Id = currentSnuff.Id;
+
+    // await _currentSnuffRepository.ReplaceOneAsync(updatedCurrentSnuff);
+
+    // await _snuffLogService.CreateSnuffLogAsync(new SnuffLog
+    // {
+    //     UserId = "ABABABA",
+    //     CurrentSnusId = id,
+    //     SnuffLogDate = DateTime.UtcNow,
+    //     Amount = currentSnuff.CurrentAmount - updatedCurrentSnuff.CurrentAmount,
+    // });
+
+    // return updatedCurrentSnuff;
+
+    // }
 
     // public async Task<List<CurrentSnuff>> GetAllCurrentSnuffAsync() => 
     //     await _currentSnuffRepository.Find(_ => true).ToListAsync();
