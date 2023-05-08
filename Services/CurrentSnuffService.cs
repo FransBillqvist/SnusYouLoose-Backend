@@ -13,13 +13,17 @@ public class CurrentSnuffService : ICurrentSnuffService
 {
     private readonly IGenericMongoRepository<CurrentSnuff> _currentSnuffRepository;
     private readonly ISnuffLogService _snuffLogService;
-    private readonly ISnuffService _snuffRepository;
+    private readonly ISnuffService _snuffService;
 
     public CurrentSnuffService(
-        IOptions<MongoDbSettings> Settings, IGenericMongoRepository<CurrentSnuff> currentSnuffRepository, ISnuffLogService snuffLogService)
+            IOptions<MongoDbSettings> Settings,
+            IGenericMongoRepository<CurrentSnuff> currentSnuffRepository,
+            ISnuffLogService snuffLogService,
+            ISnuffService snuffService)
     {
 
         _snuffLogService = snuffLogService;
+        _snuffService = snuffService;
 
         var mongoClient = new MongoClient(
             Settings.Value.ConnectionString);
@@ -32,7 +36,7 @@ public class CurrentSnuffService : ICurrentSnuffService
 
     public async Task CreateCurrentSnuffAsync(CurrentSnuff newCurrentSnuff)
     {
-        throw new NotImplementedException();
+        await _currentSnuffRepository.InsertOneAsync(newCurrentSnuff);
     }
 
     public async Task<CurrentSnuff> GetCurrentSnuffAsync(string id)
@@ -60,11 +64,7 @@ public class CurrentSnuffService : ICurrentSnuffService
             var getDefaultSnuffAmount = await _snuffRepository.GetSnuffAmountAsync(snuffId);
             return getDefaultSnuffAmount == numberOfUsedSnuff ? true : false;
         }
-        else
-        {
-            throw new Exception("CurrentSnuff not found");
-        }
-
+        return false;
     }
     public async Task<CurrentSnuff> LogAdder(string id, int amount, string userId)
     {
@@ -76,22 +76,15 @@ public class CurrentSnuffService : ICurrentSnuffService
             AmountUsed = amount,
         });
 
-        var currentSnuff = await _currentSnuffRepository.FindOneAsync(x => x.Id == id); //finns dosan
-        if (currentSnuff != null)
+        var currentSnuff = await _currentSnuffRepository.FindOneAsync(x => x.Id == id);
+        if (currentSnuff != null) //finns dosan?
         {
             var log = currentSnuff.LogsOfBox.Append(createdNewLog).ToArray();
+            currentSnuff.LogsOfBox = log;
+            currentSnuff.IsEmpty = await ReturnEmptyStatus(log, currentSnuff.SnusId);
 
-            var updatedObject = new CurrentSnuff
-            {
-                Id = currentSnuff.Id,
-                SnusId = currentSnuff.SnusId,
-                PurchaseDate = currentSnuff.PurchaseDate,
-                LogsOfBox = log,
-                IsEmpty = ReturnEmptyStatus(log, currentSnuff.SnusId).Result,
-            };
-
-            await _currentSnuffRepository.ReplaceOneAsync(updatedObject);
-            return updatedObject;
+            await _currentSnuffRepository.ReplaceOneAsync(currentSnuff);
+            return currentSnuff;
         }
         else
         {

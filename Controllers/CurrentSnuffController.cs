@@ -13,11 +13,18 @@ public class CurrentSnuffController : ControllerBase
     private readonly ILogger<CurrentSnuffController> _logger;
     private readonly IGenericMongoRepository<CurrentSnuff> _csRepository;
     private readonly ICurrentSnuffService _csService;
+    private readonly ISnuffService _sService;
 
-    public CurrentSnuffController(ILogger<CurrentSnuffController> logger, IGenericMongoRepository<CurrentSnuff> CSRepository)
+    public CurrentSnuffController(
+        ILogger<CurrentSnuffController> logger,
+        IGenericMongoRepository<CurrentSnuff> CSRepository,
+        ICurrentSnuffService CSService,
+        ISnuffService SService)
     {
         _logger = logger;
         _csRepository = CSRepository;
+        _csService = CSService;
+        _sService = SService;
     }
 
     [HttpGet]
@@ -51,7 +58,7 @@ public class CurrentSnuffController : ControllerBase
     }
 
     [HttpPost]
-    [Route("NewSnuffLog/{id}")]
+    [Route("NewSnuffLog")]
     public async Task<IActionResult> AddLog(string id, int amount, string userId)
     {
 

@@ -13,8 +13,11 @@ public class SnuffService : ISnuffService
     private readonly IGenericMongoRepository<Snuff> _snuffRespository;
 
     public SnuffService(
-        IOptions<MongoDbSettings> Settings)
+        IOptions<MongoDbSettings> Settings,
+        IGenericMongoRepository<Snuff> snuffRespository
+        )
     {
+        _snuffRespository = snuffRespository;
         var mongoClient = new MongoClient(
             Settings.Value.ConnectionString);
 
