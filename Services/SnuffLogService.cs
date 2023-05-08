@@ -23,8 +23,19 @@ public class SnuffLogService : ISnuffLogService
         var mongoDatabase = mongoClient.GetDatabase(
                 Settings.Value.DatabaseName);
     }
-    public async Task CreateSnuffLogAsync(SnuffLog newSnuffLog) =>
-        await _snuffLogRepository.InsertOneAsync(newSnuffLog);
+    public async Task<SnuffLog> CreateSnuffLogAsync(SnuffLog newSnuffLog)
+    {
+        try
+        {
+            await _snuffLogRepository.InsertOneAsync(newSnuffLog);
+            return newSnuffLog;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+    }
     // public async Task<List<SnuffLog>> GetAllSnuffLogsAsync() => 
     //     await _serviceCollection.Find(_ => true).ToListAsync();
 

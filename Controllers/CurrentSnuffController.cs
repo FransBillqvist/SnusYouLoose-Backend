@@ -50,14 +50,14 @@ public class CurrentSnuffController : ControllerBase
         }
     }
 
-    [HttpPut]
-    [Route("Update/{id}")]
-    public async Task<IActionResult> AddLog(string id, CurrentSnuff updatedCurrentSnuff)
+    [HttpPost]
+    [Route("NewSnuffLog/{id}")]
+    public async Task<IActionResult> AddLog(string id, int amount, string userId)
     {
 
         try
         {
-            await _csService.LogAdder(id, updatedCurrentSnuff);
+            await _csService.LogAdder(id, amount, userId);
             return Ok();
         }
 

@@ -13,6 +13,7 @@ public class CurrentSnuffService : ICurrentSnuffService
 {
     private readonly IGenericMongoRepository<CurrentSnuff> _currentSnuffRepository;
     private readonly ISnuffLogService _snuffLogService;
+    private readonly ISnuffService _snuffRepository;
 
     public CurrentSnuffService(
         IOptions<MongoDbSettings> Settings, IGenericMongoRepository<CurrentSnuff> currentSnuffRepository, ISnuffLogService snuffLogService)
@@ -29,7 +30,7 @@ public class CurrentSnuffService : ICurrentSnuffService
         _currentSnuffRepository = currentSnuffRepository;
     }
 
-    public Task CreateCurrentSnuffAsync(CurrentSnuff newCurrentSnuff)
+    public async Task CreateCurrentSnuffAsync(CurrentSnuff newCurrentSnuff)
     {
         throw new NotImplementedException();
     }
@@ -46,9 +47,57 @@ public class CurrentSnuffService : ICurrentSnuffService
         return result;
     }
 
-    public Task<CurrentSnuff> LogAdder(string id, SnuffLog updatedLog)
+    public async Task<Boolean> ReturnEmptyStatus(SnuffLog[] Logs, string snuffId)
     {
-        var response = _currentSnuffRepository.FindOneAndUpdateAsync(x => x.Id == id, Builders<CurrentSnuff>.Update.Inc(x => x.Id, updatedLog));
+        if (Logs != null)
+        {
+            var numberOfUsedSnuff = 0;
+            foreach (var snuff in Logs)
+            {
+                numberOfUsedSnuff += snuff.AmountUsed;
+            }
+
+            var getDefaultSnuffAmount = await _snuffRepository.GetSnuffAmountAsync(snuffId);
+            return getDefaultSnuffAmount == numberOfUsedSnuff ? true : false;
+        }
+        else
+        {
+            throw new Exception("CurrentSnuff not found");
+        }
+
+    }
+    public async Task<CurrentSnuff> LogAdder(string id, int amount, string userId)
+    {
+        //skapa en log via snufflogservice
+        var createdNewLog = await _snuffLogService.CreateSnuffLogAsync(new SnuffLog
+        {
+            UserId = userId,
+            SnuffLogDate = DateTime.UtcNow,
+            AmountUsed = amount,
+        });
+
+        var currentSnuff = await _currentSnuffRepository.FindOneAsync(x => x.Id == id); //finns dosan
+        if (currentSnuff != null)
+        {
+            var log = currentSnuff.LogsOfBox.Append(createdNewLog).ToArray();
+
+            var updatedObject = new CurrentSnuff
+            {
+                Id = currentSnuff.Id,
+                SnusId = currentSnuff.SnusId,
+                PurchaseDate = currentSnuff.PurchaseDate,
+                LogsOfBox = log,
+                IsEmpty = ReturnEmptyStatus(log, currentSnuff.SnusId).Result,
+            };
+
+            await _currentSnuffRepository.ReplaceOneAsync(updatedObject);
+            return updatedObject;
+        }
+        else
+        {
+            throw new Exception("CurrentSnuff not found");
+        }
+
     }
 
     // public async Task<CurrentSnuff> UpdateCurrentSnuffAsync(string id, CurrentSnuff updatedCurrentSnuff)
