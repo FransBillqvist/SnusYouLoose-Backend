@@ -1,6 +1,7 @@
 using DAL;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
 
 namespace Controllers;
 
@@ -10,10 +11,15 @@ public class HabitController : ControllerBase
 {
     private readonly ILogger<HabitController> _logger;
     private readonly IGenericMongoRepository<Habit> _habitRepository;
-    public HabitController(ILogger<HabitController> logger, IGenericMongoRepository<Habit> habitRepository)
+    private readonly IHabitService _habitService;
+    public HabitController(
+        ILogger<HabitController> logger,
+        IGenericMongoRepository<Habit> habitRepository,
+        IHabitService habitService)
     {
         _logger = logger;
         _habitRepository = habitRepository;
+        _habitService = habitService;
     }
 
     [HttpGet]
@@ -22,7 +28,7 @@ public class HabitController : ControllerBase
     {
         try
         {
-            var habit = await _habitRepository.FindOneAsync(x => x.Id == id);
+            var habit = await _habitService.GetHabitAsync(id);
 
             if (habit is null)
             {
@@ -43,7 +49,7 @@ public class HabitController : ControllerBase
     {
         try
         {
-            await _habitRepository.InsertOneAsync(newHabit);
+            await _habitService.CreateHabitAsync(newHabit);
             return Ok();
         }
         catch
@@ -58,17 +64,14 @@ public class HabitController : ControllerBase
     {
         try
         {
-            var habit = await _habitRepository.FindByIdAsync(id);
+            var habit = await _habitService.GetHabitAsync(id);
 
             if (habit is null)
             {
                 return NotFound();
             }
 
-
-            updatedHabit.Id = habit.Id;
-
-            await _habitRepository.ReplaceOneAsync(updatedHabit);
+            await _habitService.UpdateHabitAsync(id, updatedHabit);
 
             return Ok();
         }
@@ -84,14 +87,14 @@ public class HabitController : ControllerBase
     {
         try
         {
-            var habit = await _habitRepository.FindByIdAsync(id);
+            var habit = await _habitService.GetHabitAsync(id);
 
             if (habit is null)
             {
                 return NotFound();
             }
 
-            await _habitRepository.DeleteByIdAsync(id);
+            await _habitService.RemoveHabitAsync(id);
 
             return NoContent();
         }

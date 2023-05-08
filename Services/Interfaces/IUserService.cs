@@ -1,6 +1,6 @@
 using DAL;
 
-public interface IUserServices
+public interface IUserService
 {
     Task CreateUserAsync(User newUser);
     Task<User> GetUserAsync(string id);

@@ -30,9 +30,8 @@ public class CurrentSnuffController : ControllerBase
     [HttpGet]
     [Route("Get/{id}")]
     public async Task<ActionResult<CurrentSnuff>> GetCurrentSnuff(string id)
-    {
-        var currentSnuff = await _csRepository.FindOneAsync(x => x.Id == id);
-
+    { 
+        var currentSnuff = await _csService.GetCurrentSnuffAsync(id);
         if (currentSnuff is null)
         {
             return NotFound();
@@ -47,7 +46,7 @@ public class CurrentSnuffController : ControllerBase
     {
         try
         {
-            await _csRepository.InsertOneAsync(newCurrentSnuff);
+            await _csService.CreateCurrentSnuffAsync(newCurrentSnuff);
             return Ok();
         }
 
@@ -80,14 +79,13 @@ public class CurrentSnuffController : ControllerBase
     {
         try
         {
-            var currentSnuff = await _csRepository.FindByIdAsync(id);
-
-            if (currentSnuff is null)
+            var currentSnuffToDelete = _csService.GetCurrentSnuffAsync(id);
+            if (currentSnuffToDelete is null)
             {
                 return NotFound();
             }
 
-            await _csRepository.DeleteByIdAsync(id);
+            await _csService.RemoveCurrentSnuffAsync(id);
             return NoContent();
         }
 
