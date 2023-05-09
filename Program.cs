@@ -21,16 +21,26 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHabitService, HabitService>();
 
 builder.Services.AddControllers();
+builder.Services.AddOpenApiDocument(
+    options =>
+    {
+        options.Title = "SUL BE API";
+        options.Description = "API for SUL";
+        options.DocumentName = "v1";
+        options.Version = "v1";
+    }
+);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseOpenApi();
+    app.UseSwaggerUi3();
+    app.UseReDoc();
 }
 
 app.UseHttpsRedirection();
