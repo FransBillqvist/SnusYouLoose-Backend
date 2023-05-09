@@ -1,40 +1,57 @@
-// using DAL;
-// using DAL.Models;
-// using Microsoft.Extensions.Options;
-// using MongoDB.Bson;
-// using MongoDB.Driver;
+using DAL;
+using DAL.Interfaces;
+using Microsoft.Extensions.Options;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using Services.Interfaces;
 
-// namespace Services;
+namespace Services;
 
-// public class SnuffService
-// {
-// private readonly IMongoCollection<Snuff> _serviceCollection;
+public class SnuffService : ISnuffService
+{
+    private readonly IGenericMongoRepository<Snuff> _snuffRepository;
 
-// public SnuffService(
-//     IOptions<SnuffDatabaseSettings> snuffDatabaseSettings)
-//     {
-//         var mongoClient = new MongoClient(
-//             snuffDatabaseSettings.Value.ConnectionString);
+    public SnuffService(
+            IOptions<MongoDbSettings> Settings,
+            IGenericMongoRepository<Snuff> snuffRepository
+        )
+    {
+        _snuffRepository = snuffRepository;
+        var mongoClient = new MongoClient(
+            Settings.Value.ConnectionString);
 
-//         var mongoDatabase = mongoClient.GetDatabase(
-//                 snuffDatabaseSettings.Value.DatabaseName);
+        var mongoDatabase = mongoClient.GetDatabase(
+                Settings.Value.DatabaseName);
+    }
+    
+    public async Task<Snuff> CreateSnuffAsync(Snuff newSnuff)
+    {
+        try
+        {
+            await _snuffRepository.InsertOneAsync(newSnuff);
+            return newSnuff;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
 
-//         _serviceCollection = mongoDatabase.GetCollection<Snuff>(
-//                 snuffDatabaseSettings.Value.SnuffCollection);
-//     }
+    }
+    public async Task<int> GetSnuffAmountAsync(string snuffId)
+    {
+        var response = await _snuffRepository.FindOneAsync(x => x.Id == snuffId);
+        return (response != null ? response.DefaultAmount : 0);
+    }
 
-// public async Task<List<Snuff>> GetAllSnuffAsync() => 
-//     await _serviceCollection.Find(_ => true).ToListAsync();
+    public async Task<Snuff> GetSnuffAsync(string id) =>
+        await _snuffRepository.FindOneAsync(x => x.Id == id);
 
-// public async Task<Snuff> GetSnuffAsync(ObjectId id) =>
-//     await _serviceCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+    public async Task UpdateSnuffAsync(string id, Snuff updatedSnuff) =>
+        await _snuffRepository.ReplaceOneAsync(updatedSnuff);
 
-// public async Task CreateSnuffAsync(Snuff newSnuff) =>
-//     await _serviceCollection.InsertOneAsync(newSnuff);
-
-// public async Task UpdateSnuffAsync(ObjectId id, Snuff updatedSnuff) =>
-//     await _serviceCollection.ReplaceOneAsync(x => x.Id == id, updatedSnuff);
-
-// public async Task RemoveSnuffAsync(ObjectId id) =>
-//     await _serviceCollection.DeleteOneAsync(x => x.Id == id);
-// }
+    public async Task RemoveSnuffAsync(string id)
+    {
+        ObjectId mongoId = ObjectId.Parse(id);
+        await _snuffRepository.DeleteOneAsync(x => x.Id == id);
+    }
+}

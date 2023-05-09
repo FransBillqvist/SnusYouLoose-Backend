@@ -15,6 +15,11 @@ builder.Services.AddScoped<MongoDbSettings>(serviceProvider =>
 
 builder.Services.AddScoped(typeof(IGenericMongoRepository<>), typeof(MongoRepository<>));
 builder.Services.AddScoped<ISnuffLogService, SnuffLogService>();
+builder.Services.AddScoped<ICurrentSnuffService, CurrentSnuffService>();
+builder.Services.AddScoped<ISnuffService, SnuffService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IHabitService, HabitService>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

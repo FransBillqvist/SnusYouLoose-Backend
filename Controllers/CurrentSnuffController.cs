@@ -13,19 +13,25 @@ public class CurrentSnuffController : ControllerBase
     private readonly ILogger<CurrentSnuffController> _logger;
     private readonly IGenericMongoRepository<CurrentSnuff> _csRepository;
     private readonly ICurrentSnuffService _csService;
+    private readonly ISnuffService _sService;
 
-    public CurrentSnuffController(ILogger<CurrentSnuffController> logger, IGenericMongoRepository<CurrentSnuff> CSRepository)
+    public CurrentSnuffController(
+        ILogger<CurrentSnuffController> logger,
+        IGenericMongoRepository<CurrentSnuff> CSRepository,
+        ICurrentSnuffService CSService,
+        ISnuffService SService)
     {
         _logger = logger;
         _csRepository = CSRepository;
+        _csService = CSService;
+        _sService = SService;
     }
 
     [HttpGet]
     [Route("Get/{id}")]
     public async Task<ActionResult<CurrentSnuff>> GetCurrentSnuff(string id)
-    {
-        var currentSnuff = await _csRepository.FindOneAsync(x => x.Id == id);
-
+    { 
+        var currentSnuff = await _csService.GetCurrentSnuffAsync(id);
         if (currentSnuff is null)
         {
             return NotFound();
@@ -40,7 +46,7 @@ public class CurrentSnuffController : ControllerBase
     {
         try
         {
-            await _csRepository.InsertOneAsync(newCurrentSnuff);
+            await _csService.CreateCurrentSnuffAsync(newCurrentSnuff);
             return Ok();
         }
 
@@ -50,14 +56,14 @@ public class CurrentSnuffController : ControllerBase
         }
     }
 
-    [HttpPut]
-    [Route("Update/{id}")]
-    public async Task<IActionResult> Update(string id, CurrentSnuff updatedCurrentSnuff)
+    [HttpPost]
+    [Route("NewSnuffLog")]
+    public async Task<IActionResult> AddLog(string id, int amount, string userId)
     {
 
         try
         {
-            await _csService.UpdateCurrentSnuffAsync(id, updatedCurrentSnuff);
+            await _csService.LogAdder(id, amount, userId);
             return Ok();
         }
 
@@ -73,14 +79,13 @@ public class CurrentSnuffController : ControllerBase
     {
         try
         {
-            var currentSnuff = await _csRepository.FindByIdAsync(id);
-
-            if (currentSnuff is null)
+            var currentSnuffToDelete = _csService.GetCurrentSnuffAsync(id);
+            if (currentSnuffToDelete is null)
             {
                 return NotFound();
             }
 
-            await _csRepository.DeleteByIdAsync(id);
+            await _csService.RemoveCurrentSnuffAsync(id);
             return NoContent();
         }
 

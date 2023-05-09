@@ -1,6 +1,7 @@
 using DAL;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
 
 namespace Controllers;
 
@@ -10,11 +11,16 @@ public class SnuffController : ControllerBase
 {
     private readonly ILogger<SnuffController> _logger;
     private readonly IGenericMongoRepository<Snuff> _snuffRepository;
+    private readonly ISnuffService _snuffService;
 
-    public SnuffController(ILogger<SnuffController> logger, IGenericMongoRepository<Snuff> snuffRepository)
+    public SnuffController(
+            ILogger<SnuffController> logger,
+            IGenericMongoRepository<Snuff> snuffRepository,
+            ISnuffService snuffService)
     {
         _logger = logger;
         _snuffRepository = snuffRepository;
+        _snuffService = snuffService;
     }
 
     [HttpGet]
@@ -23,7 +29,7 @@ public class SnuffController : ControllerBase
     {
         try
         {
-            var response = await _snuffRepository.FindOneAsync(x => x.Id == id);
+            var response = await _snuffService.GetSnuffAsync(id);
 
             if (response is null)
             {
@@ -44,7 +50,7 @@ public class SnuffController : ControllerBase
     {
         try
         {
-            await _snuffRepository.InsertOneAsync(newSnuff);
+            await _snuffService.CreateSnuffAsync(newSnuff);
             return Ok();
         }
         catch
@@ -59,18 +65,16 @@ public class SnuffController : ControllerBase
     {
         try
         {
-            var snuff = await _snuffRepository.FindByIdAsync(id);
-
-            if (snuff is null)
+            var snuffToUpdate = await _snuffService.GetSnuffAsync(id);
+            if (snuffToUpdate is null)
             {
                 return NotFound();
             }
 
-            updatedSnuff.Id = snuff.Id;
+            await _snuffService.UpdateSnuffAsync(id, updatedSnuff);
+            var checkIfUpdateWasOK = await _snuffService.GetSnuffAsync(id);
 
-            await _snuffRepository.ReplaceOneAsync(updatedSnuff);
-
-            return Ok();
+            return Ok(checkIfUpdateWasOK);
         }
 
         catch
@@ -83,14 +87,13 @@ public class SnuffController : ControllerBase
     [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
     {
-        var snuff = await _snuffRepository.FindByIdAsync(id);
-
-        if (snuff is null)
+        var snuffToDelete = await _snuffService.GetSnuffAsync(id);
+        if (snuffToDelete is null)
         {
             return NotFound();
         }
 
-        await _snuffRepository.DeleteByIdAsync(id);
+        await _snuffService.RemoveSnuffAsync(id);
 
         return NoContent();
     }

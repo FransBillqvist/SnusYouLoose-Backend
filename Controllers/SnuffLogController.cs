@@ -1,8 +1,6 @@
 using DAL;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using Services;
 using Services.Interfaces;
 
 namespace Controllers.SnuffLogController;
@@ -29,14 +27,14 @@ public class SnuffLogController : ControllerBase
     {
         try
         {
-            var response = await _snuffLogRepository.FindOneAsync(x => x.Id == id);
+            var response = await _snuffLogService.GetSnuffLogAsync(id);
 
-            if (response is null)
+            if (response != null)
             {
-                return null;
+                return response;
             }
 
-            return response;
+            return null;
         }
         catch
         {
@@ -46,7 +44,7 @@ public class SnuffLogController : ControllerBase
 
     [HttpPost]
     [Route("Create")]
-    public async Task<IActionResult> Post(SnuffLog newSnuffLog)
+    public async Task<IActionResult> Post(string id, SnuffLog newSnuffLog)
     {
         try
         {
@@ -60,6 +58,7 @@ public class SnuffLogController : ControllerBase
     }
 
     [HttpPut]
+    [Obsolete]
     [Route("Update/{id}")]
     public async Task<IActionResult> Update(string id, SnuffLog updatedSnuffLog)
     {
@@ -89,14 +88,14 @@ public class SnuffLogController : ControllerBase
     [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
     {
-        var snuffLog = await _snuffLogRepository.FindByIdAsync(id);
+        var snuffLog = await _snuffLogService.GetSnuffLogAsync(id);
 
         if (snuffLog is null)
         {
             return NotFound();
         }
 
-        await _snuffLogRepository.DeleteByIdAsync(id);
+        await _snuffLogService.RemoveSnuffLogAsync(id);
 
         return NoContent();
     }

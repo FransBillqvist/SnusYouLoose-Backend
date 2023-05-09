@@ -10,11 +10,16 @@ public class UserController : ControllerBase
 {
     private readonly ILogger<UserController> _logger;
     private readonly IGenericMongoRepository<User> _userRepository;
+    private readonly IUserService _userService;
 
-    public UserController(ILogger<UserController> logger, IGenericMongoRepository<User> userRepository)
+    public UserController(
+            ILogger<UserController> logger,
+            IGenericMongoRepository<User> userRepository,
+            IUserService userService)
     {
         _logger = logger;
         _userRepository = userRepository;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -44,7 +49,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            await _userRepository.InsertOneAsync(newUser);
+            await _userService.CreateUserAsync(newUser);
             return Ok();
         }
         catch
@@ -59,7 +64,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var user = await _userRepository.FindByIdAsync(id);
+            var user = await _userService.GetUserAsync(id);
 
             if (user is null)
             {
@@ -68,7 +73,7 @@ public class UserController : ControllerBase
 
             updatedUser.Id = user.Id;
 
-            await _userRepository.ReplaceOneAsync(updatedUser);
+            await _userService.UpdateUserAsync(updatedUser);
 
             return Ok();
         }
@@ -83,14 +88,14 @@ public class UserController : ControllerBase
     [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
     {
-        var user = await _userRepository.FindByIdAsync(id);
+        var user = await _userService.GetUserAsync(id);
 
         if (user is null)
         {
             return NotFound();
         }
 
-        await _userRepository.DeleteByIdAsync(id);
+        await _userService.RemoveUserAsync(id);
 
         return NoContent();
     }

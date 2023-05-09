@@ -1,39 +1,49 @@
 using DAL;
+using DAL.Interfaces;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Services.Interfaces;
 
 namespace Services;
 
-public class HabitService
+public class HabitService : IHabitService
 {
-    //     private readonly IMongoCollection<Habit> _serviceCollection;
+        private readonly IGenericMongoRepository<Habit> _habitRepository;
 
-    //     public HabitService(
-    //         IOptions<SnuffDatabaseSettings> snuffDatabaseSettings)
-    //         {
-    //             var mongoClient = new MongoClient(
-    //                 snuffDatabaseSettings.Value.ConnectionString);
+        public HabitService(
+                IOptions<MongoDbSettings> Settings,
+                IGenericMongoRepository<Habit> habitRepository
+            )
+            {
+                _habitRepository = habitRepository;
+                var mongoClient = new MongoClient(
+                    Settings.Value.ConnectionString);
 
-    //             var mongoDatabase = mongoClient.GetDatabase(
-    //                     snuffDatabaseSettings.Value.DatabaseName);
-
-    //             _serviceCollection = mongoDatabase.GetCollection<Habit>(
-    //                     snuffDatabaseSettings.Value.SnuffCollection);
-    //         }
+                var mongoDatabase = mongoClient.GetDatabase(
+                        Settings.Value.DatabaseName);
+            }
 
     // public async Task<List<Habit>> GetAllHabitsAsync() => 
-    //     await _serviceCollection.Find(_ => true).ToListAsync();
+    //     await _habitRepository.FindOneAsync(_ => true).ToListAsync();
 
-    // public async Task<Habit> GetHabitAsync(ObjectId id) =>
-    //     await _serviceCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+    public async Task<Habit> GetHabitAsync(string id)
+    {
+        ObjectId mongoId = ObjectId.Parse(id);
+        return await _habitRepository.FindOneAsync(x => x.Id == id);
+    }
 
-    // public async Task CreateHabitAsync(Habit newHabit) =>
-    //     await _serviceCollection.InsertOneAsync(newHabit);
+    public async Task CreateHabitAsync(Habit newHabit) =>
+        await _habitRepository.InsertOneAsync(newHabit);
 
-    // public async Task UpdateHabitAsync(ObjectId id, Habit updatedHabit) =>
-    //     await _serviceCollection.ReplaceOneAsync(x => x.Id == id, updatedHabit);
+    public async Task UpdateHabitAsync(string id, Habit updatedHabit)
+    {
+        await _habitRepository.ReplaceOneAsync(updatedHabit);
+    }
 
-    // public async Task RemoveHabitAsync(ObjectId id) =>
-    //     await _serviceCollection.DeleteOneAsync(x => x.Id == id);
+    public async Task RemoveHabitAsync(string id)
+    {
+        ObjectId mongoId = ObjectId.Parse(id);
+        await _habitRepository.DeleteOneAsync(x => x.Id == id);
+    }
 }
