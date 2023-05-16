@@ -32,7 +32,7 @@ public class UserController : ControllerBase
 
             if (response is null)
             {
-                return null;
+                return NotFound();
             }
 
             return response;

@@ -24,12 +24,33 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApiDocument(
     options =>
     {
-        options.Title = "SUL BE API";
-        options.Description = "API for SUL";
+        options.Title = "SUL Backend API";
+        options.Description = "API for SUL communicating with mongodb";
         options.DocumentName = "v1";
         options.Version = "v1";
     }
 );
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    builder.
+    WithOrigins("http://localhost:5126").
+    AllowAnyHeader().
+    AllowAnyMethod().
+    AllowCredentials());
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    builder.
+    WithOrigins("https://localhost:7162").
+    AllowAnyHeader().
+    AllowAnyMethod().
+    AllowCredentials());
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 // builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSwaggerGen();
@@ -42,6 +63,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUi3();
     app.UseReDoc();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 
