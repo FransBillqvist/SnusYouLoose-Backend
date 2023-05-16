@@ -18,10 +18,19 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
 
     private protected string GetCollectionName(Type documentType)
     {
-        return ((BsonCollectionAttribute)documentType.GetCustomAttributes(
+        var collectionName = ((BsonCollectionAttribute)documentType.GetCustomAttributes(
             typeof(BsonCollectionAttribute),
             true)
             .FirstOrDefault())?.CollectionName;
+
+        if (collectionName != null)
+        {
+            return collectionName.ToString();
+        }
+        else
+        {
+            return string.Empty;
+        }
     }
 
     public virtual IQueryable<TDocument> AsQueryable()

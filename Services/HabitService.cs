@@ -24,9 +24,6 @@ public class HabitService : IHabitService
                         Settings.Value.DatabaseName);
             }
 
-    // public async Task<List<Habit>> GetAllHabitsAsync() => 
-    //     await _habitRepository.FindOneAsync(_ => true).ToListAsync();
-
     public async Task<Habit> GetHabitAsync(string id)
     {
         ObjectId mongoId = ObjectId.Parse(id);

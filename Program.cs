@@ -51,6 +51,7 @@ builder.Services.AddCors(options =>
     AllowCredentials());
 });
 
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
@@ -60,7 +61,6 @@ builder.Services.AddCors(options =>
     AllowAnyMethod().
     AllowCredentials());
 });
-
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 // builder.Services.AddEndpointsApiExplorer();
@@ -76,6 +76,8 @@ if (app.Environment.IsDevelopment())
     app.UseCors();
 }
 
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 

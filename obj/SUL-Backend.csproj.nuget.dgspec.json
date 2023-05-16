@@ -42,6 +42,10 @@
               "target": "Package",
               "version": "[2.19.1, )"
             },
+            "NSwag.AspNetCore": {
+              "target": "Package",
+              "version": "[13.19.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
