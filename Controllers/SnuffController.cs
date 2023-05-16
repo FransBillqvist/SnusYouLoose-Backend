@@ -33,7 +33,7 @@ public class SnuffController : ControllerBase
 
             if (response is null)
             {
-                return null;
+                return NotFound();
             }
 
             return response;

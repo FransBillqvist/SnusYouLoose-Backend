@@ -10,4 +10,5 @@ public class User : Document
     public string Email { get; set; }
     [BsonElement("Name")]
     public string Name { get; set; }
+    
 }

@@ -32,7 +32,7 @@ public class HabitController : ControllerBase
 
             if (habit is null)
             {
-                return null;
+                return NotFound();
             }
 
             return habit;

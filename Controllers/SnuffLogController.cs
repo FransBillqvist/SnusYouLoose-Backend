@@ -34,7 +34,7 @@ public class SnuffLogController : ControllerBase
                 return response;
             }
 
-            return null;
+            return NotFound();
         }
         catch
         {
