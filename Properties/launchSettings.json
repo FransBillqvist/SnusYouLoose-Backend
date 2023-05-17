@@ -9,12 +9,22 @@
     }
   },
   "profiles": {
-    "SUL_Backend": {
+    "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://192.168.0.10:7162;http://192.168.0.10:5126",
+      "applicationUrl": "http://192.168.0.4:5126",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://192.168.0.4:7126",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
