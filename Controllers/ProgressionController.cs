@@ -1,6 +1,7 @@
 using DAL;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
 
 namespace Controllers;
 
@@ -26,11 +27,11 @@ public class ProgressionController : ControllerBase
 
     [HttpGet]
     [Route("GetProgression/{id}")]
-    public async Task<ActionResult<Progression>> GetProgression(string id)
+    public async Task<ActionResult<Progression>> GetCurrentUserProgression(string uid)
     {
         try
         {
-            var response = await _progressionService.FindUserActiveProgression(id);
+            var response = await _progressionService.FindUserActiveProgression(uid);
 
             if (response is null)
             {
@@ -47,18 +48,13 @@ public class ProgressionController : ControllerBase
 
     [HttpGet]
     [Route("RemaingSnuffToday/{id}")]
-    public async Task<ActionResult<int>> GetRemainingSnuffToday(string id)
+    public async Task<ActionResult<int>> GetRemainingSnuffToday(string uid)
     {
         try
         {
-            var response = await _progressionService.CalculateRemaingSnuff(id);
+            var response = await _progressionService.CalculateRemaingSnuff(uid);
 
-            if (response is null)
-            {
-                return NotFound();
-            }
-
-            return response.RemainingSnuffToday;
+            return response;
         }
         catch
         {
@@ -72,7 +68,7 @@ public class ProgressionController : ControllerBase
     {
         try
         {
-            await _progressionService.UpdateInUseState(newState);
+            await _progressionService.UpdateProgressionStateAsync(newState);
             return Ok();
         }
         catch
@@ -88,6 +84,21 @@ public class ProgressionController : ControllerBase
         try
         {
             await _progressionService.AddNewProgression(dto);
+            return Ok();
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [HttpDelete]
+    [Route("RemoveProgression/{id}")]
+    public async Task<IActionResult> RemoveProgression(string uid)
+    {
+        try
+        {
+            await _progressionService.RemoveProgressionAsync(uid);
             return Ok();
         }
         catch
