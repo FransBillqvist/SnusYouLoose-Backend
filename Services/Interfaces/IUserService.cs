@@ -1,5 +1,6 @@
 using DAL;
 
+namespace Services.Interfaces;
 public interface IUserService
 {
     Task CreateUserAsync(User newUser);
