@@ -36,32 +36,29 @@ public class ProgressionService : IProgressionService
                 Settings.Value.DatabaseName);
     }
 
-    public async Task AddNewProgression(Progression newProgression)
+    public async Task AddNewProgression(string uid)
     {
-        var selectOldProgression = await _progressionRepository.FindOneAsync(x => x.UserId == newProgression.UserId);
+        var selectOldProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid);
         if (selectOldProgression == null)
         {
+            var newProgression = await ProgressionHandler(uid);
             await _progressionRepository.InsertOneAsync(newProgression);
         }
 
-        var selectProgressionWithInUseTrue = await FindUserActiveProgression(newProgression.UserId);
+        var selectProgressionWithInUseTrue = await FindUserActiveProgression(uid);
 
         if (selectProgressionWithInUseTrue.GoalEndDate > DateTime.Now)
         {
-            throw new Exception("User already has an active progression");
+            Console.WriteLine("Progression already exists");
         }
         else if (selectProgressionWithInUseTrue.GoalEndDate < DateTime.Now)
         {
             await UpdateProgressionStateAsync(selectProgressionWithInUseTrue);
         }
-        else
-        {
-            var handleProgression = await ProgressionHandler(newProgression);
-            await _progressionRepository.InsertOneAsync(newProgression);
-        }
+
     }
 
-    public async Task<int> CalculateRemaingSnuff(string uid)
+    public async Task<int> CalculateRemainingSnuff(string uid)
     {
         var allLogsForUserToday = _snuffLogRepository.FilterBy(x => x.SnuffLogDate == DateTime.Now.Date && x.UserId == uid);
         var activeProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
@@ -96,28 +93,38 @@ public class ProgressionService : IProgressionService
     {
         updatedProgression.InUse = false;
         await _progressionRepository.ReplaceOneAsync(updatedProgression);
+        await AddNewProgression(updatedProgression.UserId);
     }
 
-    public async Task<Progression> ProgressionHandler(Progression progressionData)
+    public async Task<Progression> ProgressionHandler(string uid)
     {
-        var habitProtocol = await _habitRepository.FindOneAsync(x => x.UserId == progressionData.UserId);
-        progressionData.GoalStartDate = progressionData.GoalStartDate.Date;
+        var habitData = await _habitRepository.FindOneAsync(x => x.UserId == uid);
+        var newProgression = new Progression
+        {
+            Id = "",
+            UserId = uid,
+            GoalStartDate = DateTime.Now.Date,
+            GoalEndDate = DateTime.Now.Date,
+            SnuffGoalAmount = habitData.DoseAmount - 1,
+            UsageInterval = new DateTime(),
+            InUse = true
+        };
 
-        switch (habitProtocol.ProgressionType)
+        switch (habitData.ProgressionType)
         {
             case "app":
-                progressionData = await AppProgression(progressionData, habitProtocol.Speed);
+                newProgression = await AppProgression(newProgression, habitData.Speed);
                 break;
             case "datum":
-                progressionData = await DatumProgression(progressionData, habitProtocol);
+                newProgression = await DatumProgression(newProgression, habitData);
                 break;
             default:
                 throw new Exception("Progression type not found");
         }
 
-        progressionData = await SetUsageInterval(progressionData);
+        newProgression = await SetUsageInterval(newProgression);
 
-        return progressionData;
+        return newProgression;
     }
 
     private async Task<Progression> SetUsageInterval(Progression progressionData)

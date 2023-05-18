@@ -53,13 +53,13 @@ public class HabitService : IHabitService
         var days = 0;
         switch (speed)
         {
-            case "Långsam":
+            case "Snabbt":
                 days = 4;
                 break;
             case "Lagom":
                 days = 7;
                 break;
-            case "Snabbt":
+            case "Långsamt":
                 days = 14;
                 break;
             default:

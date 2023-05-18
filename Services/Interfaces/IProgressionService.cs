@@ -4,10 +4,10 @@ namespace Services.Interfaces;
 
 public interface IProgressionService
 {
-    Task AddNewProgression(Progression newProgression);
-    Task<int> CalculateRemaingSnuff(string uid);
+    Task AddNewProgression(string uid);
+    Task<int> CalculateRemainingSnuff(string uid);
     Task<Progression> FindUserActiveProgression(string uid);
     Task RemoveProgressionAsync(string pid);
     Task UpdateProgressionStateAsync(Progression updatedProgression);
-    Task<Progression> ProgressionHandler(Progression progressionData);
+    Task<Progression> ProgressionHandler(string uid);
 }

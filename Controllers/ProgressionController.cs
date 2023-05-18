@@ -52,7 +52,7 @@ public class ProgressionController : ControllerBase
     {
         try
         {
-            var response = await _progressionService.CalculateRemaingSnuff(uid);
+            var response = await _progressionService.CalculateRemainingSnuff(uid);
 
             return response;
         }
@@ -79,11 +79,11 @@ public class ProgressionController : ControllerBase
 
     [HttpPost]
     [Route("CreateUserProgression")]
-    public async Task<IActionResult> CreateUserProgression(Progression dto)
+    public async Task<IActionResult> CreateUserProgression(string uid)
     {
         try
         {
-            await _progressionService.AddNewProgression(dto);
+            await _progressionService.AddNewProgression(uid);
             return Ok();
         }
         catch
