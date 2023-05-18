@@ -26,9 +26,10 @@ public class ProgressionController : ControllerBase
     }
 
     [HttpGet]
-    [Route("GetProgression/{id}")]
+    [Route("GetProgression/{uid}")]
     public async Task<ActionResult<Progression>> GetCurrentUserProgression(string uid)
     {
+        Console.WriteLine("I'M GetCurrentUserProgression with userId: " + uid);
         try
         {
             var response = await _progressionService.FindUserActiveProgression(uid);
@@ -81,6 +82,7 @@ public class ProgressionController : ControllerBase
     [Route("CreateUserProgression")]
     public async Task<IActionResult> CreateUserProgression(string uid)
     {
+        Console.WriteLine("I'M CreateUserProgression with userId: " + uid);
         try
         {
             await _progressionService.AddNewProgression(uid);
