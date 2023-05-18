@@ -38,7 +38,7 @@ public class ProgressionService : IProgressionService
 
     public async Task AddNewProgression(string uid)
     {
-        var selectOldProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid);
+        var selectOldProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
         if (selectOldProgression == null)
         {
             var newProgression = await ProgressionHandler(uid);
@@ -46,13 +46,15 @@ public class ProgressionService : IProgressionService
         }
 
         var selectProgressionWithInUseTrue = await FindUserActiveProgression(uid);
-
-        if (selectProgressionWithInUseTrue.GoalEndDate > DateTime.Now)
+        Console.WriteLine("Object Time: " + selectProgressionWithInUseTrue.GoalEndDate);
+        Console.WriteLine("Date Time UTC: " + DateTime.UtcNow);
+        if (selectProgressionWithInUseTrue.GoalEndDate > DateTime.UtcNow)
         {
             Console.WriteLine("Progression already exists");
         }
-        else if (selectProgressionWithInUseTrue.GoalEndDate < DateTime.Now)
+        else if (selectProgressionWithInUseTrue.GoalEndDate < DateTime.UtcNow)
         {
+            Console.WriteLine("Progression is old send it to the graveyard(UpdateProgressionStateAsync)");
             await UpdateProgressionStateAsync(selectProgressionWithInUseTrue);
         }
 
@@ -103,14 +105,15 @@ public class ProgressionService : IProgressionService
         var newProgression = new Progression
         {
             Id = "",
+            CreatedAtUtc = DateTime.UtcNow,
             UserId = uid,
-            GoalStartDate = DateTime.Now.Date,
-            GoalEndDate = DateTime.Now.Date,
-            SnuffGoalAmount = (habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1),
-            UsageInterval = new DateTime(),
+            GoalStartDate = DateTime.UtcNow.Date,
+            GoalEndDate = DateTime.UtcNow.Date,
+            SnuffGoalAmount = habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1,
+            UsageInterval = new TimeSpan(),
             InUse = true
         };
-
+        Console.WriteLine("Before Switch(ProgressionType)");
         switch (habitData.ProgressionType)
         {
             case "app":
@@ -122,6 +125,7 @@ public class ProgressionService : IProgressionService
             default:
                 throw new Exception("Progression type not found");
         }
+        Console.WriteLine("Switch Switch(ProgressionType)");
 
         newProgression = await SetUsageInterval(newProgression);
 
@@ -130,15 +134,23 @@ public class ProgressionService : IProgressionService
 
     private async Task<Progression> SetUsageInterval(Progression progressionData)
     {
+        var spaceBetween = 0;
+        if (progressionData.SnuffGoalAmount == 0)
+        {
+            var habitValue = await _habitRepository.FindOneAsync(x => x.UserId == progressionData.UserId);
+            progressionData.SnuffGoalAmount = habitValue.DoseAmount;
+        }
 
-        var spaceBetween = progressionData.SnuffGoalAmount / 24;
+        spaceBetween = 24 * 60 * 60 / progressionData.SnuffGoalAmount;
+        Console.WriteLine("Space between: " + spaceBetween);
+        //conver space between to hours, mins and seconds
+        var hours = spaceBetween / 3600;
+        var mins = (spaceBetween % 3600) / 60;
+        var seconds = spaceBetween % 60;
+        var valueInTimeSpan = new TimeSpan(hours, mins, seconds);
+        Console.WriteLine("TimeSpan: " + valueInTimeSpan);
 
-        var hours = spaceBetween / 60;
-        var minutes = spaceBetween % 60;
-        var seconds = 0;
-        var valueInTimeSpan = new TimeSpan(hours, minutes, seconds);
-
-        progressionData.UsageInterval = new DateTime(valueInTimeSpan.Ticks);
+        progressionData.UsageInterval = valueInTimeSpan;
 
         return progressionData;
     }
