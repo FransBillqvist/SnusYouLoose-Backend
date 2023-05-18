@@ -1,5 +1,4 @@
 using DAL;
-
 namespace Services.Interfaces;
 public interface IUserService
 {
