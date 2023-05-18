@@ -19,6 +19,7 @@ builder.Services.AddScoped<ICurrentSnuffService, CurrentSnuffService>();
 builder.Services.AddScoped<ISnuffService, SnuffService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHabitService, HabitService>();
+builder.Services.AddScoped<IProgressionService, ProgressionService>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApiDocument(

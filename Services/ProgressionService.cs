@@ -38,7 +38,7 @@ public class ProgressionService : IProgressionService
 
     public async Task AddNewProgression(string uid)
     {
-        var selectOldProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid);
+        var selectOldProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
         if (selectOldProgression == null)
         {
             var newProgression = await ProgressionHandler(uid);
@@ -46,13 +46,15 @@ public class ProgressionService : IProgressionService
         }
 
         var selectProgressionWithInUseTrue = await FindUserActiveProgression(uid);
-
-        if (selectProgressionWithInUseTrue.GoalEndDate > DateTime.Now)
+        Console.WriteLine("Object Time: " + selectProgressionWithInUseTrue.GoalEndDate);
+        Console.WriteLine("Date Time UTC: " + DateTime.UtcNow);
+        if (selectProgressionWithInUseTrue.GoalEndDate > DateTime.UtcNow)
         {
             Console.WriteLine("Progression already exists");
         }
-        else if (selectProgressionWithInUseTrue.GoalEndDate < DateTime.Now)
+        else if (selectProgressionWithInUseTrue.GoalEndDate < DateTime.UtcNow)
         {
+            Console.WriteLine("Progression is old send it to the graveyard(UpdateProgressionStateAsync)");
             await UpdateProgressionStateAsync(selectProgressionWithInUseTrue);
         }
 
@@ -103,9 +105,10 @@ public class ProgressionService : IProgressionService
         var newProgression = new Progression
         {
             Id = "",
+            CreatedAtUtc = DateTime.UtcNow,
             UserId = uid,
-            GoalStartDate = DateTime.Now.Date,
-            GoalEndDate = DateTime.Now.Date,
+            GoalStartDate = DateTime.UtcNow.Date,
+            GoalEndDate = DateTime.UtcNow.Date,
             SnuffGoalAmount = (habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1),
             UsageInterval = new TimeSpan(),
             InUse = true
@@ -132,7 +135,7 @@ public class ProgressionService : IProgressionService
     {
 
         var spaceBetween = progressionData.SnuffGoalAmount / 24;
-
+        Console.WriteLine("Space between: " + spaceBetween);
         var hours = spaceBetween / 60;
         var minutes = spaceBetween % 60;
         var seconds = 0;
