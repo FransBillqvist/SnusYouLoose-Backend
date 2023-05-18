@@ -48,7 +48,7 @@ public class ProgressionController : ControllerBase
     }
 
     [HttpGet]
-    [Route("RemaingSnuffToday/{id}")]
+    [Route("RemainingSnuffToday/{uid}")]
     public async Task<ActionResult<int>> GetRemainingSnuffToday(string uid)
     {
         try

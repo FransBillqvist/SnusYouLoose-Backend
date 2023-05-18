@@ -62,14 +62,15 @@ public class ProgressionService : IProgressionService
 
     public async Task<int> CalculateRemainingSnuff(string uid)
     {
-        var allLogsForUserToday = _snuffLogRepository.FilterBy(x => x.SnuffLogDate == DateTime.Now.Date && x.UserId == uid);
+        var allLogsForUserToday = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.Day && x.UserId == uid);
         var activeProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
-        var numberOfSnuffLogs = 0;
+        var numberOfUsedSnuff = 0;
         foreach (var log in allLogsForUserToday)
         {
-            numberOfSnuffLogs += log.AmountUsed;
+            numberOfUsedSnuff += log.AmountUsed;
         }
-        return activeProgression.SnuffGoalAmount - numberOfSnuffLogs;
+        var remainingSnuff = activeProgression.SnuffGoalAmount - numberOfUsedSnuff;
+        return remainingSnuff;
     }
 
     public async Task<Progression> FindUserActiveProgression(string uid)

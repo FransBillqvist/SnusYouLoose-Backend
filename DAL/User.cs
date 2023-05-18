@@ -10,5 +10,7 @@ public class User : Document
     public string Email { get; set; }
     [BsonElement("Name")]
     public string Name { get; set; }
+    [BsonElement("Password")]
+    public string Password { get; set; }
     
 }
