@@ -30,9 +30,11 @@ public class HabitService : IHabitService
         return await _habitRepository.FindOneAsync(x => x.Id == id);
     }
 
-    public async Task CreateHabitAsync(Habit newHabit) =>
+    public async Task CreateHabitAsync(Habit newHabit)
+    {
         await _habitRepository.InsertOneAsync(newHabit);
-
+        await SetEndDateForHabit(newHabit);
+    }
     public async Task UpdateHabitAsync(string id, Habit updatedHabit)
     {
         await _habitRepository.ReplaceOneAsync(updatedHabit);
@@ -46,8 +48,8 @@ public class HabitService : IHabitService
 
     public async Task<Habit> SetEndDateForHabit(Habit dto)
     {
-        var habit = await _habitRepository.FindOneAsync(x => x.Id == dto.Id);
-        var speed = habit.Speed;
+
+        var speed = dto.Speed;
         var days = 0;
         switch (speed)
         {
@@ -64,12 +66,12 @@ public class HabitService : IHabitService
                 days = 7;
                 break;
         }
-        for (int i = 0; i < habit.DoseAmount; i++)
+        for (int i = 0; i < dto.DoseAmount; i++)
         {
-            habit.EndDate = habit.EndDate.AddDays(days);
+            dto.EndDate = dto.EndDate.AddDays(days);
         }
 
-        await _habitRepository.ReplaceOneAsync(habit);
-        return habit;
+        await _habitRepository.ReplaceOneAsync(dto);
+        return dto;
     }
 }
