@@ -99,13 +99,14 @@ public class ProgressionService : IProgressionService
     public async Task<Progression> ProgressionHandler(string uid)
     {
         var habitData = await _habitRepository.FindOneAsync(x => x.UserId == uid);
+
         var newProgression = new Progression
         {
             Id = "",
             UserId = uid,
             GoalStartDate = DateTime.Now.Date,
             GoalEndDate = DateTime.Now.Date,
-            SnuffGoalAmount = habitData.DoseAmount - 1,
+            SnuffGoalAmount = (habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1),
             UsageInterval = new DateTime(),
             InUse = true
         };
