@@ -109,11 +109,11 @@ public class ProgressionService : IProgressionService
             UserId = uid,
             GoalStartDate = DateTime.UtcNow.Date,
             GoalEndDate = DateTime.UtcNow.Date,
-            SnuffGoalAmount = (habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1),
+            SnuffGoalAmount = habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1,
             UsageInterval = new TimeSpan(),
             InUse = true
         };
-
+        Console.WriteLine("Before Switch(ProgressionType)");
         switch (habitData.ProgressionType)
         {
             case "app":
@@ -125,6 +125,7 @@ public class ProgressionService : IProgressionService
             default:
                 throw new Exception("Progression type not found");
         }
+        Console.WriteLine("Switch Switch(ProgressionType)");
 
         newProgression = await SetUsageInterval(newProgression);
 
@@ -133,13 +134,21 @@ public class ProgressionService : IProgressionService
 
     private async Task<Progression> SetUsageInterval(Progression progressionData)
     {
+        var spaceBetween = 0;
+        if (progressionData.SnuffGoalAmount == 0)
+        {
+            var habitValue = await _habitRepository.FindOneAsync(x => x.UserId == progressionData.UserId);
+            progressionData.SnuffGoalAmount = habitValue.DoseAmount;
+        }
 
-        var spaceBetween = progressionData.SnuffGoalAmount / 24;
+        spaceBetween = 24 * 60 * 60 / progressionData.SnuffGoalAmount;
         Console.WriteLine("Space between: " + spaceBetween);
-        var hours = spaceBetween / 60;
-        var minutes = spaceBetween % 60;
-        var seconds = 0;
-        var valueInTimeSpan = new TimeSpan(hours, minutes, seconds);
+        //conver space between to hours, mins and seconds
+        var hours = spaceBetween / 3600;
+        var mins = (spaceBetween % 3600) / 60;
+        var seconds = spaceBetween % 60;
+        var valueInTimeSpan = new TimeSpan(hours, mins, seconds);
+        Console.WriteLine("TimeSpan: " + valueInTimeSpan);
 
         progressionData.UsageInterval = valueInTimeSpan;
 
