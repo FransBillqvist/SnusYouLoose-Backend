@@ -45,8 +45,10 @@ public class HabitController : ControllerBase
 
     [HttpPost]
     [Route("Create")]
-    public async Task<IActionResult> Post(Habit newHabit)
+
+    public async Task<IActionResult> Post([FromBody] Habit newHabit)
     {
+        Console.WriteLine("Hello, Am Post Habit Endpoint");
         try
         {
             await _habitService.CreateHabitAsync(newHabit);
