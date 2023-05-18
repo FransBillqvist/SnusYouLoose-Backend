@@ -9,20 +9,20 @@ namespace Services;
 
 public class HabitService : IHabitService
 {
-        private readonly IGenericMongoRepository<Habit> _habitRepository;
+    private readonly IGenericMongoRepository<Habit> _habitRepository;
 
-        public HabitService(
-                IOptions<MongoDbSettings> Settings,
-                IGenericMongoRepository<Habit> habitRepository
-            )
-            {
-                _habitRepository = habitRepository;
-                var mongoClient = new MongoClient(
-                    Settings.Value.ConnectionString);
+    public HabitService(
+            IOptions<MongoDbSettings> Settings,
+            IGenericMongoRepository<Habit> habitRepository
+        )
+    {
+        _habitRepository = habitRepository;
+        var mongoClient = new MongoClient(
+            Settings.Value.ConnectionString);
 
-                var mongoDatabase = mongoClient.GetDatabase(
-                        Settings.Value.DatabaseName);
-            }
+        var mongoDatabase = mongoClient.GetDatabase(
+                Settings.Value.DatabaseName);
+    }
 
     public async Task<Habit> GetHabitAsync(string id)
     {
@@ -42,5 +42,34 @@ public class HabitService : IHabitService
     {
         ObjectId mongoId = ObjectId.Parse(id);
         await _habitRepository.DeleteOneAsync(x => x.Id == id);
+    }
+
+    public async Task<Habit> SetEndDateForHabit(Habit dto)
+    {
+        var habit = await _habitRepository.FindOneAsync(x => x.Id == dto.Id);
+        var speed = habit.Speed;
+        var days = 0;
+        switch (speed)
+        {
+            case "Långsam":
+                days = 4;
+                break;
+            case "Lagom":
+                days = 7;
+                break;
+            case "Snabbt":
+                days = 14;
+                break;
+            default:
+                days = 7;
+                break;
+        }
+        for (int i = 0; i < habit.DoseAmount; i++)
+        {
+            habit.EndDate = habit.EndDate.AddDays(days);
+        }
+
+        await _habitRepository.ReplaceOneAsync(habit);
+        return habit;
     }
 }
