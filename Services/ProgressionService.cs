@@ -107,7 +107,7 @@ public class ProgressionService : IProgressionService
             GoalStartDate = DateTime.Now.Date,
             GoalEndDate = DateTime.Now.Date,
             SnuffGoalAmount = (habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1),
-            UsageInterval = new DateTime(),
+            UsageInterval = new TimeSpan(),
             InUse = true
         };
 
@@ -138,7 +138,7 @@ public class ProgressionService : IProgressionService
         var seconds = 0;
         var valueInTimeSpan = new TimeSpan(hours, minutes, seconds);
 
-        progressionData.UsageInterval = new DateTime(valueInTimeSpan.Ticks);
+        progressionData.UsageInterval = valueInTimeSpan;
 
         return progressionData;
     }
