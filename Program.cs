@@ -1,6 +1,15 @@
+using System.Text;
+using AspNetCore.Identity.MongoDbCore.Extensions;
+using AspNetCore.Identity.MongoDbCore.Infrastructure;
 using DAL;
 using DAL.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using Repository;
 using Services;
 using Services.Interfaces;
@@ -8,10 +17,69 @@ using Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.Configure<MongoDbSettings>(
+BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+BsonSerializer.RegisterSerializer(new DateTimeSerializer(BsonType.String));
+BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
+
+var mongoDbIdentitySettings = new MongoDbIdentityConfiguration
+{
+    MongoDbSettings = new AspNetCore.Identity.MongoDbCore.Infrastructure.MongoDbSettings
+    {
+        ConnectionString = "mongodb://localhost:27017",
+        DatabaseName = "SnuffStorage"
+    },
+    IdentityOptionsAction = options =>
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 1;
+        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedPhoneNumber = false;
+        options.SignIn.RequireConfirmedAccount = false;
+        options.User.RequireUniqueEmail = true;
+
+        //lockout settings
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        options.Lockout.MaxFailedAccessAttempts = 5;
+    }
+};
+
+builder.Services.ConfigureMongoDbIdentity<AuthUser, Role, Guid>(mongoDbIdentitySettings)
+    .AddUserManager<UserManager<AuthUser>>()
+    .AddSignInManager<SignInManager<AuthUser>>()
+    .AddRoleManager<RoleManager<Role>>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(x =>
+{
+
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidIssuer = "http://localhost:5126",
+        ValidAudience = "http://localhost:5126",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("B055355up3R53Cr3tK3y@345")),
+    };
+});
+
+builder.Services.Configure<DAL.MongoDbSettings>(
 builder.Configuration.GetSection("MongoDbSettings"));
-builder.Services.AddScoped<MongoDbSettings>(serviceProvider =>
-        serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
+builder.Services.AddScoped<DAL.MongoDbSettings>(serviceProvider =>
+        serviceProvider.GetRequiredService<IOptions<DAL.MongoDbSettings>>().Value);
 
 builder.Services.AddScoped(typeof(IGenericMongoRepository<>), typeof(MongoRepository<>));
 builder.Services.AddScoped<ISnuffLogService, SnuffLogService>();
@@ -80,8 +148,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 
-app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

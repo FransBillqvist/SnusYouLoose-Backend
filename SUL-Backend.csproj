@@ -8,6 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.Identity.Mongo" Version="8.3.3" />
+    <PackageReference Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
     <PackageReference Include="MongoDB.Driver" Version="2.19.1" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.19.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
