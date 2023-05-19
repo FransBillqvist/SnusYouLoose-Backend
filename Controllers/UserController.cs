@@ -9,6 +9,7 @@ namespace Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
+
     private readonly ILogger<UserController> _logger;
     private readonly IGenericMongoRepository<User> _userRepository;
     private readonly IUserService _userService;
@@ -25,6 +26,7 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("Get/{id}")]
+    [Obsolete]
     public async Task<ActionResult<User>> GetUser(string id)
     {
         try
@@ -46,6 +48,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Route("Create")]
+    [Obsolete]
     public async Task<IActionResult> Post(User newUser)
     {
         try
@@ -61,6 +64,7 @@ public class UserController : ControllerBase
 
     [HttpPut]
     [Route("Update/{id}")]
+    [Obsolete]
     public async Task<IActionResult> Update(string id, User updatedUser)
     {
         try
@@ -87,6 +91,7 @@ public class UserController : ControllerBase
 
     [HttpDelete]
     [Route("Delete")]
+    [Obsolete]
     public async Task<IActionResult> Delete(string id)
     {
         var user = await _userService.GetUserAsync(id);
