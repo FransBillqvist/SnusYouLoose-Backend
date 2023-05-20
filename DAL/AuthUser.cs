@@ -7,5 +7,4 @@ namespace DAL;
 public class AuthUser : MongoIdentityUser<Guid>
 {
     public string FullName { get; set; } = string.Empty;
-
 }

@@ -93,6 +93,7 @@ public class AuthController : ControllerBase
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                 Message = "Success",
                 Email = user.Email,
+                FullName = user.FullName,
                 Success = true,
                 UserId = user.Id.ToString(),
             };

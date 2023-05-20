@@ -19,7 +19,7 @@ public class CurrentSnuffService : ICurrentSnuffService
             ISnuffLogService snuffLogService,
             ISnuffService snuffService
             )
-        {
+    {
         _snuffLogService = snuffLogService;
         _snuffService = snuffService;
         _currentSnuffRepository = currentSnuffRepository;
@@ -29,7 +29,7 @@ public class CurrentSnuffService : ICurrentSnuffService
 
         var mongoDatabase = mongoClient.GetDatabase(
                 Settings.Value.DatabaseName);
-        }
+    }
 
     public async Task CreateCurrentSnuffAsync(CurrentSnuff newCurrentSnuff)
     {
@@ -42,7 +42,7 @@ public class CurrentSnuffService : ICurrentSnuffService
 
         if (result == null)
         {
-            throw new Exception("CurrentSnuff not found");
+            Console.WriteLine("CurrentSnuff not found");
         }
 
         return result;
