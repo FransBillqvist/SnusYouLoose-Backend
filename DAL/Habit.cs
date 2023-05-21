@@ -8,6 +8,15 @@ public class Habit : Document
     public int DoseAmount { get; set; }
     public string ProgressionType { get; set; }
     public string Speed { get; set; }
-    public DateTime EndDate { get; set; }
-    public DateTime StartDate { get; set; }
+    internal DateTime EndDate { get; set; }
+    internal DateTime StartDate { get; set; } = DateTime.Now;
+    public string StringEndDate
+    {
+        get
+        {
+            return EndDate.ToString();
+        }
+        set { StringEndDate = EndDate.ToString(); }
+    }
+    public string StringStartDate { get; set; } = string.Empty;
 }
