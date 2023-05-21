@@ -80,13 +80,14 @@ public class ProgressionController : ControllerBase
 
     [HttpPost]
     [Route("CreateUserProgression")]
-    public async Task<IActionResult> CreateUserProgression(string uid)
+    public async Task<ActionResult<Progression>> CreateUserProgression(string uid)
     {
         Console.WriteLine("I'M CreateUserProgression with userId: " + uid);
         try
         {
-            await _progressionService.AddNewProgression(uid);
-            return Ok();
+            var newProgression = await _progressionService.AddNewProgression(uid);
+
+            return newProgression;
         }
         catch
         {

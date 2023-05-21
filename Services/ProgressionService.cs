@@ -36,13 +36,14 @@ public class ProgressionService : IProgressionService
                 Settings.Value.DatabaseName);
     }
 
-    public async Task AddNewProgression(string uid)
+    public async Task<Progression> AddNewProgression(string uid)
     {
         var selectOldProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
         if (selectOldProgression == null)
         {
             var newProgression = await ProgressionHandler(uid);
             await _progressionRepository.InsertOneAsync(newProgression);
+            return newProgression;
         }
 
         var selectProgressionWithInUseTrue = await FindUserActiveProgression(uid);
@@ -51,13 +52,15 @@ public class ProgressionService : IProgressionService
         if (selectProgressionWithInUseTrue.GoalEndDate > DateTime.UtcNow)
         {
             Console.WriteLine("Progression already exists");
+            return selectProgressionWithInUseTrue;
         }
         else if (selectProgressionWithInUseTrue.GoalEndDate < DateTime.UtcNow)
         {
             Console.WriteLine("Progression is old send it to the graveyard(UpdateProgressionStateAsync)");
-            await UpdateProgressionStateAsync(selectProgressionWithInUseTrue);
+            var updatedProgression = await UpdateProgressionStateAsync(selectProgressionWithInUseTrue);
+            return updatedProgression;
         }
-
+        return selectProgressionWithInUseTrue;
     }
 
     public async Task<int> CalculateRemainingSnuff(string uid)
@@ -92,11 +95,12 @@ public class ProgressionService : IProgressionService
         }
     }
 
-    public async Task UpdateProgressionStateAsync(Progression updatedProgression)
+    public async Task<Progression> UpdateProgressionStateAsync(Progression updatedProgression)
     {
         updatedProgression.InUse = false;
         await _progressionRepository.ReplaceOneAsync(updatedProgression);
         await AddNewProgression(updatedProgression.UserId);
+        return updatedProgression;
     }
 
     public async Task<Progression> ProgressionHandler(string uid)
