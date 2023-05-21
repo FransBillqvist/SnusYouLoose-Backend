@@ -50,8 +50,8 @@ public class HabitService : IHabitService
 
     public async Task<Habit> SetEndDateForHabit(Habit dto)
     {
-        if (dto.DoseType == "dosor")
-            dto.DoseAmount = dto.DoseAmount * 20;
+        var dosorAmount = (dto.DoseType == "dosor" ? dto.DoseAmount * 20 : dto.DoseAmount);
+
         var speed = dto.Speed;
         var days = 0;
         switch (speed)
@@ -69,7 +69,7 @@ public class HabitService : IHabitService
                 days = 7;
                 break;
         }
-        for (int i = 0; i < dto.DoseAmount; i++)
+        for (int i = 0; i < dosorAmount; i++)
         {
             dto.EndDate = dto.EndDate.AddDays(days);
         }
