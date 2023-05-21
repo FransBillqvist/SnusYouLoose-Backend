@@ -32,6 +32,8 @@ public class HabitService : IHabitService
 
     public async Task CreateHabitAsync(Habit newHabit)
     {
+        newHabit.StartDate = DateTime.UtcNow;
+        newHabit.EndDate = DateTime.UtcNow.AddTicks(1);
         await _habitRepository.InsertOneAsync(newHabit);
         await SetEndDateForHabit(newHabit);
     }
@@ -48,7 +50,8 @@ public class HabitService : IHabitService
 
     public async Task<Habit> SetEndDateForHabit(Habit dto)
     {
-
+        if (dto.DoseType == "dosor")
+            dto.DoseAmount = dto.DoseAmount * 20;
         var speed = dto.Speed;
         var days = 0;
         switch (speed)
