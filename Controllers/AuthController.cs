@@ -134,7 +134,7 @@ public class AuthController : ControllerBase
                 Success = false
             };
 
-            return new RegisterResponse { Message = "User is now registrated", Success = true };
+            return new RegisterResponse { Id = newUser.Id.ToString(), Message = "User is now registered", Success = true };
 
         }
         catch (Exception ex)
