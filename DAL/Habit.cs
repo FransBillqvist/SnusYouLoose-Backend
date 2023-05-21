@@ -9,14 +9,21 @@ public class Habit : Document
     public string ProgressionType { get; set; }
     public string Speed { get; set; }
     internal DateTime EndDate { get; set; }
-    internal DateTime StartDate { get; set; } = DateTime.Now;
+    internal DateTime StartDate { get; set; }
     public string StringEndDate
     {
         get
         {
             return EndDate.ToString();
         }
-        set { StringEndDate = EndDate.ToString(); }
+        private set { }
     }
-    public string StringStartDate { get; set; } = string.Empty;
+    public string StringStartDate
+    {
+        get
+        {
+            return StartDate.ToString();
+        }
+        private set { }
+    }
 }
