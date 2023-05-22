@@ -9,9 +9,29 @@ public class Progression : Document
     [BsonElement("UserId")]
     public string UserId { get; set; }
     [BsonElement("GoalStartDate")]
-    public DateTime GoalStartDate { get; set; }
+    internal DateTime GoalStartDate { get; set; }
+
+    [BsonElement("StringGoalStartDate")]
+    public string StringGoalStartDate
+    {
+        get
+        {
+            return GoalStartDate.ToString();
+        }
+        private set { }
+    }
     [BsonElement("GoalEndDate")]
-    public DateTime GoalEndDate { get; set; }
+    internal DateTime GoalEndDate { get; set; }
+
+    [BsonElement("StringGoalEndDate")]
+    public string StringGoalEndDate
+    {
+        get
+        {
+            return GoalEndDate.ToString();
+        }
+        private set { }
+    }
     [BsonElement("SnuffGoalAmount")]
     public int SnuffGoalAmount { get; set; }
     [BsonElement("UsageInterval")]

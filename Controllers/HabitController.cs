@@ -51,6 +51,8 @@ public class HabitController : ControllerBase
         Console.WriteLine("Hello, Am Post Habit Endpoint");
         try
         {
+            newHabit.StartDate = DateTime.UtcNow;
+            newHabit.EndDate = DateTime.UtcNow;
             await _habitService.CreateHabitAsync(newHabit);
             return Ok();
         }

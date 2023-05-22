@@ -8,5 +8,13 @@ public interface IDocument
     [BsonId]
     [BsonRepresentation(BsonType.String)]
     public string Id { get; set; }
-    DateTime CreatedAtUtc {get;}
+    internal DateTime CreatedAtUtc { get; }
+    public string StringCreateAtUtc
+    {
+        get
+        {
+            return CreatedAtUtc.ToString();
+        }
+        private set { }
+    }
 }
