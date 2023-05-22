@@ -98,4 +98,17 @@ public class CurrentSnuffService : ICurrentSnuffService
         ObjectId mongoId = ObjectId.Parse(id);
         await _currentSnuffRepository.DeleteOneAsync(x => x.Id == id);
     }
+
+    public async Task<List<CurrentSnuff>> GetAllCurrentSnuffsForThisUserAsync(string uid)
+    {
+        try
+        {
+            return _currentSnuffRepository.FilterBy(x => x.UserId == uid && x.IsEmpty == false).ToList<CurrentSnuff>();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return null;
+        }
+    }
 }

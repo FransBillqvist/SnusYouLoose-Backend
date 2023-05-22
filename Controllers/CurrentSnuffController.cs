@@ -28,6 +28,15 @@ public class CurrentSnuffController : ControllerBase
     }
 
     [HttpGet]
+    [Route("GetAllSnuff/{uid}")]
+    public async Task<List<CurrentSnuff>> GetActiveSnuffForUser(string uid)
+    {
+        var result = await _csService.GetAllCurrentSnuffsForThisUserAsync(uid);
+        return result;
+    }
+
+
+    [HttpGet]
     [Route("Get/{id}")]
     public async Task<ActionResult<CurrentSnuff>> GetCurrentSnuff(string id)
     {
