@@ -10,5 +10,16 @@ public abstract class Document : IDocument
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = null;
     [BsonElement("CreatedAtUtc")]
-    public DateTime CreatedAtUtc {get; set;}
+    internal DateTime CreatedAtUtc { get; set; }
+    [BsonElement("StringCreatedAtUtc")]
+    public string StringCreatedAtUtc
+    {
+        get
+        {
+            return CreatedAtUtc.ToString();
+        }
+        private set { }
+    }
+
+    DateTime IDocument.CreatedAtUtc => throw new NotImplementedException();
 }
