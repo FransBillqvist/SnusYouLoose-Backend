@@ -26,7 +26,9 @@ public class HabitService : IHabitService
 
     public async Task<Habit> GetHabitAsync(string id)
     {
+        Console.WriteLine("Hello, Am Get Habit Service with incoming string: " + id);
         ObjectId mongoId = ObjectId.Parse(id);
+        Console.WriteLine("Hello, Am Get Habit Service with Converted ObjectId: " + mongoId);
         return await _habitRepository.FindOneAsync(x => x.Id == id);
     }
 
