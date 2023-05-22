@@ -30,7 +30,7 @@ public class CurrentSnuffController : ControllerBase
     [HttpGet]
     [Route("Get/{id}")]
     public async Task<ActionResult<CurrentSnuff>> GetCurrentSnuff(string id)
-    { 
+    {
         var currentSnuff = await _csService.GetCurrentSnuffAsync(id);
         if (currentSnuff is null)
         {
@@ -46,6 +46,7 @@ public class CurrentSnuffController : ControllerBase
     {
         try
         {
+            newCurrentSnuff.CreatedAtUtc = DateTime.UtcNow;
             await _csService.CreateCurrentSnuffAsync(newCurrentSnuff);
             return Ok();
         }

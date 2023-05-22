@@ -50,6 +50,7 @@ public class SnuffController : ControllerBase
     {
         try
         {
+            newSnuff.CreatedAtUtc = DateTime.UtcNow;
             await _snuffService.CreateSnuffAsync(newSnuff);
             return Ok();
         }

@@ -48,6 +48,7 @@ public class SnuffLogController : ControllerBase
     {
         try
         {
+            newSnuffLog.CreatedAtUtc = DateTime.UtcNow;
             await _snuffLogService.CreateSnuffLogAsync(newSnuffLog);
             return Ok();
         }

@@ -53,6 +53,7 @@ public class UserController : ControllerBase
     {
         try
         {
+            newUser.CreatedAtUtc = DateTime.UtcNow;
             await _userService.CreateUserAsync(newUser);
             return Ok();
         }
