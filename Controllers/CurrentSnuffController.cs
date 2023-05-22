@@ -56,6 +56,7 @@ public class CurrentSnuffController : ControllerBase
         try
         {
             newCurrentSnuff.CreatedAtUtc = DateTime.UtcNow;
+            newCurrentSnuff.PurchaseDate = DateTime.UtcNow;
             await _csService.CreateCurrentSnuffAsync(newCurrentSnuff);
             return Ok();
         }
