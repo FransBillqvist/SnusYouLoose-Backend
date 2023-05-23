@@ -29,7 +29,6 @@ public class HabitController : ControllerBase
         try
         {
             var habit = await _habitService.GetHabitAsync(id);
-
             if (habit is null)
             {
                 return NotFound();
