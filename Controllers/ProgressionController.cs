@@ -125,4 +125,20 @@ public class ProgressionController : ControllerBase
             return BadRequest();
         }
     }
+
+    [HttpGet]
+    [Route("LastConsumedSnuff/{uid}")]
+    public async Task<ActionResult<TimeSpan>> LastConsumedSnuff(string uid)
+    {
+        try
+        {
+            Console.WriteLine("I'M LastConsumedSnuff with userId: " + uid);
+            var result = await _progressionService.LastConsumedSnuffAtUtc(uid);
+            return result;
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 }

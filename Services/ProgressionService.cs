@@ -139,16 +139,15 @@ public class ProgressionService : IProgressionService
 
     private async Task<Progression> SetUsageInterval(Progression progressionData)
     {
-        var lazyveriable = 0;
-        var spaceBetween = 0;
+        var habitValue = await _habitRepository.FindOneAsync(x => x.UserId == progressionData.UserId);
+
         if (progressionData.SnuffGoalAmount == 0)
         {
-            var habitValue = await _habitRepository.FindOneAsync(x => x.UserId == progressionData.UserId);
             progressionData.SnuffGoalAmount = habitValue.DoseAmount;
-            lazyveriable = habitValue.NumberOfHoursPerDay;
         }
+        var lazyveriable = habitValue.NumberOfHoursPerDay;
 
-        spaceBetween = lazyveriable * 60 * 60 / progressionData.SnuffGoalAmount;
+        var spaceBetween = lazyveriable * 60 * 60 / progressionData.SnuffGoalAmount;
         Console.WriteLine("Space between: " + spaceBetween);
         //conver space between to hours, mins and seconds
         var hours = spaceBetween / 3600;
@@ -209,5 +208,24 @@ public class ProgressionService : IProgressionService
         Console.WriteLine(TimeSpan.FromSeconds(newTimeInveral) + "With logs of today");
         return TimeSpan.FromSeconds(newTimeInveral);
 
+    }
+
+    public async Task<TimeSpan> LastConsumedSnuffAtUtc(string uid)
+    {
+        var lastLog = _snuffLogRepository.FilterBy(x => x.UserId == uid).OrderByDescending(x => x.SnuffLogDate).FirstOrDefault();
+        if (lastLog == null)
+        {
+            var todaysdate = long.Parse(DateTime.UtcNow.Date.ToString());
+            var timeNow = long.Parse(DateTime.UtcNow.ToString());
+            var mathTime = timeNow - todaysdate;
+            return new TimeSpan(mathTime);
+        }
+        else
+        {
+            var convertDateToLong = long.Parse(DateTime.UtcNow.ToString());
+            var convertLogDateToLong = long.Parse(lastLog.SnuffLogDate.ToString());
+            var convertToLong = convertDateToLong - convertLogDateToLong;
+            return new TimeSpan(convertToLong);
+        }
     }
 }
