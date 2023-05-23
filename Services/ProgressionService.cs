@@ -115,7 +115,7 @@ public class ProgressionService : IProgressionService
             GoalStartDate = DateTime.UtcNow.Date,
             GoalEndDate = DateTime.UtcNow.Date,
             SnuffGoalAmount = habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1,
-            UsageInterval = new TimeSpan(),
+            RecommendedUsageInterval = new TimeSpan(),
             InUse = true
         };
         Console.WriteLine("Before Switch(ProgressionType)");
@@ -139,14 +139,16 @@ public class ProgressionService : IProgressionService
 
     private async Task<Progression> SetUsageInterval(Progression progressionData)
     {
+        var lazyveriable = 0;
         var spaceBetween = 0;
         if (progressionData.SnuffGoalAmount == 0)
         {
             var habitValue = await _habitRepository.FindOneAsync(x => x.UserId == progressionData.UserId);
             progressionData.SnuffGoalAmount = habitValue.DoseAmount;
+            lazyveriable = habitValue.NumberOfHoursPerDay;
         }
 
-        spaceBetween = 24 * 60 * 60 / progressionData.SnuffGoalAmount;
+        spaceBetween = lazyveriable * 60 * 60 / progressionData.SnuffGoalAmount;
         Console.WriteLine("Space between: " + spaceBetween);
         //conver space between to hours, mins and seconds
         var hours = spaceBetween / 3600;
@@ -155,7 +157,7 @@ public class ProgressionService : IProgressionService
         var valueInTimeSpan = new TimeSpan(hours, mins, seconds);
         Console.WriteLine("TimeSpan: " + valueInTimeSpan);
 
-        progressionData.UsageInterval = valueInTimeSpan;
+        progressionData.RecommendedUsageInterval = valueInTimeSpan;
 
         return progressionData;
     }
@@ -185,4 +187,27 @@ public class ProgressionService : IProgressionService
         return datumProgressionData;
     }
 
+    public async Task<TimeSpan> WhenIsTheNextDoseAvailbe(string uid)
+    {
+        var newTimeInveral = 0.0;
+        var availableSnuffToday = 0;
+        var timeLeftOfTheDate = DateTime.UtcNow.Date.AddHours(23).AddMinutes(59).AddSeconds(59) - DateTime.UtcNow;
+
+        var logDetails = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.Day && x.UserId == uid);
+        var progressionDetails = _progressionRepository.FilterBy(x => x.UserId == uid && x.InUse == true).FirstOrDefault();
+
+        if (logDetails == null)
+        {
+            availableSnuffToday = progressionDetails.SnuffGoalAmount;
+            newTimeInveral = timeLeftOfTheDate.TotalSeconds / availableSnuffToday;
+            Console.WriteLine(TimeSpan.FromSeconds(newTimeInveral) + "From no logs of today");
+            return TimeSpan.FromSeconds(newTimeInveral);
+        }
+
+        availableSnuffToday = progressionDetails.SnuffGoalAmount - logDetails.Sum(x => x.AmountUsed);
+        newTimeInveral = timeLeftOfTheDate.TotalSeconds / availableSnuffToday;
+        Console.WriteLine(TimeSpan.FromSeconds(newTimeInveral) + "With logs of today");
+        return TimeSpan.FromSeconds(newTimeInveral);
+
+    }
 }

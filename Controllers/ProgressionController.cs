@@ -109,4 +109,20 @@ public class ProgressionController : ControllerBase
             return BadRequest();
         }
     }
+
+    [HttpGet]
+    [Route("TimeToNextDose/{uid}")]
+    public async Task<ActionResult<TimeSpan>> TimeToNextDose(string uid)
+    {
+        try
+        {
+            Console.WriteLine("I'M WhenIsTheNextDoseAvailbe with userId: " + uid);
+            var result = await _progressionService.WhenIsTheNextDoseAvailbe(uid);
+            return result;
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 }
