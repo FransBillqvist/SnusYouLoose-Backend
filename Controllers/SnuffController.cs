@@ -98,4 +98,12 @@ public class SnuffController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet]
+    [Route("GetAllSnuffs")]
+    public async Task<List<Snuff>> GetAllSnuffs()
+    {
+        var response = await _snuffService.GetAllSnuffsAsync();
+        return response;
+    }
 }

@@ -9,4 +9,5 @@ public interface ISnuffService
     Task UpdateSnuffAsync(string id, Snuff updatedSnuff);
     Task RemoveSnuffAsync(string id);
     Task<int> GetSnuffAmountAsync(string snuffId);
+    Task<List<Snuff>> GetAllSnuffsAsync();
 }

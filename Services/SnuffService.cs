@@ -23,7 +23,7 @@ public class SnuffService : ISnuffService
         var mongoDatabase = mongoClient.GetDatabase(
                 Settings.Value.DatabaseName);
     }
-    
+
     public async Task<Snuff> CreateSnuffAsync(Snuff newSnuff)
     {
         try
@@ -53,5 +53,11 @@ public class SnuffService : ISnuffService
     {
         ObjectId mongoId = ObjectId.Parse(id);
         await _snuffRepository.DeleteOneAsync(x => x.Id == id);
+    }
+
+    public async Task<List<Snuff>> GetAllSnuffsAsync()
+    {
+        var response = _snuffRepository.FilterBy(x => x.Id != null);
+        return response.ToList();
     }
 }
