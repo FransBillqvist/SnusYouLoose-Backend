@@ -9,4 +9,5 @@ public interface ICurrentSnuffService
     Task RemoveCurrentSnuffAsync(string id);
     Task UpdateCurrentSnuffAsync(string id, CurrentSnuff updatedCurrentSnuff);
     Task<List<CurrentSnuff>> GetAllCurrentSnuffsForThisUserAsync(string uid);
+    Task<Boolean> AddCurrentSnuffToArchiveAsync(string CurrentSnuffId);
 }

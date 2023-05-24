@@ -99,7 +99,20 @@ public class CurrentSnuffController : ControllerBase
             await _csService.RemoveCurrentSnuffAsync(id);
             return NoContent();
         }
+        catch
+        {
+            return BadRequest();
+        }
+    }
 
+    [HttpPost]
+    [Route("AddCurrentSnuffToArchive/{csId}")]
+    public async Task<IActionResult> AddCurrentSnuffToArchive(string csId)
+    {
+        try
+        {
+            return Ok(await _csService.AddCurrentSnuffToArchiveAsync(csId));
+        }
         catch
         {
             return BadRequest();
