@@ -51,14 +51,14 @@ public class CurrentSnuffController : ControllerBase
 
     [HttpPost]
     [Route("Create")]
-    public async Task<IActionResult> Post(CurrentSnuff newCurrentSnuff)
+    public async Task<ActionResult<CurrentSnuff>> Post(CurrentSnuff newCurrentSnuff)
     {
         try
         {
             newCurrentSnuff.CreatedAtUtc = DateTime.UtcNow;
             newCurrentSnuff.PurchaseDate = DateTime.UtcNow;
             await _csService.CreateCurrentSnuffAsync(newCurrentSnuff);
-            return Ok();
+            return newCurrentSnuff;
         }
 
         catch

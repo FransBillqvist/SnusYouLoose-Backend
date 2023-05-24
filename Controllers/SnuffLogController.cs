@@ -48,6 +48,7 @@ public class SnuffLogController : ControllerBase
     {
         try
         {
+            Console.WriteLine("CreateSnuffLog line 51: amount of snuff to use: " + newSnuffLog.AmountUsed);
             newSnuffLog.CreatedAtUtc = DateTime.UtcNow;
             await _snuffLogService.CreateSnuffLogAsync(newSnuffLog);
             return Ok();

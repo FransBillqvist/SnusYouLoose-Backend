@@ -19,5 +19,5 @@ public class CurrentSnuff : Document
     }
     public SnuffLog[]? LogsOfBox { get; set; } = null;
     public string UserId { get; set; }
-    public bool IsEmpty { get; set; }
+    public bool IsEmpty { get; set; }       
 }

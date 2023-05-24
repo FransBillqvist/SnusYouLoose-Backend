@@ -53,6 +53,7 @@ public class ProgressionController : ControllerBase
     {
         try
         {
+            Console.WriteLine("inside remainingsnufftoday, id is: " + uid);
             var response = await _progressionService.CalculateRemainingSnuff(uid);
 
             return response;
