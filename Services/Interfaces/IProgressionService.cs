@@ -10,6 +10,6 @@ public interface IProgressionService
     Task RemoveProgressionAsync(string pid);
     Task<Progression> UpdateProgressionStateAsync(Progression updatedProgression);
     Task<Progression> ProgressionHandler(string uid);
-    Task<TimeSpan> WhenIsTheNextDoseAvailbe(string uid);
+    Task<TimeSpan> WhenIsTheNextDoseAvailable(string uid);
     Task<TimeSpan> LastConsumedSnuffAtUtc(string uid);
 }

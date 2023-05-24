@@ -186,9 +186,9 @@ public class ProgressionService : IProgressionService
         return datumProgressionData;
     }
 
-    public async Task<TimeSpan> WhenIsTheNextDoseAvailbe(string uid)
+    public async Task<TimeSpan> WhenIsTheNextDoseAvailable(string uid)
     {
-        var newTimeInveral = 0.0;
+        var newTimeInterval = 0.0;
         var availableSnuffToday = 0;
         var timeLeftOfTheDate = DateTime.UtcNow.Date.AddHours(23).AddMinutes(59).AddSeconds(59) - DateTime.UtcNow;
 
@@ -198,15 +198,15 @@ public class ProgressionService : IProgressionService
         if (logDetails == null)
         {
             availableSnuffToday = progressionDetails.SnuffGoalAmount;
-            newTimeInveral = timeLeftOfTheDate.TotalSeconds / availableSnuffToday;
-            Console.WriteLine(TimeSpan.FromSeconds(newTimeInveral) + "From no logs of today");
-            return TimeSpan.FromSeconds(newTimeInveral);
+            newTimeInterval = timeLeftOfTheDate.TotalSeconds / availableSnuffToday;
+            Console.WriteLine(TimeSpan.FromSeconds(newTimeInterval) + "From no logs of today");
+            return TimeSpan.FromSeconds(newTimeInterval);
         }
 
         availableSnuffToday = progressionDetails.SnuffGoalAmount - logDetails.Sum(x => x.AmountUsed);
-        newTimeInveral = timeLeftOfTheDate.TotalSeconds / availableSnuffToday;
-        Console.WriteLine(TimeSpan.FromSeconds(newTimeInveral) + "With logs of today");
-        return TimeSpan.FromSeconds(newTimeInveral);
+        newTimeInterval = timeLeftOfTheDate.TotalSeconds / availableSnuffToday;
+        Console.WriteLine(TimeSpan.FromSeconds(newTimeInterval) + "With logs of today");
+        return TimeSpan.FromSeconds(newTimeInterval);
 
     }
 

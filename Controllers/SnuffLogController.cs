@@ -44,7 +44,7 @@ public class SnuffLogController : ControllerBase
 
     [HttpPost]
     [Route("Create")]
-    public async Task<IActionResult> Post(string id, SnuffLog newSnuffLog)
+    public async Task<IActionResult> Post(SnuffLog newSnuffLog)
     {
         try
         {

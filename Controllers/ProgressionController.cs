@@ -116,8 +116,8 @@ public class ProgressionController : ControllerBase
     {
         try
         {
-            Console.WriteLine("I'M WhenIsTheNextDoseAvailbe with userId: " + uid);
-            var result = await _progressionService.WhenIsTheNextDoseAvailbe(uid);
+            Console.WriteLine("I'M WhenIsTheNextDoseAvailable with userId: " + uid);
+            var result = await _progressionService.WhenIsTheNextDoseAvailable(uid);
             return result;
         }
         catch
