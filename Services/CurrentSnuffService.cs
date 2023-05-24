@@ -79,7 +79,7 @@ public class CurrentSnuffService : ICurrentSnuffService
             var log = currentSnuff.LogsOfBox.Append(createdNewLog).ToArray();
             currentSnuff.LogsOfBox = log;
             currentSnuff.IsEmpty = await ReturnEmptyStatus(log, currentSnuff.SnusId);
-
+            currentSnuff.IsArchived = (currentSnuff.IsEmpty ? true : false);
             await _currentSnuffRepository.ReplaceOneAsync(currentSnuff);
             return currentSnuff;
         }
@@ -110,5 +110,20 @@ public class CurrentSnuffService : ICurrentSnuffService
             Console.WriteLine(e);
             return null;
         }
+    }
+
+    public async Task<bool> AddCurrentSnuffToArchiveAsync(string CurrentSnuffId)
+    {
+        var getThisSnuffFromDb = await _currentSnuffRepository.FindOneAsync(x => x.Id == CurrentSnuffId);
+
+        if (getThisSnuffFromDb != null)
+        {
+            getThisSnuffFromDb.IsArchived = true;
+            await _currentSnuffRepository.ReplaceOneAsync(getThisSnuffFromDb);
+
+            return true;
+        }
+
+        return false;
     }
 }
