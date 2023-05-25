@@ -188,7 +188,7 @@ public class ProgressionService : IProgressionService
         return datumProgressionData;
     }
 
-    public async Task<TimeSpan> WhenIsTheNextDoseAvailable(string uid)
+    public async Task<string> WhenIsTheNextDoseAvailable(string uid)
     {
         var newTimeInterval = 0.0;
         var availableSnuffToday = 0;
@@ -205,7 +205,7 @@ public class ProgressionService : IProgressionService
             Console.WriteLine(TimeSpan.FromSeconds(newTimeInterval) + "From no logs of today");
             progressionDetails.ActualUsageInterval = TimeSpan.FromSeconds(newTimeInterval);
             await _progressionRepository.ReplaceOneAsync(progressionDetails);
-            return TimeSpan.FromSeconds(newTimeInterval);
+            return newTimeInterval.ToString();
         }
 
         availableSnuffToday = progressionDetails.SnuffGoalAmount - logDetails.Sum(x => x.AmountUsed);
@@ -213,7 +213,7 @@ public class ProgressionService : IProgressionService
         Console.WriteLine(TimeSpan.FromSeconds(newTimeInterval) + "With logs of today");
         progressionDetails.ActualUsageInterval = TimeSpan.FromSeconds(newTimeInterval);
         await _progressionRepository.ReplaceOneAsync(progressionDetails);
-        return TimeSpan.FromSeconds(newTimeInterval);
+        return newTimeInterval.ToString();
 
     }
 

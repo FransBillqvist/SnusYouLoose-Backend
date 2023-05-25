@@ -113,7 +113,7 @@ public class ProgressionController : ControllerBase
 
     [HttpGet]
     [Route("TimeToNextDose/{uid}")]
-    public async Task<ActionResult<TimeSpan>> TimeToNextDose(string uid)
+    public async Task<ActionResult<string>> TimeToNextDose(string uid)
     {
         try
         {
