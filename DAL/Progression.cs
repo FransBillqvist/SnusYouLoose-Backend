@@ -36,8 +36,9 @@ public class Progression : Document
     }
     [BsonElement("SnuffGoalAmount")]
     public int SnuffGoalAmount { get; set; }
-    [BsonElement("UsageInterval")]
+    [BsonElement("RecommendedUsageInterval")]
     public TimeSpan RecommendedUsageInterval { get; set; }
+    [BsonElement("ActualUsageInterval")]
     public TimeSpan ActualUsageInterval { get; set; }
     [BsonElement("InUse")]
     public Boolean InUse { get; set; }

@@ -116,6 +116,7 @@ public class ProgressionService : IProgressionService
             GoalEndDate = DateTime.UtcNow.Date,
             SnuffGoalAmount = habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1,
             RecommendedUsageInterval = new TimeSpan(),
+            ActualUsageInterval = new TimeSpan(),
             InUse = true
         };
         Console.WriteLine("Before Switch(ProgressionType)");
@@ -157,6 +158,7 @@ public class ProgressionService : IProgressionService
         Console.WriteLine("TimeSpan: " + valueInTimeSpan);
 
         progressionData.RecommendedUsageInterval = valueInTimeSpan;
+        progressionData.ActualUsageInterval = valueInTimeSpan;
 
         return progressionData;
     }
@@ -190,6 +192,7 @@ public class ProgressionService : IProgressionService
     {
         var newTimeInterval = 0.0;
         var availableSnuffToday = 0;
+        var usedSnuffToday = await CalculateRemainingSnuff(uid);
         var timeLeftOfTheDate = DateTime.UtcNow.Date.AddHours(23).AddMinutes(59).AddSeconds(59) - DateTime.UtcNow;
 
         var logDetails = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.Day && x.UserId == uid);
@@ -200,12 +203,16 @@ public class ProgressionService : IProgressionService
             availableSnuffToday = progressionDetails.SnuffGoalAmount;
             newTimeInterval = timeLeftOfTheDate.TotalSeconds / availableSnuffToday;
             Console.WriteLine(TimeSpan.FromSeconds(newTimeInterval) + "From no logs of today");
+            progressionDetails.ActualUsageInterval = TimeSpan.FromSeconds(newTimeInterval);
+            await _progressionRepository.ReplaceOneAsync(progressionDetails);
             return TimeSpan.FromSeconds(newTimeInterval);
         }
 
         availableSnuffToday = progressionDetails.SnuffGoalAmount - logDetails.Sum(x => x.AmountUsed);
         newTimeInterval = timeLeftOfTheDate.TotalSeconds / availableSnuffToday;
         Console.WriteLine(TimeSpan.FromSeconds(newTimeInterval) + "With logs of today");
+        progressionDetails.ActualUsageInterval = TimeSpan.FromSeconds(newTimeInterval);
+        await _progressionRepository.ReplaceOneAsync(progressionDetails);
         return TimeSpan.FromSeconds(newTimeInterval);
 
     }

@@ -68,6 +68,7 @@ public class CurrentSnuffService : ICurrentSnuffService
         //skapa en log via snufflogservice
         var createdNewLog = await _snuffLogService.CreateSnuffLogAsync(new SnuffLog
         {
+            CreatedAtUtc = DateTime.UtcNow,
             UserId = userId,
             SnuffLogDate = DateTime.UtcNow,
             AmountUsed = amount,
