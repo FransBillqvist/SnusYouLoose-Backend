@@ -213,6 +213,7 @@ public class ProgressionService : IProgressionService
         Console.WriteLine(TimeSpan.FromSeconds(newTimeInterval) + "With logs of today");
         progressionDetails.ActualUsageInterval = TimeSpan.FromSeconds(newTimeInterval);
         await _progressionRepository.ReplaceOneAsync(progressionDetails);
+        Console.WriteLine("ProgressionService Line 216: newTimeInterval: " + newTimeInterval);
         return newTimeInterval.ToString();
 
     }
