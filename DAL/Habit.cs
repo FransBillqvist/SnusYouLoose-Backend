@@ -1,3 +1,5 @@
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace DAL;
 
 [BsonCollection("Habits")]
@@ -9,7 +11,9 @@ public class Habit : Document
     public string ProgressionType { get; set; }
     public string Speed { get; set; }
     public int NumberOfHoursPerDay { get; set; } = 17;
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     internal DateTime EndDate { get; set; }
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     internal DateTime StartDate { get; set; }
     public string StringEndDate
     {

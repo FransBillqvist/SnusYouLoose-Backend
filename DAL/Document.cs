@@ -10,6 +10,7 @@ public abstract class Document : IDocument
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = null;
     [BsonElement("CreatedAtUtc")]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     internal DateTime CreatedAtUtc { get; set; }
     [BsonElement("StringCreatedAtUtc")]
     public string StringCreatedAtUtc
