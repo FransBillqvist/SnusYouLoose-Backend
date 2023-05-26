@@ -218,22 +218,21 @@ public class ProgressionService : IProgressionService
 
     }
 
-    public async Task<TimeSpan> LastConsumedSnuffAtUtc(string uid)
+    public async Task<string> LastConsumedSnuffAtUtc(string uid)
     {
-        var lastLog = _snuffLogRepository.FilterBy(x => x.UserId == uid).OrderByDescending(x => x.SnuffLogDate).FirstOrDefault();
-        if (lastLog == null)
+        Console.WriteLine("ProgressionService Line 222: uid: " + uid);
+        Console.WriteLine("ProgressionService Line 223: DateTime.UtcNow.Date: " + DateTime.UtcNow.Date);
+        var allLogByUser = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.Day && x.UserId == uid);
+        if (allLogByUser == null) // du har inte snusat idag
         {
-            var todaysdate = long.Parse(DateTime.UtcNow.Date.ToString());
-            var timeNow = long.Parse(DateTime.UtcNow.ToString());
-            var mathTime = timeNow - todaysdate;
-            return new TimeSpan(mathTime);
+            Console.WriteLine("ProgressionService Line 227: allLogByUser == null");
+            return DateTime.UtcNow.Date.ToString();
         }
-        else
+        else // du har snusat idag
         {
-            var convertDateToLong = long.Parse(DateTime.UtcNow.ToString());
-            var convertLogDateToLong = long.Parse(lastLog.SnuffLogDate.ToString());
-            var convertToLong = convertDateToLong - convertLogDateToLong;
-            return new TimeSpan(convertToLong);
+            var mostRecentSnuff = allLogByUser.OrderByDescending(x => x.SnuffLogDate).FirstOrDefault();
+            Console.WriteLine("ProgressionService Line 233: mostRecentSnuff: " + mostRecentSnuff.SnuffLogDate.ToString());
+            return mostRecentSnuff.SnuffLogDate.ToString();
         }
     }
 }

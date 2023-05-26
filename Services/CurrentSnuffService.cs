@@ -74,7 +74,7 @@ public class CurrentSnuffService : ICurrentSnuffService
             AmountUsed = amount,
         });
 
-        var currentSnuff = await _currentSnuffRepository.FindOneAsync(x => x.Id == id);
+        var currentSnuff = await _currentSnuffRepository.FindOneAsync(x => x.SnusId == id);
         if (currentSnuff != null) //finns dosan?
         {
             var log = currentSnuff.LogsOfBox.Append(createdNewLog).ToArray();

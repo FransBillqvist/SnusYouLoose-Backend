@@ -11,5 +11,5 @@ public interface IProgressionService
     Task<Progression> UpdateProgressionStateAsync(Progression updatedProgression);
     Task<Progression> ProgressionHandler(string uid);
     Task<string> WhenIsTheNextDoseAvailable(string uid);
-    Task<TimeSpan> LastConsumedSnuffAtUtc(string uid);
+    Task<string> LastConsumedSnuffAtUtc(string uid);
 }

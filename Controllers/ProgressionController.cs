@@ -130,7 +130,7 @@ public class ProgressionController : ControllerBase
 
     [HttpGet]
     [Route("LastConsumedSnuff/{uid}")]
-    public async Task<ActionResult<TimeSpan>> LastConsumedSnuff(string uid)
+    public async Task<ActionResult<string>> LastConsumedSnuff(string uid)
     {
         try
         {
@@ -138,9 +138,18 @@ public class ProgressionController : ControllerBase
             var result = await _progressionService.LastConsumedSnuffAtUtc(uid);
             return result;
         }
-        catch
+        catch (InvalidOperationException ex)
         {
-            return BadRequest();
+            // Hantera undantag som InvalidOperationException här
+            // Exempel: returnera en NotFound-response eller ett anpassat felmeddelande
+            return NotFound("Specified user not found.");
+        }
+        catch (Exception ex)
+        {
+            // Hantera andra undantag här
+            // Exempel: logga felmeddelandet eller returnera en InternalServerError-response
+            Console.WriteLine("An error occurred: " + ex.Message);
+            return StatusCode(500, "An error occurred while processing the request.");
         }
     }
 }
