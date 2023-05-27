@@ -45,16 +45,16 @@ public class HabitController : ControllerBase
     [HttpPost]
     [Route("Create")]
 
-    public async Task<IActionResult> Post([FromBody] Habit newHabit)
+    public async Task<ActionResult<Habit>> Post([FromBody] Habit newHabit)
     {
-        Console.WriteLine("Hello, Am Post Habit Endpoint");
+        Console.WriteLine("Hello, Am Post Habit Endpoint, with createdatutc time: " + DateTime.Now);
         try
         {
             newHabit.CreatedAtUtc = DateTime.UtcNow;
             newHabit.StartDate = DateTime.UtcNow;
             newHabit.EndDate = DateTime.UtcNow;
             await _habitService.CreateHabitAsync(newHabit);
-            return Ok();
+            return newHabit;
         }
         catch
         {

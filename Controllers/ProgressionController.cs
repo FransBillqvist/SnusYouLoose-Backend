@@ -117,7 +117,7 @@ public class ProgressionController : ControllerBase
     {
         try
         {
-            Console.WriteLine("I'M WhenIsTheNextDoseAvailable with userId: " + uid);
+            Console.WriteLine("I'M WhenIsTheNextDoseAvailable with userId: " + uid + "time is: " + DateTime.Now);
             var result = await _progressionService.WhenIsTheNextDoseAvailable(uid);
             Console.WriteLine("I am the result to send out! " + result);
             return result;
