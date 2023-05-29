@@ -33,6 +33,8 @@ public class CurrentSnuffService : ICurrentSnuffService
 
     public async Task CreateCurrentSnuffAsync(CurrentSnuff newCurrentSnuff)
     {
+        var getBoxSize = await _snuffService.GetSnuffAmountAsync(newCurrentSnuff.SnusId);
+        newCurrentSnuff.RemainingAmount = getBoxSize;
         await _currentSnuffRepository.InsertOneAsync(newCurrentSnuff);
     }
 
