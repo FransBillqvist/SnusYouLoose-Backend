@@ -127,4 +127,23 @@ public class CurrentSnuffService : ICurrentSnuffService
 
         return false;
     }
+
+    public async Task<int> GetAmountInBoxAsync(string csid)
+    {
+        var getThisSnuffFromDb = await _currentSnuffRepository.FindOneAsync(x => x.Id == csid);
+        var boxSize = _snuffService.GetSnuffAmountAsync(getThisSnuffFromDb.SnusId).Result;
+
+        if (getThisSnuffFromDb == null)
+        {
+            return 0;
+        }
+        var numberofused = 0;
+        foreach (var log in getThisSnuffFromDb.LogsOfBox)
+        {
+            numberofused += log.AmountUsed;
+        }
+
+        return boxSize - numberofused;
+
+    }
 }

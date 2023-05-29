@@ -118,4 +118,18 @@ public class CurrentSnuffController : ControllerBase
             return BadRequest();
         }
     }
+
+    [HttpGet]
+    [Route("GetRemainingSnuffInBox/{csId}")]
+    public async Task<int> GetRemainingSnuffInBox(string csId)
+    {
+        try
+        {
+            return await _csService.GetAmountInBoxAsync(csId);
+        }
+        catch
+        {
+            return 0;
+        }
+    }
 }
