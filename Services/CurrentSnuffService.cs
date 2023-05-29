@@ -73,14 +73,19 @@ public class CurrentSnuffService : ICurrentSnuffService
             SnuffLogDate = DateTime.UtcNow,
             AmountUsed = amount,
         });
-
-        var currentSnuff = await _currentSnuffRepository.FindOneAsync(x => x.SnusId == id);
+        var yolo = _currentSnuffRepository.FilterBy(x => x.SnusId == id && x.UserId == userId);
+        var yoloId = yolo.FirstOrDefault().Id;
+        var currentSnuff = await _currentSnuffRepository.FindOneAsync(x => x.Id == yoloId);
         if (currentSnuff != null) //finns dosan?
         {
+            Console.WriteLine("I am here and my id is: " + id);
             var log = currentSnuff.LogsOfBox.Append(createdNewLog).ToArray();
             currentSnuff.LogsOfBox = log;
             currentSnuff.IsEmpty = await ReturnEmptyStatus(log, currentSnuff.SnusId);
             currentSnuff.IsArchived = (currentSnuff.IsEmpty ? true : false);
+            var testRemainingAmount = await GetAmountInBoxAsync(yoloId);
+            Console.WriteLine("I am remaining amount" + testRemainingAmount);
+            currentSnuff.RemainingAmount = testRemainingAmount;
             await _currentSnuffRepository.ReplaceOneAsync(currentSnuff);
             return currentSnuff;
         }
@@ -128,9 +133,9 @@ public class CurrentSnuffService : ICurrentSnuffService
         return false;
     }
 
-    public async Task<int> GetAmountInBoxAsync(string csid)
+    public async Task<int> GetAmountInBoxAsync(string csObjectId)
     {
-        var getThisSnuffFromDb = await _currentSnuffRepository.FindOneAsync(x => x.Id == csid);
+        var getThisSnuffFromDb = await _currentSnuffRepository.FindOneAsync(x => x.Id == csObjectId);
         var boxSize = _snuffService.GetSnuffAmountAsync(getThisSnuffFromDb.SnusId).Result;
 
         if (getThisSnuffFromDb == null)
@@ -143,7 +148,8 @@ public class CurrentSnuffService : ICurrentSnuffService
             numberofused += log.AmountUsed;
         }
 
+        Console.WriteLine("Time to get outta here" + numberofused);
+        getThisSnuffFromDb.RemainingAmount = boxSize - numberofused;
         return boxSize - numberofused;
-
     }
 }

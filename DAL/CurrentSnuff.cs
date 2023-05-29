@@ -22,4 +22,5 @@ public class CurrentSnuff : Document
     public string UserId { get; set; }
     public bool IsEmpty { get; set; }
     public bool IsArchived { get; set; }
+    public int RemainingAmount { get; set; }
 }
