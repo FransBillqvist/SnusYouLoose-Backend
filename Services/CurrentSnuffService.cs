@@ -61,9 +61,19 @@ public class CurrentSnuffService : ICurrentSnuffService
             }
 
             var getDefaultSnuffAmount = await _snuffService.GetSnuffAmountAsync(snuffId);
-            return getDefaultSnuffAmount == numberOfUsedSnuff ? true : false;
+            if (numberOfUsedSnuff >= getDefaultSnuffAmount)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        return false;
+        else
+        {
+            return false;
+        }
     }
     public async Task<CurrentSnuff> LogAdder(string id, int amount, string userId)
     {
@@ -83,7 +93,8 @@ public class CurrentSnuffService : ICurrentSnuffService
             Console.WriteLine("I am here and my id is: " + id);
             var log = currentSnuff.LogsOfBox.Append(createdNewLog).ToArray();
             currentSnuff.LogsOfBox = log;
-            currentSnuff.IsEmpty = await ReturnEmptyStatus(log, currentSnuff.SnusId);
+            var testBoolResult = await ReturnEmptyStatus(log, currentSnuff.SnusId);
+            currentSnuff.IsEmpty = testBoolResult;
             currentSnuff.IsArchived = (currentSnuff.IsEmpty ? true : false);
             var testRemainingAmount = await GetAmountInBoxAsync(yoloId);
             Console.WriteLine("I am remaining amount" + testRemainingAmount);
