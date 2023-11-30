@@ -6,7 +6,8 @@ using Services.Interfaces;
 namespace Controllers.SnuffLogController;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class SnuffLogController : ControllerBase
 {
     private readonly ILogger<SnuffLogController> _logger;

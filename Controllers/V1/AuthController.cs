@@ -11,7 +11,8 @@ using System.Text;
 namespace Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class AuthController : ControllerBase
 {
     private readonly UserManager<AuthUser> _userManager;
@@ -23,6 +24,7 @@ public class AuthController : ControllerBase
         _roleManager = roleManager;
     }
 
+    [MapToApiVersion("1.0")]
     [HttpPost]
     [Route("roles/add")]
     public async Task<IActionResult> CreateRole([FromBody] CreateRoleRequest request)
@@ -36,6 +38,7 @@ public class AuthController : ControllerBase
         return Ok(new { message = "Role created successfully" });
     }
 
+    [MapToApiVersion("1.0")]
     [HttpPost]
     [Route("register")]
     [ProducesResponseType(typeof(RegisterResponse), StatusCodes.Status200OK)]
@@ -46,13 +49,14 @@ public class AuthController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
+    [MapToApiVersion("1.0")]
     [HttpPost]
     [Route("login")]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var result = await LoginAsync(request);
-
+        Console.WriteLine("Inside Login");
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
@@ -60,9 +64,13 @@ public class AuthController : ControllerBase
     {
         try
         {
+            Console.WriteLine("TRYING TO LOGIN");
             var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null) return new LoginResponse { Message = "Invalid Email/Password", Success = false };
-
+            Console.WriteLine(user);
+            var passwordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+            Console.WriteLine(passwordValid);
+            if (user == null || passwordValid == false) return new LoginResponse { Message = "Invalid Email/Password", Success = false };
+            Console.WriteLine("credaentials are valid");
             //all is well if we reach this point
 
             var claims = new List<Claim>

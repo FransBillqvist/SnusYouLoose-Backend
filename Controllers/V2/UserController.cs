@@ -3,10 +3,11 @@ using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
-namespace Controllers;
+namespace Controllers.V2;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("2.0")]
 public class UserController : ControllerBase
 {
 
@@ -23,21 +24,22 @@ public class UserController : ControllerBase
         _userRepository = userRepository;
         _userService = userService;
     }
-
+    [MapToApiVersion("2.0")]
     [HttpGet]
     [Route("Get/{id}")]
-    [Obsolete]
     public async Task<ActionResult<User>> GetUser(string id)
     {
         try
         {
+            Console.WriteLine("Inside Get");
             var response = await _userRepository.FindOneAsync(x => x.Id == id);
 
             if (response is null)
             {
+                Console.WriteLine("Inside Get Null");
                 return NotFound();
             }
-
+            Console.WriteLine("Inside Get VALUE Not Null");
             return response;
         }
         catch
@@ -45,10 +47,9 @@ public class UserController : ControllerBase
             return NotFound();
         }
     }
-
+    [MapToApiVersion("2.0")]
     [HttpPost]
     [Route("Create")]
-    [Obsolete]
     public async Task<IActionResult> Post(User newUser)
     {
         try
@@ -62,10 +63,9 @@ public class UserController : ControllerBase
             return BadRequest();
         }
     }
-
+    [MapToApiVersion("2.0")]
     [HttpPut]
     [Route("Update/{id}")]
-    [Obsolete]
     public async Task<IActionResult> Update(string id, User updatedUser)
     {
         try
@@ -89,10 +89,9 @@ public class UserController : ControllerBase
             return BadRequest();
         }
     }
-
+    [MapToApiVersion("2.0")]
     [HttpDelete]
     [Route("Delete")]
-    [Obsolete]
     public async Task<IActionResult> Delete(string id)
     {
         var user = await _userService.GetUserAsync(id);
