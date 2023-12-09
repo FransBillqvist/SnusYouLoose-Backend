@@ -32,14 +32,14 @@ public class UserController : ControllerBase
         try
         {
             Console.WriteLine("Inside Get");
-            var response = await _userRepository.FindOneAsync(x => x.Id == id);
+            var response = await _userRepository.FindOneAsync(x => x.UserId == id);
 
             if (response is null)
             {
                 Console.WriteLine("Inside Get Null");
                 return NotFound();
             }
-            Console.WriteLine("Inside Get VALUE Not Null");
+            Console.WriteLine($"Inside Get VALUE {response}");
             return response;
         }
         catch
