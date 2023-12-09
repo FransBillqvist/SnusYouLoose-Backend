@@ -31,7 +31,6 @@ public class UserController : ControllerBase
     {
         try
         {
-            Console.WriteLine("Inside Get");
             var response = await _userRepository.FindOneAsync(x => x.UserId == id);
 
             if (response is null)
@@ -39,7 +38,7 @@ public class UserController : ControllerBase
                 Console.WriteLine("Inside Get Null");
                 return NotFound();
             }
-            Console.WriteLine($"Inside Get VALUE {response}");
+            Console.WriteLine($"Get User data for User: {response.Username}");
             return response;
         }
         catch
