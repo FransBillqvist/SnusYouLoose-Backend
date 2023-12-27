@@ -37,6 +37,22 @@ public class SnuffService : ISnuffService
         }
 
     }
+
+     public async Task<Snuff> CreateSnuffAsyncV2(Snuff newSnuff)
+    {
+        try
+        {
+            Console.WriteLine($"Create Snuff data for Snuff(Sevice): {newSnuff.Id}");
+            await _snuffRepository.InsertOneAsync(newSnuff);
+            return newSnuff;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Create Snuff data for Snuff(Sevice): {ex.Message}");
+            throw new Exception(ex.Message);
+        }
+
+    }
     public async Task<int> GetSnuffAmountAsync(string snuffId)
     {
         var response = await _snuffRepository.FindOneAsync(x => x.Id == snuffId);
