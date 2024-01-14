@@ -39,6 +39,7 @@ public class UserController : ControllerBase
                 return NotFound();
             }
             Console.WriteLine($"Get User data for User: {response.Username}");
+            Console.WriteLine($"------------------------------------------");
             return response;
         }
         catch
