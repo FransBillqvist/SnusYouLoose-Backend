@@ -28,6 +28,7 @@ public class CurrentSnuffController : ControllerBase
         _sService = SService;
     }
 
+    [MapToApiVersion("1.0")]
     [HttpGet]
     [Route("GetAllSnuff/{uid}")]
     public async Task<List<CurrentSnuff>> GetActiveSnuffForUser(string uid)
@@ -36,7 +37,7 @@ public class CurrentSnuffController : ControllerBase
         return result;
     }
 
-
+    [MapToApiVersion("1.0")]
     [HttpGet]
     [Route("Get/{id}")]
     public async Task<ActionResult<CurrentSnuff>> GetCurrentSnuff(string id)
@@ -50,6 +51,7 @@ public class CurrentSnuffController : ControllerBase
         return currentSnuff;
     }
 
+    [MapToApiVersion("1.0")]
     [HttpPost]
     [Route("Create")]
     public async Task<ActionResult<CurrentSnuff>> Post(CurrentSnuff newCurrentSnuff)
@@ -68,6 +70,7 @@ public class CurrentSnuffController : ControllerBase
         }
     }
 
+    [MapToApiVersion("1.0")]
     [HttpPost]
     [Route("NewSnuffLog")]
     public async Task<IActionResult> AddLog(string id, int amount, string userId)
@@ -85,6 +88,7 @@ public class CurrentSnuffController : ControllerBase
         }
     }
 
+    [MapToApiVersion("1.0")]
     [HttpDelete]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
@@ -106,6 +110,7 @@ public class CurrentSnuffController : ControllerBase
         }
     }
 
+    [MapToApiVersion("1.0")]
     [HttpPost]
     [Route("AddCurrentSnuffToArchive/{csId}")]
     public async Task<IActionResult> AddCurrentSnuffToArchive(string csId)
@@ -120,6 +125,7 @@ public class CurrentSnuffController : ControllerBase
         }
     }
 
+    [MapToApiVersion("1.0")]
     [HttpGet]
     [Route("GetRemainingSnuffInBox/{csId}")]
     public async Task<int> GetRemainingSnuffInBox(string csId)
