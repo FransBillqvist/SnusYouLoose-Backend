@@ -34,6 +34,12 @@ public class CurrentSnuffController : ControllerBase
     public async Task<List<CurrentSnuff>> GetActiveSnuffForUser(string uid)
     {
         var result = await _csService.GetAllCurrentSnuffsForThisUserAsync(uid);
+        Console.WriteLine($"userid is: {uid}");
+        foreach (var item in result)
+        {
+            Console.WriteLine(item.SnusId);
+        }
+        Console.WriteLine("----------GetActiveSnuffForUser----------------");
         return result;
     }
 
@@ -47,6 +53,9 @@ public class CurrentSnuffController : ControllerBase
         {
             return NotFound();
         }
+
+        Console.WriteLine(currentSnuff);
+        Console.WriteLine("--------------------------");
 
         return currentSnuff;
     }
@@ -78,6 +87,8 @@ public class CurrentSnuffController : ControllerBase
         try
         {
             await _csService.LogAdder(id, amount, userId);
+            Console.WriteLine("Log added");
+            Console.WriteLine("--------------------------");
             return Ok();
         }
 
@@ -116,6 +127,8 @@ public class CurrentSnuffController : ControllerBase
     {
         try
         {
+            Console.WriteLine("Adding to archive");
+            Console.WriteLine("--------------------------");
             return Ok(await _csService.AddCurrentSnuffToArchiveAsync(csId));
         }
         catch
@@ -131,6 +144,8 @@ public class CurrentSnuffController : ControllerBase
     {
         try
         {
+            Console.WriteLine("Getting remaining snuff in box");
+            Console.WriteLine("--------------------------");
             return await _csService.GetAmountInBoxAsync(csId);
         }
         catch
