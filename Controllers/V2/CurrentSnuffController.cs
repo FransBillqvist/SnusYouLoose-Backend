@@ -1,4 +1,5 @@
 using DAL;
+using DAL.Dto;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
@@ -152,5 +153,15 @@ public class CurrentSnuffController : ControllerBase
         {
             return 0;
         }
+    }
+
+    [MapToApiVersion("2.0")]
+    [HttpGet]
+    [Route("GetSnuffInventory/{uid}")]
+    public async Task<List<CurrentSnuffDto>> GetActiveSnuffInventory(string uid)
+    {
+        var result = await _csService.GetCurrentSnuffInventoryAsync(uid);
+        _logger.LogInformation($"Fetch data: {result} {DateTime.UtcNow}");
+        return result;
     }
 }
