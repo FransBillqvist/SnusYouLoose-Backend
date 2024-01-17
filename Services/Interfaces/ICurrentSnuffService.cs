@@ -1,4 +1,5 @@
 using DAL;
+using DAL.Dto;
 
 namespace Services.Interfaces;
 public interface ICurrentSnuffService
@@ -11,4 +12,5 @@ public interface ICurrentSnuffService
     Task<List<CurrentSnuff>> GetAllCurrentSnuffsForThisUserAsync(string uid);
     Task<Boolean> AddCurrentSnuffToArchiveAsync(string CurrentSnuffId);
     Task<int> GetAmountInBoxAsync(string csid);
+    Task<List<CurrentSnuffDto>> GetCurrentSnuffInventoryAsync(string userId);
 }
