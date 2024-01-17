@@ -1,9 +1,12 @@
 using DAL;
+using DAL.Dto;
 using DAL.Interfaces;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Services.Interfaces;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Services;
 
@@ -165,4 +168,67 @@ public class CurrentSnuffService : ICurrentSnuffService
         getThisSnuffFromDb.RemainingAmount = boxSize - numberofused;
         return boxSize - numberofused;
     }
+
+    public async Task<List<CurrentSnuffDto>> GetCurrentSnuffInventoryAsync(string userId)
+    {
+        var currentSnuffs = _currentSnuffRepository. FilterBy(x => x.UserId == userId && x.IsArchived == false);
+        var snuffList = new List<CurrentSnuffDto>();
+        foreach (var item in currentSnuffs)
+        {
+            var snuffObj = await _snuffService.GetSnuffAsync(item.SnusId);
+            var snuff = new CurrentSnuffDto
+            {
+                CurrentSnuffId = item.Id,
+                PurchaseDate = item.PurchaseDate,
+                AmountRemaing = snuffObj.DefaultAmount - item.LogsOfBox.Sum(x => x.AmountUsed),
+                ImageUrl = snuffObj.ImageUrl,
+                Type = snuffObj.Type,
+                Brand = snuffObj.Brand
+            };
+            snuffList.Add(snuff);
+        }
+ 
+        return snuffList;
+    }
+
+    Task ICurrentSnuffService.CreateCurrentSnuffAsync(CurrentSnuff newCurrentSnuff)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<CurrentSnuff> ICurrentSnuffService.GetCurrentSnuffAsync(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<CurrentSnuff> ICurrentSnuffService.LogAdder(string id, int amount, string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task ICurrentSnuffService.RemoveCurrentSnuffAsync(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task ICurrentSnuffService.UpdateCurrentSnuffAsync(string id, CurrentSnuff updatedCurrentSnuff)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<List<CurrentSnuff>> ICurrentSnuffService.GetAllCurrentSnuffsForThisUserAsync(string uid)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<bool> ICurrentSnuffService.AddCurrentSnuffToArchiveAsync(string CurrentSnuffId)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<int> ICurrentSnuffService.GetAmountInBoxAsync(string csid)
+    {
+        throw new NotImplementedException();
+    }
+
 }
