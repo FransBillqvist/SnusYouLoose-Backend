@@ -23,6 +23,7 @@ public class HabitController : ControllerBase
         _habitService = habitService;
     }
 
+    [MapToApiVersion("1.0")]
     [HttpGet]
     [Route("Get/{id}")]
     public async Task<ActionResult<Habit>> GetHabit(string id)
@@ -43,6 +44,7 @@ public class HabitController : ControllerBase
         }
     }
 
+    [MapToApiVersion("1.0")]
     [HttpPost]
     [Route("Create")]
 
@@ -63,6 +65,7 @@ public class HabitController : ControllerBase
         }
     }
 
+    [MapToApiVersion("1.0")]
     [HttpPut]
     [Route("Update/{id}")]
     public async Task<IActionResult> Update(string id, Habit updatedHabit)
@@ -86,6 +89,7 @@ public class HabitController : ControllerBase
         }
     }
 
+    [MapToApiVersion("1.0")]
     [HttpDelete]
     [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
