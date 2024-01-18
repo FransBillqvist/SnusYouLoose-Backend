@@ -47,12 +47,12 @@ public class HabitController : ControllerBase
 
     [MapToApiVersion("2.0")]
     [HttpGet]
-    [Route("Get/{id}")]
-    public async Task<ActionResult<HabitDto>> GetHabitDto(string id)
+    [Route("GetDto/{userid}")]
+    public async Task<ActionResult<HabitDto>> GetHabitDto(string userid)
     {
         try
         {
-            var habit = await _habitService.GetHabitDtoAsync(id);
+            var habit = await _habitService.GetHabitDtoAsync(userid);
             if (habit is null)
             {
                 return NotFound();
