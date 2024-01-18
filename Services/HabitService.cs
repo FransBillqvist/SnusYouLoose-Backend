@@ -1,4 +1,5 @@
 using DAL;
+using DAL.Dto;
 using DAL.Interfaces;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
@@ -78,5 +79,22 @@ public class HabitService : IHabitService
 
         await _habitRepository.ReplaceOneAsync(dto);
         return dto;
+    }
+
+    public async Task<HabitDto> GetHabitDtoAsync(string id) 
+    {
+        var findHabit = await _habitRepository.FindOneAsync(x => x.UserId == id);
+        var habitDto = new HabitDto
+        {
+            DoseType = findHabit.DoseType,
+            DoseAmount = findHabit.DoseAmount,
+            ProgressionType = findHabit.ProgressionType,
+            Speed = findHabit.Speed,
+            NumberOfHoursPerDay = findHabit.NumberOfHoursPerDay,
+            StartDate = findHabit.StartDate,
+            EndDate = findHabit.EndDate
+        };
+
+        return habitDto;
     }
 }
