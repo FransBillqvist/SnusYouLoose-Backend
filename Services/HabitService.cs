@@ -97,4 +97,22 @@ public class HabitService : IHabitService
 
         return habitDto;
     }
+
+    public async Task<HabitRequest> CreateHabitFromRequestAsync(HabitRequest newHabit)
+    {
+        var habit = new Habit
+        {
+            UserId = newHabit.UserId,
+            DoseType = newHabit.Habit.DoseType,
+            DoseAmount = newHabit.Habit.DoseAmount,
+            ProgressionType = newHabit.Habit.ProgressionType,
+            Speed = newHabit.Habit.Speed,
+            NumberOfHoursPerDay = newHabit.Habit.NumberOfHoursPerDay,
+            StartDate = DateTime.UtcNow,
+            EndDate = DateTime.UtcNow.AddTicks(1)
+        };
+        await _habitRepository.InsertOneAsync(habit);
+        await SetEndDateForHabit(habit);
+        return newHabit;
+    }
 }
