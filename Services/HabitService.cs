@@ -38,7 +38,7 @@ public class HabitService : IHabitService
         newHabit.StartDate = DateTime.UtcNow;
         newHabit.EndDate = DateTime.UtcNow.AddTicks(1);
         await _habitRepository.InsertOneAsync(newHabit);
-        await SetEndDateForHabit(newHabit);
+        await SetEndDateForHabitWithoutEndDate(newHabit);
     }
     public async Task UpdateHabitAsync(string id, Habit updatedHabit)
     {
@@ -51,7 +51,7 @@ public class HabitService : IHabitService
         await _habitRepository.DeleteOneAsync(x => x.Id == id);
     }
 
-    public async Task<Habit> SetEndDateForHabit(Habit dto)
+    public async Task<Habit> SetEndDateForHabitWithoutEndDate(Habit dto)
     {
         var dosorAmount = (dto.DoseType == "dosor" ? dto.DoseAmount * 20 : dto.DoseAmount);
 
@@ -98,21 +98,41 @@ public class HabitService : IHabitService
         return habitDto;
     }
 
-    public async Task<HabitRequest> CreateHabitFromRequestAsync(HabitRequest newHabit)
+    public async Task<HabitDto> CreateHabitFromRequestAsync(HabitDto newHabit, string userId)
     {
+        if(newHabit.EndDate != new DateTime(0)){
+
         var habit = new Habit
         {
-            UserId = newHabit.UserId,
-            DoseType = newHabit.Habit.DoseType,
-            DoseAmount = newHabit.Habit.DoseAmount,
-            ProgressionType = newHabit.Habit.ProgressionType,
-            Speed = newHabit.Habit.Speed,
-            NumberOfHoursPerDay = newHabit.Habit.NumberOfHoursPerDay,
+            UserId = userId,
+            DoseType = newHabit.DoseType,
+            DoseAmount = newHabit.DoseAmount,
+            ProgressionType = newHabit.ProgressionType,
+            Speed = newHabit.Speed,
+            NumberOfHoursPerDay = newHabit.NumberOfHoursPerDay,
+            StartDate = DateTime.UtcNow,
+            EndDate = newHabit.EndDate
+        };
+        await _habitRepository.InsertOneAsync(habit);
+        // await SetEndDateForHabitWithoutEndDate(habit);
+        var result = await GetHabitDtoAsync(userId);
+        return result;
+        }
+        else{
+            var habit = new Habit
+        {
+            UserId = userId,
+            DoseType = newHabit.DoseType,
+            DoseAmount = newHabit.DoseAmount,
+            ProgressionType = newHabit.ProgressionType,
+            Speed = newHabit.Speed,
+            NumberOfHoursPerDay = newHabit.NumberOfHoursPerDay,
             StartDate = DateTime.UtcNow,
             EndDate = DateTime.UtcNow.AddTicks(1)
         };
         await _habitRepository.InsertOneAsync(habit);
-        await SetEndDateForHabit(habit);
-        return newHabit;
+        await SetEndDateForHabitWithoutEndDate(habit);
+        var result = await GetHabitDtoAsync(userId);
+        return result;
     }
-}
+}}

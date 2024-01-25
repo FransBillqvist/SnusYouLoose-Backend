@@ -68,15 +68,15 @@ public class HabitController : ControllerBase
 
     [MapToApiVersion("2.0")]
     [HttpPost]
-    [Route("CreateV2")]
+    [Route("CreateV2/{userid}")]
 
-    public async Task<ActionResult<HabitRequest>> CreateHabit([FromBody] HabitRequest newHabit)
+    public async Task<ActionResult<HabitDto>> CreateHabit([FromBody] HabitDto habit, string userid)
     {
         Console.WriteLine("Hello, Am CreateHabit Endpoint, with createdatutc time: " + DateTime.Now);
         try
         {
-            await _habitService.CreateHabitFromRequestAsync(newHabit);
-            return newHabit;
+            var response = await _habitService.CreateHabitFromRequestAsync(habit, userid);
+            return response;
         }
         catch
         {
