@@ -1,4 +1,5 @@
 using DAL;
+using DAL.Dto;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
@@ -28,13 +29,13 @@ public class ProgressionController : ControllerBase
 
     [MapToApiVersion("2.0")]
     [HttpGet]
-    [Route("GetProgression/{uid}")]
-    public async Task<ActionResult<Progression>> GetCurrentUserProgression(string uid)
+    [Route("GetProgressionDto/{uid}")]
+    public async Task<ActionResult<ProgressionDto>> GetCurrentUserProgression(string uid)
     {
         Console.WriteLine("I'M GetCurrentUserProgression with userId: " + uid);
         try
         {
-            var response = await _progressionService.FindUserActiveProgression(uid);
+            var response = await _progressionService.FindUserActiveProgressionDto(uid);
 
             if (response is null)
             {
