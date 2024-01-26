@@ -4,6 +4,7 @@ using Services.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Microsoft.Extensions.Options;
+using DAL.Dto;
 
 namespace Services;
 
@@ -87,6 +88,40 @@ public class ProgressionService : IProgressionService
                 result = await AddNewProgression(uid);
             }
         }
+        return result;
+    }
+
+    public async Task<ProgressionDto> FindUserActiveProgressionDto(string userId)
+    {
+        var response = await _progressionRepository.FindOneAsync(x => x.UserId == userId && x.InUse == true);
+        var result = MapProgressionToDto(response);
+        if(response == null)
+        {
+            var checkIfOldProgressionExists = await _progressionRepository.FindOneAsync(x => x.UserId == userId && x.InUse == false);
+            if(checkIfOldProgressionExists != null)
+            {
+                var notDto = await AddNewProgression(userId);
+                if(notDto == null)
+                {
+                    throw new Exception("ProgressionService Line 174: notDto is null");
+                }
+                result = MapProgressionToDto(notDto);
+            
+            }
+        }
+        return result;
+    }
+
+    public ProgressionDto MapProgressionToDto(Progression progression)
+    {
+        var result = new ProgressionDto
+        {
+            GoalStartDate = progression.GoalStartDate,
+            GoalEndDate = progression.GoalEndDate,
+            SnuffLimitAmount = progression.SnuffGoalAmount,
+            RecommendedUsageInterval = progression.RecommendedUsageInterval,
+            InUse = progression.InUse
+        };
         return result;
     }
 
