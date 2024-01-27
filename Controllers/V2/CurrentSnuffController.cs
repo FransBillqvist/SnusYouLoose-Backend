@@ -60,6 +60,7 @@ public class CurrentSnuffController : ControllerBase
 
         return currentSnuff;
     }
+
     [MapToApiVersion("2.0")]
     [HttpPost]
     [Route("Create")]
@@ -90,6 +91,7 @@ public class CurrentSnuffController : ControllerBase
             await _csService.LogAdderV2(currentsnuffId, amount);
             Console.WriteLine("Log added");
             Console.WriteLine("--------------------------");
+            _logger.LogInformation($"Logger data: Amount: {amount} in CurrentSnuff: {currentsnuffId} @ {DateTime.UtcNow}");
             return Ok();
         }
 
