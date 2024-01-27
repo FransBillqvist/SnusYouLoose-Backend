@@ -81,13 +81,13 @@ public class CurrentSnuffController : ControllerBase
 
     [MapToApiVersion("2.0")]
     [HttpPost]
-    [Route("NewSnuffLog")]
-    public async Task<IActionResult> AddLog(string id, int amount, string userId)
+    [Route("NewSnuffLogV2")]
+    public async Task<IActionResult> AddLogV2(string currentsnuffId, int amount)
     {
 
         try
         {
-            await _csService.LogAdder(id, amount, userId);
+            await _csService.LogAdderV2(currentsnuffId, amount);
             Console.WriteLine("Log added");
             Console.WriteLine("--------------------------");
             return Ok();
