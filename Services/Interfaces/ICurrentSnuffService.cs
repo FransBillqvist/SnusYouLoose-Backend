@@ -7,6 +7,7 @@ public interface ICurrentSnuffService
     Task CreateCurrentSnuffAsync(CurrentSnuff newCurrentSnuff);
     Task<CurrentSnuff> GetCurrentSnuffAsync(string id);
     Task<CurrentSnuff> LogAdder(string id, int amount, string userId);
+    Task<CurrentSnuff> LogAdderV2(string csId, int amount);
     Task RemoveCurrentSnuffAsync(string id);
     Task UpdateCurrentSnuffAsync(string id, CurrentSnuff updatedCurrentSnuff);
     Task<List<CurrentSnuff>> GetAllCurrentSnuffsForThisUserAsync(string uid);
