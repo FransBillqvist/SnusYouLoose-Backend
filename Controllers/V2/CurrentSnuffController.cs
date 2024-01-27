@@ -85,7 +85,7 @@ public class CurrentSnuffController : ControllerBase
     [Route("NewSnuffLogV2")]
     public async Task<IActionResult> AddLogV2(string currentsnuffId, int amount)
     {
-
+        Console.WriteLine("in Endpoint AddLogV2");
         try
         {
             await _csService.LogAdderV2(currentsnuffId, amount);
