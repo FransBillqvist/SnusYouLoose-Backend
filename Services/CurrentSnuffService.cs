@@ -111,6 +111,39 @@ public class CurrentSnuffService : ICurrentSnuffService
         }
 
     }
+    public async Task<CurrentSnuff> LogAdderV2(string csId, int amount)
+    {
+        //hämta currentsnuff objektet via id
+        var currentSnuff = await _currentSnuffRepository.FindOneAsync(x => x.Id == csId);
+        if (currentSnuff == null)
+        {
+            throw new Exception("CurrentSnuff not found");
+        }
+        //hämta användarens id via currentsnuffid
+        var userId = _currentSnuffRepository.FilterBy(x => x.Id == csId).FirstOrDefault().UserId;
+        if(userId == null)
+        {
+            throw new Exception("User not found");
+        }
+        //skapa en ny logg via CreateSnuffLogAsync
+        var createdNewLog = await _snuffLogService.CreateSnuffLogAsync(new SnuffLog
+        {
+            CreatedAtUtc = DateTime.UtcNow,
+            UserId = userId,
+            SnuffLogDate = DateTime.UtcNow,
+            AmountUsed = amount,
+        });
+        //lägg till nya loggen i currentsnuff objektet
+        var log = currentSnuff.LogsOfBox.Append(createdNewLog).ToArray();
+        currentSnuff.LogsOfBox = log;
+        var testBoolResult = await ReturnEmptyStatus(log, currentSnuff.SnusId);
+        currentSnuff.IsEmpty = testBoolResult;
+        currentSnuff.IsArchived = currentSnuff.IsEmpty ? true : false;
+        var remainingAmount = await GetAmountInBoxAsync(csId);
+        currentSnuff.RemainingAmount = remainingAmount;
+        await _currentSnuffRepository.ReplaceOneAsync(currentSnuff);
+        return currentSnuff;
+    }
 
     public async Task UpdateCurrentSnuffAsync(string id, CurrentSnuff updatedCurrentSnuff) =>
         await _currentSnuffRepository.ReplaceOneAsync(updatedCurrentSnuff);
@@ -197,11 +230,6 @@ public class CurrentSnuffService : ICurrentSnuffService
     }
 
     Task<CurrentSnuff> ICurrentSnuffService.GetCurrentSnuffAsync(string id)
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<CurrentSnuff> ICurrentSnuffService.LogAdder(string id, int amount, string userId)
     {
         throw new NotImplementedException();
     }
