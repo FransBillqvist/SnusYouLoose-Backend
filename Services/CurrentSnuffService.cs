@@ -120,11 +120,12 @@ public class CurrentSnuffService : ICurrentSnuffService
             throw new Exception("CurrentSnuff not found");
         }
         //hämta användarens id via currentsnuffid
-        var userId = _currentSnuffRepository.FilterBy(x => x.Id == csId).FirstOrDefault().UserId;
+        var userId = _currentSnuffRepository.FilterBy(x => x.Id == csId).FirstOrDefault()!.UserId;
         if(userId == null)
         {
             throw new Exception("User not found");
         }
+        var snuffDefaultAmount = await _snuffService.GetSnuffAmountAsync(currentSnuff.SnusId);
         //skapa en ny logg via CreateSnuffLogAsync
         var createdNewLog = await _snuffLogService.CreateSnuffLogAsync(new SnuffLog
         {
@@ -135,13 +136,17 @@ public class CurrentSnuffService : ICurrentSnuffService
         });
         //lägg till nya loggen i currentsnuff objektet
         var log = currentSnuff.LogsOfBox.Append(createdNewLog).ToArray();
-        currentSnuff.LogsOfBox = log;
-        var testBoolResult = await ReturnEmptyStatus(log, currentSnuff.SnusId);
-        currentSnuff.IsEmpty = testBoolResult;
-        currentSnuff.IsArchived = currentSnuff.IsEmpty ? true : false;
-        var remainingAmount = await GetAmountInBoxAsync(csId);
-        currentSnuff.RemainingAmount = remainingAmount;
+        //kolla om currentsnuff är tom
+        var newAmountInBox = snuffDefaultAmount - log.Sum(x => x.AmountUsed);
+        //uppdatera currentsnuff objektet
+        currentSnuff.RemainingAmount = newAmountInBox;
+        if(newAmountInBox <= 0)
+        {
+            currentSnuff.IsEmpty = true;
+        }
+        //spara currentsnuff objektet
         await _currentSnuffRepository.ReplaceOneAsync(currentSnuff);
+
         return currentSnuff;
     }
 
