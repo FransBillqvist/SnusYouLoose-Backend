@@ -18,7 +18,7 @@ public class CurrentSnuff : Document
         }
         private set { }
     }
-    public SnuffLog[]? LogsOfBox { get; set; } = null;
+    public SnuffLog[] LogsOfBox { get; set; } = Array.Empty<SnuffLog>();
     public string UserId { get; set; }
     public bool IsEmpty { get; set; }
     public bool IsArchived { get; set; }
