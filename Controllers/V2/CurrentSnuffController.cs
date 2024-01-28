@@ -83,7 +83,7 @@ public class CurrentSnuffController : ControllerBase
     [MapToApiVersion("2.0")]
     [HttpPost]
     [Route("NewSnuffLogV2")]
-    public async Task<IActionResult> AddLogV2(string currentsnuffId, int amount)
+    public async Task<ActionResult> AddLogV2(string currentsnuffId, int amount)
     {
         Console.WriteLine("in Endpoint AddLogV2");
         try
@@ -95,8 +95,9 @@ public class CurrentSnuffController : ControllerBase
             return Ok();
         }
 
-        catch
+        catch(Exception e)
         {
+            _logger.LogError($"Error: {e.Message} @ {DateTime.UtcNow}");
             return BadRequest();
         }
     }
