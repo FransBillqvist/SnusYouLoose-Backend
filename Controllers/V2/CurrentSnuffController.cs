@@ -63,15 +63,13 @@ public class CurrentSnuffController : ControllerBase
 
     [MapToApiVersion("2.0")]
     [HttpPost]
-    [Route("Create")]
-    public async Task<ActionResult<CurrentSnuff>> Post(CurrentSnuff newCurrentSnuff)
+    [Route("CreateV2")]
+    public async Task<ActionResult<CurrentSnuff>> CreateNewCurrentSnuffForUser(CreateCSDto newCurrentSnuff)
     {
         try
         {
-            newCurrentSnuff.CreatedAtUtc = DateTime.UtcNow;
-            newCurrentSnuff.PurchaseDate = DateTime.UtcNow;
-            await _csService.CreateCurrentSnuffAsync(newCurrentSnuff);
-            return newCurrentSnuff;
+           var realCurrentSnuff = await _csService.CreateCurrentSnuffWithDtoAsync(newCurrentSnuff);
+            return realCurrentSnuff;
         }
 
         catch
