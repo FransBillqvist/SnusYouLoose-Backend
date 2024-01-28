@@ -52,6 +52,29 @@ public class CurrentSnuffService : ICurrentSnuffService
 
         return result;
     }
+    public async Task<CurrentSnuff> CreateCurrentSnuffWithDtoAsync(CreateCSDto newCurrentSnuff)
+    {
+        var getBoxSize = await _snuffService.GetSnuffAmountAsync(newCurrentSnuff.SnusId);
+        if(getBoxSize == null)
+        {
+            throw new Exception("Snuff not found");
+        }
+        
+        var newSnuff = new CurrentSnuff
+        {
+            SnusId = newCurrentSnuff.SnusId,
+            PurchaseDate = DateTime.UtcNow,
+            CreatedAtUtc = DateTime.UtcNow,
+            UserId = newCurrentSnuff.UserId,
+            LogsOfBox = Array.Empty<SnuffLog>(),
+            IsEmpty = false,
+            IsArchived = false,
+            RemainingAmount = getBoxSize
+        };
+        await _currentSnuffRepository.InsertOneAsync(newSnuff);
+
+        return newSnuff;
+    }
 
     public async Task<Boolean> ReturnEmptyStatus(SnuffLog[] Logs, string snuffId)
     {
