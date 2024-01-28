@@ -145,9 +145,23 @@ public class CurrentSnuffService : ICurrentSnuffService
             currentSnuff.IsEmpty = true;
         }
         //spara currentsnuff objektet
-        await _currentSnuffRepository.ReplaceOneAsync(currentSnuff);
 
-        return currentSnuff;
+        var newCurrentSnuff = new CurrentSnuff
+        {
+            Id = currentSnuff.Id,
+            SnusId = currentSnuff.SnusId,
+            PurchaseDate = currentSnuff.PurchaseDate,
+            CreatedAtUtc = currentSnuff.CreatedAtUtc,
+            LogsOfBox = log,
+            UserId = currentSnuff.UserId,
+            IsEmpty = currentSnuff.IsEmpty,
+            IsArchived = currentSnuff.IsArchived,
+            RemainingAmount = currentSnuff.RemainingAmount
+        };
+
+        await _currentSnuffRepository.ReplaceOneAsync(newCurrentSnuff);
+
+        return newCurrentSnuff;
     }
 
     public async Task UpdateCurrentSnuffAsync(string id, CurrentSnuff updatedCurrentSnuff) =>
