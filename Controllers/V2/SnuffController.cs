@@ -1,3 +1,4 @@
+using DAl.Dto;
 using DAL;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -107,13 +108,13 @@ public class SnuffController : ControllerBase
 
     [MapToApiVersion("2.0")]
     [HttpGet]
-    [Route("GetAllSortOfSnuffs")]
+    [Route("GetShopSnuffs")]
     /// <summary>
     /// Get all snuffs use case for shopping list, where we need to get all snuffs
     /// </summary>
-    public async Task<List<Snuff>> GetAllSortOfSnuffs()
+    public async Task<List<SnuffShopDto>> GetAllSortOfSnuffs()
     {
-        var response = await _snuffService.GetAllSnuffsAsync();
+        var response = await _snuffService.GetShopSnuffsAsync();
         return response;
     }
   
