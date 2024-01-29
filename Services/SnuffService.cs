@@ -1,3 +1,4 @@
+using DAl.Dto;
 using DAL;
 using DAL.Interfaces;
 using Microsoft.Extensions.Options;
@@ -75,5 +76,28 @@ public class SnuffService : ISnuffService
     {
         var response = _snuffRepository.FilterBy(x => x.Id != null);
         return response.ToList();
+    }
+
+    public async Task<List<SnuffShopDto>> GetShopSnuffsAsync()
+    {
+        var result = new List<SnuffShopDto>();
+        var response = _snuffRepository.FilterBy(x => x.Id != null);
+        //konvertera till SnuffShopDto
+
+        foreach (var item in response)
+        {
+            var snuffShopDto = new SnuffShopDto
+            {
+                Id = item.Id,
+                Brand = item.Brand,
+                Type = item.Type,
+                Price = item.Price,
+                DefaultAmount = item.DefaultAmount,
+                ImageUrl = item.ImageUrl
+            };
+            result.Add(snuffShopDto);
+        }
+        return result;
+        
     }
 }
