@@ -5,7 +5,7 @@ namespace Services.Interfaces;
 public interface ICurrentSnuffService
 {
     Task CreateCurrentSnuffAsync(CurrentSnuff newCurrentSnuff);
-    Task<CurrentSnuff> CreateCurrentSnuffWithDtoAsync(CreateCSDto newCurrentSnuff);
+    Task<List<CurrentSnuff>> CreateCurrentSnuffWithDtoAsync(CreateCSDto[] newCurrentSnuff);
     Task<CurrentSnuff> GetCurrentSnuffAsync(string id);
     Task<CurrentSnuff> LogAdder(string id, int amount, string userId);
     Task<CurrentSnuff> LogAdderV2(string csId, int amount);
