@@ -48,6 +48,28 @@ public class SnuffController : ControllerBase
     }
 
     [MapToApiVersion("2.0")]
+    [HttpGet]
+    [Route("GetV2/{id}")]
+    public async Task<ActionResult<SnuffShopDto>> GetSnuffV2(string id)
+    {
+        try
+        {
+            var response = await _snuffService.GetSnuffViaIdAsync(id);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return response;
+        }
+        catch
+        {
+            return NotFound();
+        }
+    }
+
+    [MapToApiVersion("2.0")]
     [HttpPost]
     [Route("Create")]
     public async Task<IActionResult> Post(Snuff newSnuff)
