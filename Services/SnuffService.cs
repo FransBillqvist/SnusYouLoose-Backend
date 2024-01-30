@@ -63,6 +63,22 @@ public class SnuffService : ISnuffService
     public async Task<Snuff> GetSnuffAsync(string id) =>
         await _snuffRepository.FindOneAsync(x => x.Id == id);
 
+    public async Task<SnuffShopDto> GetSnuffViaIdAsync(string id) {
+      var getItAsSnuff =  await _snuffRepository.FindOneAsync(x => x.Id == id);
+        var snuffShopDto = new SnuffShopDto
+        {
+            Id = getItAsSnuff.Id,
+            Brand = getItAsSnuff.Brand,
+            Type = getItAsSnuff.Type,
+            Price = getItAsSnuff.Price,
+            DefaultAmount = getItAsSnuff.DefaultAmount,
+            ImageUrl = getItAsSnuff.ImageUrl
+        };
+
+        return snuffShopDto;
+
+    }
+
     public async Task UpdateSnuffAsync(string id, Snuff updatedSnuff) =>
         await _snuffRepository.ReplaceOneAsync(updatedSnuff);
 
