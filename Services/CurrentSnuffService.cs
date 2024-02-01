@@ -81,6 +81,28 @@ public class CurrentSnuffService : ICurrentSnuffService
         return result;
     }
 
+    public async Task<bool> ArchiveAUsersInventoryAsync(string userId)
+    {
+        var getThisSnuffFromDb =  _currentSnuffRepository.FilterBy(x => x.UserId == userId).ToList();
+
+        if (getThisSnuffFromDb != null)
+        {
+            foreach (var item in getThisSnuffFromDb)
+            {
+                if(item.RemainingAmount == 0)
+                {
+                    item.IsEmpty = true;
+                }
+                item.IsArchived = true;
+                await _currentSnuffRepository.ReplaceOneAsync(item);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     public async Task<Boolean> ReturnEmptyStatus(SnuffLog[] Logs, string snuffId)
     {
         if (Logs != null)
