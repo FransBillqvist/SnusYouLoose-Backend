@@ -13,6 +13,7 @@ public interface ICurrentSnuffService
     Task UpdateCurrentSnuffAsync(string id, CurrentSnuff updatedCurrentSnuff);
     Task<List<CurrentSnuff>> GetAllCurrentSnuffsForThisUserAsync(string uid);
     Task<Boolean> AddCurrentSnuffToArchiveAsync(string CurrentSnuffId);
+    Task<bool> ArchiveAUsersInventoryAsync(string userId);
     Task<int> GetAmountInBoxAsync(string csid);
     Task<List<CurrentSnuffDto>> GetCurrentSnuffInventoryAsync(string userId);
 }
