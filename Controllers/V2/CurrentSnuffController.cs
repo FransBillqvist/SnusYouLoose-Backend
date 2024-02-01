@@ -139,6 +139,23 @@ public class CurrentSnuffController : ControllerBase
     }
 
     [MapToApiVersion("2.0")]
+    [HttpPost]
+    [Route("ArchiveAllOfAUsersSnuff/{userId}")]
+    public async Task<IActionResult> ArchiveAUsersInventory(string userId)
+    {
+        try
+        {
+            Console.WriteLine("Adding all snuff to archive for user " + userId);
+            Console.WriteLine("--------------------------");
+            return Ok(await _csService.ArchiveAUsersInventoryAsync(userId));
+        }
+        catch
+        {
+            return BadRequest();
+        }
+    }
+
+    [MapToApiVersion("2.0")]
     [HttpGet]
     [Route("GetRemainingSnuffInBox/{csId}")]
     public async Task<int> GetRemainingSnuffInBox(string csId)
