@@ -69,7 +69,7 @@ public class ProgressionService : IProgressionService
         var selectOldProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
         if (selectOldProgression == null)
         {
-            var newProgression = await ProgressionHandler(uid);
+            var newProgression = await ProgressionHandlerV2(uid);
             await _progressionRepository.InsertOneAsync(newProgression);
             return MapProgressionToDto(newProgression);
         }
@@ -168,7 +168,7 @@ public class ProgressionService : IProgressionService
         await AddNewProgression(updatedProgression.UserId);
         return updatedProgression;
     }
-    public async Task<ProgressionDto> ProgressionHandlerV2(string userId)
+    public async Task<Progression> ProgressionHandlerV2(string userId)
     {
         var newProgression = new Progression();
         var habitData = await _habitRepository.FindOneAsync(x => x.UserId == userId);
@@ -215,13 +215,11 @@ public class ProgressionService : IProgressionService
                 InUse = true
             };
         }
-
-        var progDto = MapProgressionToDto(newProgression);
         
         switch (habitData.ProgressionType)
         {
             case "App":
-                progDto = await AppProgressionV2(progDto, habitDto.Speed);
+                newProgression = await AppProgressionV2(newProgression, habitDto.Speed);
                 break;
             case "Date":
                 newProgression = await DatumProgression(newProgression, habitData);
@@ -230,7 +228,7 @@ public class ProgressionService : IProgressionService
                 throw new Exception("Progression type not found");
         }
 
-        return progDto;
+        return newProgression;
 
     }
     public async Task<Progression> ProgressionHandler(string uid)
@@ -335,7 +333,7 @@ public class ProgressionService : IProgressionService
         return appProgressionData;
     }
 
-    private Task<ProgressionDto> AppProgressionV2(ProgressionDto appProgressionData, int speed)
+    private Task<Progression> AppProgressionV2(Progression appProgressionData, int speed)
     {
         switch (speed)
         {
