@@ -120,7 +120,7 @@ public class ProgressionService : IProgressionService
     
     public async Task<ProgressionDto> FindUserActiveProgressionDto(string userId)
     {
-        var result = new ProgressionDto();
+        var result = null as ProgressionDto;
         var response = await _progressionRepository.FindOneAsync(x => x.UserId == userId && x.InUse == true);
         if (response == null)
         {
@@ -220,10 +220,10 @@ public class ProgressionService : IProgressionService
         
         switch (habitData.ProgressionType)
         {
-            case "app":
+            case "App":
                 progDto = await AppProgressionV2(progDto, habitDto.Speed);
                 break;
-            case "datum":
+            case "Date":
                 newProgression = await DatumProgression(newProgression, habitData);
                 break;
             default:
