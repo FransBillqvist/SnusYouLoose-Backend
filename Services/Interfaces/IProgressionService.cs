@@ -6,6 +6,7 @@ namespace Services.Interfaces;
 public interface IProgressionService
 {
     Task<Progression> AddNewProgression(string uid);
+    Task<ProgressionDto> AddNewProgressionV2(string uid);
     Task<int> CalculateRemainingSnuff(string uid);
     Task<Progression> FindUserActiveProgression(string uid);
     Task<ProgressionDto> FindUserActiveProgressionDto(string uid);
