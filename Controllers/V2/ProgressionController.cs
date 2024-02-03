@@ -86,13 +86,13 @@ public class ProgressionController : ControllerBase
 
     [MapToApiVersion("2.0")]
     [HttpPost]
-    [Route("CreateUserProgression")]
-    public async Task<ActionResult<Progression>> CreateUserProgression(string uid)
+    [Route("CreateUserProgressionV2")]
+    public async Task<ActionResult<ProgressionDto>> CreateUserProgression(string uid)
     {
         Console.WriteLine("I'M CreateUserProgression with userId: " + uid);
         try
         {
-            var newProgression = await _progressionService.AddNewProgression(uid);
+            var newProgression = await _progressionService.AddNewProgressionV2(uid);
 
             return newProgression;
         }
