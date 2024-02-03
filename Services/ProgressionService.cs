@@ -127,12 +127,12 @@ public class ProgressionService : IProgressionService
             var checkIfOldProgressionExists = await _progressionRepository.FindOneAsync(x => x.UserId == userId && x.InUse == false);
             if(checkIfOldProgressionExists != null)
             {
-                var notDto = await AddNewProgression(userId);
+                var notDto = await AddNewProgressionV2(userId);
                 if(notDto == null)
                 {
                     throw new Exception("ProgressionService Line 174: notDto is null");
                 }
-                result = MapProgressionToDto(notDto);
+                result = notDto;
             
             }
         }
