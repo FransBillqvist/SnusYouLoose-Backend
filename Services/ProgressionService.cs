@@ -64,6 +64,33 @@ public class ProgressionService : IProgressionService
         return selectProgressionWithInUseTrue;
     }
 
+    public async Task<ProgressionDto> AddNewProgressionV2(string uid)
+    {
+        var selectOldProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
+        if (selectOldProgression == null)
+        {
+            var newProgression = await ProgressionHandler(uid);
+            await _progressionRepository.InsertOneAsync(newProgression);
+            return MapProgressionToDto(newProgression);
+        }
+
+        var selectProgressionWithInUseTrue = await FindUserActiveProgression(uid);
+        Console.WriteLine("Object Time: " + selectProgressionWithInUseTrue.GoalEndDate);
+        Console.WriteLine("Date Time UTC: " + DateTime.UtcNow);
+        if (selectProgressionWithInUseTrue.GoalEndDate > DateTime.UtcNow)
+        {
+            Console.WriteLine("Progression already exists");
+            return MapProgressionToDto(selectProgressionWithInUseTrue);
+        }
+        else if (selectProgressionWithInUseTrue.GoalEndDate < DateTime.UtcNow)
+        {
+            Console.WriteLine("Progression is old send it to the graveyard(UpdateProgressionStateAsync)");
+            var updatedProgression = await UpdateProgressionStateAsync(selectProgressionWithInUseTrue);
+            return MapProgressionToDto(updatedProgression);
+        }
+        return MapProgressionToDto(selectProgressionWithInUseTrue);
+    }
+
     public async Task<int> CalculateRemainingSnuff(string uid)
     {
         var allLogsForUserToday = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.Day && x.UserId == uid);
@@ -90,7 +117,7 @@ public class ProgressionService : IProgressionService
         }
         return result;
     }
-
+    
     public async Task<ProgressionDto> FindUserActiveProgressionDto(string userId)
     {
         var response = await _progressionRepository.FindOneAsync(x => x.UserId == userId && x.InUse == true);
@@ -145,7 +172,71 @@ public class ProgressionService : IProgressionService
         await AddNewProgression(updatedProgression.UserId);
         return updatedProgression;
     }
+    public async Task<ProgressionDto> ProgressionHandlerV2(string userId)
+    {
+        var newProgression = new Progression();
+        var habitData = await _habitRepository.FindOneAsync(x => x.UserId == userId);
+        var habitDto = new HabitDto
+        {
+            DoseType = habitData.DoseType,
+            DoseAmount = habitData.DoseAmount,
+            ProgressionType = habitData.ProgressionType,
+            Speed = int.Parse(habitData.Speed),
+            NumberOfHoursPerDay = habitData.NumberOfHoursPerDay,
+            StartDate = habitData.StartDate,
+            EndDate = habitData.EndDate
+        };
 
+        var lastprogression = _progressionRepository.FilterBy(x => x.UserId == userId && x.InUse == false).OrderByDescending(x => x.CreatedAtUtc).FirstOrDefault();
+        if (lastprogression == null)
+        {
+            newProgression = new Progression
+            {
+                Id = "",
+                CreatedAtUtc = DateTime.UtcNow,
+                UserId = userId,
+                GoalStartDate = DateTime.UtcNow.Date,
+                GoalEndDate = DateTime.UtcNow.Date,
+                SnuffGoalAmount = habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1,
+                RecommendedUsageInterval = new TimeSpan(),
+                ActualUsageInterval = "", //new TimeSpan(),
+                InUse = true
+            };
+
+        }
+        else
+        {
+            newProgression = new Progression
+            {
+                Id = "",
+                CreatedAtUtc = DateTime.UtcNow,
+                UserId = userId,
+                GoalStartDate = lastprogression.GoalEndDate.AddDays(1),
+                GoalEndDate = lastprogression.GoalEndDate.AddDays(1),
+                SnuffGoalAmount = lastprogression.SnuffGoalAmount - 1,
+                RecommendedUsageInterval = new TimeSpan(),
+                ActualUsageInterval = "", //new TimeSpan(),
+                InUse = true
+            };
+        }
+
+        var progDto = MapProgressionToDto(newProgression);
+        
+        switch (habitData.ProgressionType)
+        {
+            case "app":
+                progDto = await AppProgressionV2(progDto, habitDto.Speed);
+                break;
+            case "datum":
+                newProgression = await DatumProgression(newProgression, habitData);
+                break;
+            default:
+                throw new Exception("Progression type not found");
+        }
+
+        return progDto;
+
+    }
     public async Task<Progression> ProgressionHandler(string uid)
     {
         var newProgression = new Progression();
@@ -246,6 +337,48 @@ public class ProgressionService : IProgressionService
                 break;
         }
         return appProgressionData;
+    }
+
+    private Task<ProgressionDto> AppProgressionV2(ProgressionDto appProgressionData, int speed)
+    {
+        switch (speed)
+        {
+            case 10:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(2).AddTicks(-1);
+                break;
+            case 9:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(4).AddTicks(-1);
+                break;
+            case 8:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(6).AddTicks(-1);
+                break;
+            case 7:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(8).AddTicks(-1);
+                break;
+            case 6:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(10).AddTicks(-1);
+                break;
+            case 5:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(12).AddTicks(-1);
+                break;
+            case 4:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(14).AddTicks(-1);
+                break;
+            case 3:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(16).AddTicks(-1);
+                break;
+            case 2:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(18).AddTicks(-1);
+                break;
+            case 1:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(20).AddTicks(-1);
+                break;
+            default:
+                appProgressionData.GoalEndDate = appProgressionData.GoalStartDate.AddDays(7).AddTicks(-1);
+                break;
+        }
+
+        return Task.FromResult(appProgressionData);
     }
     private async Task<Progression> DatumProgression(Progression datumProgressionData, Habit speed)
     {
