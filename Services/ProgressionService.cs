@@ -120,23 +120,19 @@ public class ProgressionService : IProgressionService
     
     public async Task<ProgressionDto> FindUserActiveProgressionDto(string userId)
     {
+        var result = new ProgressionDto();
         var response = await _progressionRepository.FindOneAsync(x => x.UserId == userId && x.InUse == true);
-        var result = MapProgressionToDto(response);
-        if(response == null)
+        if (response == null)
         {
             var checkIfOldProgressionExists = await _progressionRepository.FindOneAsync(x => x.UserId == userId && x.InUse == false);
-            if(checkIfOldProgressionExists != null)
+            if (checkIfOldProgressionExists != null)
             {
-                var notDto = await AddNewProgressionV2(userId);
-                if(notDto == null)
-                {
-                    throw new Exception("ProgressionService Line 174: notDto is null");
-                }
-                result = notDto;
-            
+                var oldProgressionData = await AddNewProgressionV2(userId);
+                result = oldProgressionData;
             }
         }
         return result;
+
     }
 
     public ProgressionDto MapProgressionToDto(Progression progression)
