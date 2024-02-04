@@ -39,7 +39,7 @@ public class Progression : Document
     [BsonElement("RecommendedUsageInterval")]
     public TimeSpan RecommendedUsageInterval { get; set; }
     [BsonElement("ActualUsageInterval")]
-    public string ActualUsageInterval { get; set; } = string.Empty;
+    public TimeSpan ActualUsageInterval { get; set; }
     [BsonElement("InUse")]
     public Boolean InUse { get; set; }
 }
