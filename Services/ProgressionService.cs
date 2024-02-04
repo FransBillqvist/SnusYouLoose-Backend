@@ -143,6 +143,7 @@ public class ProgressionService : IProgressionService
             GoalEndDate = progression.GoalEndDate,
             SnuffLimitAmount = progression.SnuffGoalAmount,
             RecommendedUsageInterval = progression.RecommendedUsageInterval,
+            ActualUsageInterval = progression.ActualUsageInterval,
             InUse = progression.InUse
         };
         return result;
@@ -195,7 +196,7 @@ public class ProgressionService : IProgressionService
                 GoalEndDate = DateTime.UtcNow.Date,
                 SnuffGoalAmount = habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1,
                 RecommendedUsageInterval = new TimeSpan(),
-                ActualUsageInterval = "", //new TimeSpan(),
+                ActualUsageInterval = new TimeSpan(),
                 InUse = true
             };
 
@@ -211,22 +212,24 @@ public class ProgressionService : IProgressionService
                 GoalEndDate = lastprogression.GoalEndDate.AddDays(1),
                 SnuffGoalAmount = lastprogression.SnuffGoalAmount - 1,
                 RecommendedUsageInterval = new TimeSpan(),
-                ActualUsageInterval = "", //new TimeSpan(),
+                ActualUsageInterval = new TimeSpan(),
                 InUse = true
             };
         }
         
         switch (habitData.ProgressionType)
         {
-            case "App":
+            case "app":
                 newProgression = await AppProgressionV2(newProgression, habitDto.Speed);
                 break;
-            case "Date":
+            case "date":
                 newProgression = await DatumProgression(newProgression, habitData);
                 break;
             default:
                 throw new Exception("Progression type not found");
         }
+
+        newProgression = await SetUsageInterval(newProgression);
 
         return newProgression;
 
@@ -248,7 +251,7 @@ public class ProgressionService : IProgressionService
                 GoalEndDate = DateTime.UtcNow.Date,
                 SnuffGoalAmount = habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1,
                 RecommendedUsageInterval = new TimeSpan(),
-                ActualUsageInterval = "", //new TimeSpan(),
+                ActualUsageInterval = new TimeSpan(),
                 InUse = true
             };
 
@@ -264,7 +267,7 @@ public class ProgressionService : IProgressionService
                 GoalEndDate = lastprogression.GoalEndDate.AddDays(1),
                 SnuffGoalAmount = lastprogression.SnuffGoalAmount - 1,
                 RecommendedUsageInterval = new TimeSpan(),
-                ActualUsageInterval = "", //new TimeSpan(),
+                ActualUsageInterval = new TimeSpan(),
                 InUse = true
             };
         }
@@ -288,6 +291,7 @@ public class ProgressionService : IProgressionService
         return newProgression;
     }
 
+    
     private async Task<Progression> SetUsageInterval(Progression progressionData)
     {
         var habitValue = await _habitRepository.FindOneAsync(x => x.UserId == progressionData.UserId);
@@ -302,13 +306,13 @@ public class ProgressionService : IProgressionService
         Console.WriteLine("Space between: " + spaceBetween);
         //conver space between to hours, mins and seconds
         var hours = spaceBetween / 3600;
-        var mins = (spaceBetween % 3600) / 60;
+        var mins = spaceBetween % 3600 / 60;
         var seconds = spaceBetween % 60;
         var valueInTimeSpan = new TimeSpan(hours, mins, seconds);
         Console.WriteLine("TimeSpan: " + valueInTimeSpan);
 
         progressionData.RecommendedUsageInterval = valueInTimeSpan;
-        progressionData.ActualUsageInterval = valueInTimeSpan.ToString();
+        progressionData.ActualUsageInterval = valueInTimeSpan;
 
         return progressionData;
     }
@@ -396,7 +400,7 @@ public class ProgressionService : IProgressionService
             newTimeInterval = timeLeftOfTheDate.TotalSeconds / availableSnuffToday;
             Console.WriteLine("Am new TimeInverval " + newTimeInterval);
             Console.WriteLine(TimeSpan.FromSeconds(newTimeInterval) + "From no logs of today");
-            progressionDetails.ActualUsageInterval = DateTime.UtcNow.AddSeconds(newTimeInterval).ToString(); //TimeSpan.FromSeconds(newTimeInterval);
+            progressionDetails.ActualUsageInterval = TimeSpan.FromSeconds(newTimeInterval);
             await _progressionRepository.ReplaceOneAsync(progressionDetails);
             return DateTime.UtcNow.AddSeconds(newTimeInterval).ToString();
         }
@@ -405,7 +409,7 @@ public class ProgressionService : IProgressionService
         newTimeInterval = timeLeftOfTheDate.TotalSeconds / availableSnuffToday;
         Console.WriteLine("Am new TimeInverval " + newTimeInterval);
         Console.WriteLine(TimeSpan.FromSeconds(newTimeInterval) + "WITH LOGS of today");
-        progressionDetails.ActualUsageInterval = DateTime.UtcNow.AddSeconds(newTimeInterval).ToString(); //TimeSpan.FromSeconds(newTimeInterval);
+        progressionDetails.ActualUsageInterval = TimeSpan.FromSeconds(newTimeInterval);; //TimeSpan.FromSeconds(newTimeInterval);
         await _progressionRepository.ReplaceOneAsync(progressionDetails);
         Console.WriteLine("ProgressionService Line 216: newTimeInterval: " + newTimeInterval);
         return DateTime.UtcNow.AddSeconds(newTimeInterval).ToString();
