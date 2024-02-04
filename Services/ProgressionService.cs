@@ -131,6 +131,10 @@ public class ProgressionService : IProgressionService
                 result = oldProgressionData;
             }
         }
+        else
+        {
+            result = MapProgressionToDto(response);
+        }
         return result;
 
     }
