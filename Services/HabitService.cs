@@ -86,7 +86,7 @@ public class HabitService : IHabitService
         var habitById = await _habitRepository.FindOneAsync(x => x.UserId == userId);
 
         var selectedMode = habit.ProgressionType;
-        if(selectedMode == "appMode"){
+        if(selectedMode == "app"){
             var days = 0;
             switch (habit.Speed)
             {
@@ -135,18 +135,14 @@ public class HabitService : IHabitService
         return habit;
 
         }
-        if(selectedMode == "dateMode"){
+        if(selectedMode == "date"){
             var daysLeft = habit.EndDate - DateTime.UtcNow;
             var days = daysLeft.Days / dosorAmount;
-            if(days < 2.1){
+            while(days < 2.1){
                 dosorAmount = dosorAmount / 2;
                 days = daysLeft.Days / dosorAmount;
             }
-            for (int i = 0; i < dosorAmount; i++)
-            {
-                habit.EndDate = habit.EndDate.AddDays(days);
-            }
-            habitById.EndDate = habit.EndDate;
+            habitById.DoseAmount = dosorAmount;
             await _habitRepository.ReplaceOneAsync(habitById);
         return habit;
 
@@ -182,6 +178,7 @@ public class HabitService : IHabitService
 
         var habit = new Habit
         {
+            CreatedAtUtc = DateTime.UtcNow,
             UserId = userId,
             DoseType = newHabit.DoseType,
             DoseAmount = newHabit.DoseAmount,
@@ -196,6 +193,7 @@ public class HabitService : IHabitService
         await _habitRepository.InsertOneAsync(habit);
         var result = await GetHabitDtoAsync(userId);
         await SetRulesForUsersProgression(result, userId);
+        result = await GetHabitDtoAsync(userId);
         return result;
         
     }
