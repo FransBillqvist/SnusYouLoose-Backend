@@ -10,7 +10,7 @@ public class Habit : Document
     public int DoseAmount { get; set; }
     public string ProgressionType { get; set; }
     public string Speed { get; set; }
-    public int NumberOfHoursPerDay { get; set; } = 17;
+    public int NumberOfHoursPerDay { get; set; }
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     internal DateTime EndDate { get; set; }
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
