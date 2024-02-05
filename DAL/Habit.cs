@@ -32,8 +32,6 @@ public class Habit : Document
         private set { }
     }
 
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-    public DateTime? WakeUpTime { get; set; }
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-    public DateTime? BedTime { get; set; }
+    public TimeSpan? WakeUpTime { get; set; }
+    public TimeSpan? BedTime { get; set; }
 }

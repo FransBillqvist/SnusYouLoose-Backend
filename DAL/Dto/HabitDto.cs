@@ -8,7 +8,7 @@ public class HabitDto {
     public int NumberOfHoursPerDay { get; set; } = 17;
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public DateTime? WakeUpTime { get; set; }
-    public DateTime? BedTime { get; set; }
+    public TimeSpan? WakeUpTime { get; set; }
+    public TimeSpan? BedTime { get; set; }
 
 }
