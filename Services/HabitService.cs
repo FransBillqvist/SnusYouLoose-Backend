@@ -169,7 +169,9 @@ public class HabitService : IHabitService
             Speed = int.Parse(findHabit.Speed),
             NumberOfHoursPerDay = findHabit.NumberOfHoursPerDay,
             StartDate = findHabit.StartDate,
-            EndDate = findHabit.EndDate
+            EndDate = findHabit.EndDate,
+            WakeUpTime = findHabit.WakeUpTime,
+            BedTime = findHabit.BedTime
         };
 
         return habitDto;
@@ -187,7 +189,9 @@ public class HabitService : IHabitService
             Speed = newHabit.Speed.ToString(),
             NumberOfHoursPerDay = newHabit.NumberOfHoursPerDay,
             StartDate = DateTime.UtcNow,
-            EndDate = newHabit.EndDate
+            EndDate = newHabit.EndDate,
+            WakeUpTime = newHabit.WakeUpTime,
+            BedTime = newHabit.BedTime
         };
         await _habitRepository.InsertOneAsync(habit);
         var result = await GetHabitDtoAsync(userId);
