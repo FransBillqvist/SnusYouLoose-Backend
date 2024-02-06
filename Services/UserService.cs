@@ -23,6 +23,7 @@ public class UserService : IUserService
     }
     public async Task<User> GetUserAsync(string id) => await _userRepository.FindOneAsync(x => x.Id == id);
     public async Task CreateUserAsync(User newUser) => await _userRepository.InsertOneAsync(newUser);
+    public async Task CreateUserV2Async(User newUser) => await _userRepository.InsertOneAsync(newUser);
     public async Task UpdateUserAsync(User updatedUser) => await _userRepository.ReplaceOneAsync(updatedUser);
     public async Task RemoveUserAsync(string id)
     {
