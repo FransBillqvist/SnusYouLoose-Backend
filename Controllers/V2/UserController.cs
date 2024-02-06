@@ -49,13 +49,13 @@ public class UserController : ControllerBase
     }
     [MapToApiVersion("2.0")]
     [HttpPost]
-    [Route("Create")]
+    [Route("CreateV2")]
     public async Task<IActionResult> Post(User newUser)
     {
         try
         {
             newUser.CreatedAtUtc = DateTime.UtcNow;
-            await _userService.CreateUserAsync(newUser);
+            await _userService.CreateUserV2Async(newUser);
             return Ok();
         }
         catch
