@@ -5,7 +5,7 @@ public class HabitDto {
     public int DoseAmount { get; set; }
     public string ProgressionType { get; set; }
     public int Speed { get; set; }
-    public int NumberOfHoursPerDay { get; set; } = 17;
+    public int NumberOfHoursPerDay { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public TimeSpan? WakeUpTime { get; set; }
