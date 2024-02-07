@@ -420,6 +420,55 @@ public class ProgressionService : IProgressionService
 
     }
 
+    public async Task<TimeSpan> WhenIsTheNextDoseAvailableV2(string uid)
+    {
+
+        var usedSnuffToday = await CalculateRemainingSnuff(uid);
+        var habit = await _habitRepository.FindOneAsync(x => x.UserId == uid);
+
+        TimeSpan now = DateTime.UtcNow.AddHours(1).TimeOfDay;
+        TimeSpan wakeUpTime = (TimeSpan)habit.WakeUpTime;
+        TimeSpan bedTime = (TimeSpan)habit.BedTime;
+
+        TimeSpan timeLeft;
+        if (now > bedTime || now < wakeUpTime)
+        {
+            if (now < wakeUpTime)
+            {
+            timeLeft = wakeUpTime - now;
+            }
+            else // now > bedTime
+            {
+            timeLeft = new TimeSpan(24, 0, 0) - now + wakeUpTime; // Time till midnight plus time from midnight to wake up
+            }
+            
+            timeLeft = new TimeSpan(timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
+            return timeLeft;
+        }
+        else
+        {
+            var TimeLeftToday = bedTime - now;
+            var timeToNextSnuff = TimeLeftToday / usedSnuffToday;
+
+            timeToNextSnuff = new TimeSpan(timeToNextSnuff.Hours, timeToNextSnuff.Minutes, timeToNextSnuff.Seconds);
+            return timeToNextSnuff;
+
+        }
+        // var wakeUpAsDateTime = DateTime.Today + habit.WakeUpTime;
+        // var bedTimeAsDateTime = DateTime.Today + habit.BedTime;
+        // if(DateTime.UtcNow.AddHours(1) < wakeUpAsDateTime){
+        //    var remainingDateTime =  wakeUpAsDateTime - DateTime.UtcNow.AddHours(1);
+        //    if (remainingDateTime.HasValue)
+        //    {
+        //        var result = new TimeSpan(remainingDateTime.Value.Hours, remainingDateTime.Value.Minutes, remainingDateTime.Value.Seconds);
+        //        return result;
+        //    }
+        // }
+        // if(DateTime.UtcNow.AddHours(1) > bedTimeAsDateTime){
+
+        //  }
+    }
+
     public async Task<string> LastConsumedSnuffAtUtc(string uid)
     {
         Console.WriteLine("ProgressionService Line 222: uid: " + uid);
