@@ -120,13 +120,13 @@ public class ProgressionController : ControllerBase
 
     [MapToApiVersion("2.0")]
     [HttpGet]
-    [Route("TimeToNextDose/{uid}")]
-    public async Task<ActionResult<string>> TimeToNextDose(string uid)
+    [Route("TimeToNextDoseV2/{uid}")]
+    public async Task<ActionResult<TimeSpan>> TimeToNextDose(string uid)
     {
         try
         {
             Console.WriteLine("I'M WhenIsTheNextDoseAvailable with userId: " + uid + "time is: " + DateTime.Now);
-            var result = await _progressionService.WhenIsTheNextDoseAvailable(uid);
+            var result = await _progressionService.WhenIsTheNextDoseAvailableV2(uid);
             Console.WriteLine("I am the result to send out! " + result);
             return result;
         }
