@@ -54,6 +54,7 @@ public class UserController : ControllerBase
     {
         try
         {
+            Console.WriteLine($"Create User data for User: {newUser.Username}");
             newUser.CreatedAtUtc = DateTime.UtcNow;
             await _userService.CreateUserV2Async(newUser);
             return Ok();
