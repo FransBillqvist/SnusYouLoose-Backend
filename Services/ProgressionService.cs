@@ -94,13 +94,16 @@ public class ProgressionService : IProgressionService
     public async Task<int> CalculateRemainingSnuff(string uid)
     {
         var allLogsForUserToday = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.Day && x.UserId == uid);
+        Console.WriteLine("CalculateRemainingSnuff value of allLogsForUserToday: " + allLogsForUserToday.Count());
         var activeProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
+        Console.WriteLine("CalculateRemainingSnuff value of activeProgression: " + activeProgression);
         var numberOfUsedSnuff = 0;
         foreach (var log in allLogsForUserToday)
         {
             numberOfUsedSnuff += log.AmountUsed;
         }
         var remainingSnuff = activeProgression.SnuffGoalAmount - numberOfUsedSnuff;
+        Console.WriteLine("CalculateRemainingSnuff value of remainingSnuff: " + remainingSnuff);
         return remainingSnuff;
     }
 
@@ -423,16 +426,19 @@ public class ProgressionService : IProgressionService
     public async Task<TimeSpan> WhenIsTheNextDoseAvailableV2(string uid)
     {
 
-        var usedSnuffToday = await CalculateRemainingSnuff(uid);
+        var snuffLeftToday = await CalculateRemainingSnuff(uid);
         var habit = await _habitRepository.FindOneAsync(x => x.UserId == uid);
+        var numberUsedToday =  _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.AddHours(1).Day && x.UserId == uid).Sum(x => x.AmountUsed);
+        var currentProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
 
         TimeSpan now = DateTime.UtcNow.AddHours(1).TimeOfDay;
-        TimeSpan wakeUpTime = (TimeSpan)habit.WakeUpTime;
-        TimeSpan bedTime = (TimeSpan)habit.BedTime;
+        TimeSpan wakeUpTime = (TimeSpan)habit.WakeUpTime!;
+        TimeSpan bedTime = (TimeSpan)habit.BedTime!;
 
         TimeSpan timeLeft;
         if (now > bedTime || now < wakeUpTime)
         {
+            Console.WriteLine("WhenIsTheNextDoseAvailableV2 => (now > bedTime || now < wakeUpTime) == TRUE");
             if (now < wakeUpTime)
             {
             timeLeft = wakeUpTime - now;
@@ -441,14 +447,19 @@ public class ProgressionService : IProgressionService
             {
             timeLeft = new TimeSpan(24, 0, 0) - now + wakeUpTime; // Time till midnight plus time from midnight to wake up
             }
-            
-            timeLeft = new TimeSpan(timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
+
+            timeLeft = new TimeSpan(timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds) - currentProgression.RecommendedUsageInterval;
             return timeLeft;
+        }
+        if(numberUsedToday == 0){
+            Console.WriteLine("WhenIsTheNextDoseAvailableV2 => numberUsedToday == 0 == TRUE");
+            return new TimeSpan(0, 0, 0);
         }
         else
         {
+            Console.WriteLine("WhenIsTheNextDoseAvailableV2 => ELSE");
             var TimeLeftToday = bedTime - now;
-            var timeToNextSnuff = TimeLeftToday / usedSnuffToday;
+            var timeToNextSnuff = TimeLeftToday / snuffLeftToday;
 
             timeToNextSnuff = new TimeSpan(timeToNextSnuff.Hours, timeToNextSnuff.Minutes, timeToNextSnuff.Seconds);
             return timeToNextSnuff;
