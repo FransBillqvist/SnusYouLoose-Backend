@@ -87,7 +87,7 @@ public class ProgressionController : ControllerBase
     [MapToApiVersion("2.0")]
     [HttpGet]
     [Route("GetUseAndLimitValues/{uid}")]
-    public async Task<ActionResult<Tuple<int, int>>> GetUseAndLimitValues(string uid)
+    public async Task<ActionResult<List<int>>> GetUseAndLimitValues(string uid)
     {
         try
         {

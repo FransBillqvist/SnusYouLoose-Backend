@@ -17,5 +17,5 @@ public interface IProgressionService
     Task<TimeSpan> WhenIsTheNextDoseAvailableV2(string uid);
     Task<string> LastConsumedSnuffAtUtc(string uid);
     ProgressionDto MapProgressionToDto(Progression progression);
-    Task<Tuple<int, int>> GetUsedAndAvailableSnuff(string uid);
+    Task<List<int>> GetUsedAndAvailableSnuff(string uid);
 }
