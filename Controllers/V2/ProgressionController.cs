@@ -85,6 +85,22 @@ public class ProgressionController : ControllerBase
     }
 
     [MapToApiVersion("2.0")]
+    [HttpGet]
+    [Route("GetUseAndLimitValues/{uid}")]
+    public async Task<ActionResult<Tuple<int, int>>> GetUseAndLimitValues(string uid)
+    {
+        try
+        {
+            var response = await _progressionService.GetUsedAndAvailableSnuff(uid);
+            return response;
+        }
+        catch
+        {
+            return NotFound();
+        }
+    }
+
+    [MapToApiVersion("2.0")]
     [HttpPost]
     [Route("CreateUserProgressionV2/{uid}")]
     public async Task<ActionResult<ProgressionDto>> CreateUserProgression(string uid)
