@@ -497,4 +497,11 @@ public class ProgressionService : IProgressionService
             return mostRecentSnuff.SnuffLogDate.ToString();
         }
     }
+
+    public async Task<Tuple<int, int>> GetUsedAndAvailableSnuff(string uid)
+    {
+        var usedSnuff = _snuffLogRepository.FilterBy(x => x.UserId == uid && x.SnuffLogDate.Day == DateTime.UtcNow.Day).Sum(x => x.AmountUsed);
+        var availableSnuff = await CalculateRemainingSnuff(uid);
+        return Tuple.Create(usedSnuff, availableSnuff);
+    }
 }
