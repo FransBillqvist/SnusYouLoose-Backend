@@ -318,11 +318,6 @@ public class CurrentSnuffService : ICurrentSnuffService
         throw new NotImplementedException();
     }
 
-    Task<bool> ICurrentSnuffService.AddCurrentSnuffToArchiveAsync(string CurrentSnuffId)
-    {
-        throw new NotImplementedException();
-    }
-
     Task<int> ICurrentSnuffService.GetAmountInBoxAsync(string csid)
     {
         throw new NotImplementedException();
