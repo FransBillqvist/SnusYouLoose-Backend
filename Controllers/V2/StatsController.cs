@@ -24,10 +24,10 @@ public class StatisticsController : ControllerBase
             _statsRepository = statsRepository;
             _statsService = statsService;
         }
+
     [MapToApiVersion("2.0")]
     [HttpGet]
     [Route("GetStatisticsForPeriod/{userId}/{from}/{to}")]
-
     public async Task<List<Statistics>> StatisticsForUser(string userId, DateTime from, DateTime to)
     {
         var EmptyStats = new Statistics();
