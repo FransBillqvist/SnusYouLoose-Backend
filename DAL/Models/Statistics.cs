@@ -1,3 +1,5 @@
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace DAL.Models;
 
 [BsonCollection("Statistics")]
@@ -9,4 +11,7 @@ public class Statistics : Document
     public int TotalAmoutUsed {get; set;}
     public int LimitOfUse {get; set;}
     public double Rating {get; set;}
+    [BsonElement("CreatedDate")]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    public DateTime CreatedDate { get; set;}
 }
