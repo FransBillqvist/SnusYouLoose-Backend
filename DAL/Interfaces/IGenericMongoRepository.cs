@@ -27,4 +27,5 @@ public interface IGenericMongoRepository<TDocument> where TDocument : IDocument
     Task DeleteByIdAsync(string id);
     void DeleteMany(Expression<Func<TDocument, bool>> filter);
     Task DeleteManyAsync(Expression<Func<TDocument, bool>> filter);
+    IList<TDocument> SearchFor(Expression<Func<TDocument, bool>> predicate);
 }
