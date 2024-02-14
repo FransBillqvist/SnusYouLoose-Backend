@@ -49,7 +49,7 @@ public class StatisticsController : ControllerBase
     [Route("GetLatestStatistics/{userId}")]
     public async Task<Statistics> GetLatestStatistics(string userId)
     {
-        var EmptyStats = new Statistics();
-        return EmptyStats;
+        var result = await _statsService.GetTemporaryStatisticsOfToday(userId);
+        return result;
     }
 }
