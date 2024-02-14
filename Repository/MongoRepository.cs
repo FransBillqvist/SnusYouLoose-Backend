@@ -21,7 +21,7 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
         var collectionName = ((BsonCollectionAttribute)documentType.GetCustomAttributes(
             typeof(BsonCollectionAttribute),
             true)
-            .FirstOrDefault())?.CollectionName;
+            .FirstOrDefault()).CollectionName;
 
         if (collectionName != null)
         {
@@ -45,7 +45,7 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
 
     public virtual IEnumerable<TProjected> FilterBy<TProjected>(Expression<Func<TDocument, bool>> filter, Expression<Func<TDocument, TProjected>> projection)
     {
-        return _collection.Find(filter).Project(projection).ToEnumerable();
+        return (IEnumerable<TProjected>)Task.Run(() => _collection.Find(filter).Project(projection).ToEnumerable());
     }
 
     public virtual TDocument FindById(string id)
@@ -145,4 +145,9 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
     {
         return Task.Run(() => _collection.DeleteManyAsync(filter));
     }
+
+    public IList<TDocument> SearchFor(Expression<Func<TDocument, bool>> predicate) => _collection
+           .AsQueryable<TDocument>()
+           .Where(predicate.Compile())
+           .ToList();
 }
