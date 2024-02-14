@@ -40,46 +40,112 @@ public class StatisticsService : IStatisticsService
                 Settings.Value.DatabaseName);
         }
  public async Task CreateDailyStaticsForUser(string userId)
-{
-    var user = _userRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
-
-    if (user == null || !user.Any())
     {
-        throw new HttpIOException((HttpRequestError)StatusCodes.Status404NotFound, "User not found");
+        var user = _userRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
+
+        if (user == null || !user.Any())
+        {
+            throw new Exception("User not found");
+        }
+
+        var accountCreationDate = user.First().CreatedAtUtc.Date;
+        var today = DateTime.UtcNow.Date;
+        List<Statistics> statistics = GetUserStatistics(userId);
+
+        var selectTheLatest = statistics.OrderByDescending(statistic => statistic.CreatedAtUtc).FirstOrDefault();
+        if (selectTheLatest != null)
+        {
+            accountCreationDate = selectTheLatest.CreatedDate.Date;
+        }
+        for (var date = accountCreationDate; date < today; date = date.AddDays(1))
+        {
+            var i = 0;
+            Console.WriteLine("Statistics for the " + date);
+            var logList = GetLogList(userId, date);
+            List<Progression> progressionList = GetUserProgressions(userId);
+
+            if (progressionList == null)
+            {
+                Console.WriteLine("NULLLLLLL");
+                continue;
+            }
+
+            progressionList = progressionList.OrderBy(x => x.GoalStartDate).ToList();
+            var rightProgression = progressionList.Find(x => x.GoalStartDate.Date <= date && x.GoalEndDate.Date >= date);
+            if (rightProgression == null)
+            {
+                Console.WriteLine("NULLLLLLL");
+                continue;
+            }
+            var snuffGoalAmount = rightProgression.SnuffGoalAmount;
+
+            int totalUsedSnuff = 0;
+            var listOfUsages = new List<int>();
+            var usedSnuffSorts = new List<Snuff>();
+
+            foreach (var snuff in logList)
+            {
+                var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Date == date);
+                if (logs != null)
+                {
+                    var usedSnuff = logs.Sum(log => log.AmountUsed);
+                    var snuffObject = _snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
+                    if (usedSnuff >= 1)
+                    {
+                        listOfUsages.Add(usedSnuff);
+                        totalUsedSnuff += usedSnuff;
+                        usedSnuffSorts.Add(snuffObject);
+                    }
+                }
+            }
+
+            var newStatistics = new Statistics
+            {
+                CreatedAtUtc = DateTime.UtcNow,
+                UserId = userId,
+                UsedSnuffSorts = usedSnuffSorts,
+                UsedAmountOfSnuffs = listOfUsages,
+                TotalAmoutUsed = totalUsedSnuff,
+                LimitOfUse = snuffGoalAmount,
+                Rating = DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
+                CreatedDate = date
+            };
+            await _statisticsRepo.InsertOneAsync(newStatistics);
+            Console.WriteLine("Statistics for the " + date + " Has been saved");
+        }
+
+        List<Statistics> GetUserStatistics(string userId)
+        {
+            return _statisticsRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
+        }
     }
 
-    var accountCreationDate = user.First().CreatedAtUtc.Date;
-    var today = DateTime.UtcNow.Date;
-
-    var statistics = _statisticsRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
-
-    var selectTheLatest = statistics.OrderByDescending(statistic => statistic.CreatedAtUtc).FirstOrDefault();
-    if (selectTheLatest != null)
+    private List<Progression> GetUserProgressions(string userId)
     {
-        accountCreationDate = selectTheLatest.CreatedDate.Date;
+        return _progressionRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
     }
-    for (var date = accountCreationDate; date < today; date = date.AddDays(1))
+
+    private static IEnumerable<object> GetUsedSnuffList(DateTime date, IEnumerable<CurrentSnuff> ListOfAllLogs)
     {
-        var i = 0;
-        Console.WriteLine("Statistics for the " + date);
+        return  ListOfAllLogs.GroupBy(x => x.SnusId).Select(x => new { SnusId = x.Key, Amount = x.Sum(y => y.LogsOfBox.Where(z => z.CreatedAtUtc.Date == date).Sum(z => z.AmountUsed)) });
+    }
+
+    private  IEnumerable<CurrentSnuff> GetLogList(string userId, DateTime date)
+    {
+        return _currentSnuffRepo.SearchFor(x => x.UserId == userId && x.LogsOfBox.All(log => log.SnuffLogDate.Date == date));
+    }
+
+    public Task<List<Statistics>> GetStaticsForPeriod(string userId, DateTime from, DateTime To)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Statistics> GetTemporaryStatisticsOfToday(string userId)
+    {
+        var date = DateTime.UtcNow.Date;
+        var progression = GetActiveProgression(userId);
         var logList = GetLogList(userId, date);
-
-        var progressionList = _progressionRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
-
-        if (progressionList == null)
-        {
-            Console.WriteLine("NULLLLLLL");
-            continue;
-        }
-
-        progressionList = progressionList.OrderBy(x => x.GoalStartDate).ToList();
-        var rightProgression = progressionList.Find(x => x.GoalStartDate.Date <= date && x.GoalEndDate.Date >= date);
-        if (rightProgression == null)
-        {
-            Console.WriteLine("NULLLLLLL");
-            continue;
-        }
-        var snuffGoalAmount = rightProgression.SnuffGoalAmount;
+        var snuffGoalAmount = progression.SnuffGoalAmount;
 
         int totalUsedSnuff = 0;
         var listOfUsages = new List<int>();
@@ -91,8 +157,8 @@ public class StatisticsService : IStatisticsService
             if (logs != null)
             {
                 var usedSnuff = logs.Sum(log => log.AmountUsed);
-                var snuffObject = _snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
-                if(usedSnuff >= 1)
+                var snuffObject = GetSnuffObject(snuff);
+                if (usedSnuff >= 1)
                 {
                     listOfUsages.Add(usedSnuff);
                     totalUsedSnuff += usedSnuff;
@@ -110,31 +176,29 @@ public class StatisticsService : IStatisticsService
             TotalAmoutUsed = totalUsedSnuff,
             LimitOfUse = snuffGoalAmount,
             Rating = DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
-            CreatedDate = date
+            CreatedDate = DateTime.UtcNow.Date
         };
-        await _statisticsRepo.InsertOneAsync(newStatistics);
-        Console.WriteLine("Statistics for the " + date + " Has been saved");
-    }
-}
-
-    private static IEnumerable<object> GetUsedSnuffList(DateTime date, IEnumerable<CurrentSnuff> ListOfAllLogs)
-    {
-        return  ListOfAllLogs.GroupBy(x => x.SnusId).Select(x => new { SnusId = x.Key, Amount = x.Sum(y => y.LogsOfBox.Where(z => z.CreatedAtUtc.Date == date).Sum(z => z.AmountUsed)) });
+        return await Task.FromResult(newStatistics);
     }
 
-    private  IEnumerable<CurrentSnuff> GetLogList(string userId, DateTime date)
+    private Snuff GetSnuffObject(CurrentSnuff snuff)
     {
-        return _currentSnuffRepo.SearchFor(x => x.UserId == userId && x.LogsOfBox.All(log => log.SnuffLogDate.Date == date));
+        var result =_snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
+        if(result == null)
+        {
+            throw new Exception("No snuff found");
+        }
+        return result;
     }
 
-    public Task<List<Statistics>> GetStaticsForPeriod(string userId, DateTime from, DateTime To)
+    private  Progression GetActiveProgression(string userId)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<Statistics> GetTemporaryStatisticsOfToday(string userId)
-    {
-        throw new NotImplementedException();
+        var result = _progressionRepo.SearchFor(x => x.UserId == userId && x.InUse == true).FirstOrDefault();
+        if(result == null)
+        {
+            throw new Exception("No progression found");
+        }
+        return result;
     }
 
     public double DailyRateStatitics(int limit, int used)
