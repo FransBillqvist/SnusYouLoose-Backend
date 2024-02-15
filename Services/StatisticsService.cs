@@ -169,7 +169,7 @@ public class StatisticsService : IStatisticsService
 
         var newStatistics = new Statistics
         {
-            CreatedAtUtc = DateTime.UtcNow,
+            CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             UserId = userId,
             UsedSnuffSorts = usedSnuffSorts,
             UsedAmountOfSnuffs = listOfUsages,

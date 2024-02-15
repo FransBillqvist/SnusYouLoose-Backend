@@ -58,8 +58,8 @@ public class CurrentSnuffController : ControllerBase
     {
         try
         {
-            newCurrentSnuff.CreatedAtUtc = DateTime.UtcNow;
-            newCurrentSnuff.PurchaseDate = DateTime.UtcNow;
+            newCurrentSnuff.CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1);
+            newCurrentSnuff.PurchaseDate = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1);;
             await _csService.CreateCurrentSnuffAsync(newCurrentSnuff);
             return newCurrentSnuff;
         }

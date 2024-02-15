@@ -77,7 +77,7 @@ public class SnuffController : ControllerBase
         try
         {
             Console.WriteLine($"Create Snuff data for Snuff(ENDPOINT): {newSnuff.Type}");
-            newSnuff.CreatedAtUtc = DateTime.UtcNow;
+            newSnuff.CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1);
             await _snuffService.CreateSnuffAsyncV2(newSnuff);
             return Ok();
         }

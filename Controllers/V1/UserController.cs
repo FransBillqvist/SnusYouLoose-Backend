@@ -52,7 +52,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            newUser.CreatedAtUtc = DateTime.UtcNow;
+            newUser.CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1);;
             await _userService.CreateUserAsync(newUser);
             return Ok();
         }

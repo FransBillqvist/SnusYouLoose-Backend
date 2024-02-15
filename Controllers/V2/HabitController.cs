@@ -93,9 +93,9 @@ public class HabitController : ControllerBase
         Console.WriteLine("Hello, Am Post Habit Endpoint, with createdatutc time: " + DateTime.Now);
         try
         {
-            newHabit.CreatedAtUtc = DateTime.UtcNow;
-            newHabit.StartDate = DateTime.UtcNow;
-            newHabit.EndDate = DateTime.UtcNow;
+            newHabit.CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1);
+            newHabit.StartDate = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1);
+            newHabit.EndDate = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1);
             await _habitService.CreateHabitAsync(newHabit);
             return newHabit;
         }

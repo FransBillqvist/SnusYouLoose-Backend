@@ -50,7 +50,7 @@ public class SnuffLogController : ControllerBase
         try
         {
             Console.WriteLine("CreateSnuffLog line 51: amount of snuff to use: " + newSnuffLog.AmountUsed);
-            newSnuffLog.CreatedAtUtc = DateTime.UtcNow;
+            newSnuffLog.CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1);;
             await _snuffLogService.CreateSnuffLogAsync(newSnuffLog);
             return Ok();
         }
