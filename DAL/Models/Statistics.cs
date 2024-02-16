@@ -12,6 +12,6 @@ public class Statistics : Document
     public int LimitOfUse {get; set;}
     public double Rating {get; set;}
     [BsonElement("CreatedDate")]
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     public DateTime CreatedDate { get; set;}
 }

@@ -11,7 +11,7 @@ public abstract class Document : IDocument
     public string Id { get; set; } = string.Empty;
 
     [BsonElement("CreatedAtUtc")]
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     public DateTime CreatedAtUtc { get; set; }
 
     [BsonElement("StringCreatedAtUtc")]

@@ -8,7 +8,7 @@ public class CurrentSnuff : Document
 {
     [BsonElement("SnusId")]
     public string SnusId { get; set; }
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     internal DateTime PurchaseDate { get; set; }
     public string StringPurchaseDate
     {

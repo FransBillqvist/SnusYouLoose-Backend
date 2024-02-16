@@ -5,6 +5,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Microsoft.Extensions.Options;
 using DAL.Dto;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Services;
 
@@ -431,11 +432,16 @@ public class ProgressionService : IProgressionService
         var numberUsedToday =  _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.AddHours(1).Day && x.UserId == uid).Sum(x => x.AmountUsed);
         var currentProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
 
-        TimeSpan now = DateTime.UtcNow.AddHours(1).TimeOfDay;
+        TimeSpan now = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).TimeOfDay : DateTime.UtcNow.AddHours(1).TimeOfDay;
         TimeSpan wakeUpTime = (TimeSpan)habit.WakeUpTime!;
         TimeSpan bedTime = (TimeSpan)habit.BedTime!;
 
+        Console.WriteLine("WhenIsTheNextDoseAvailableV2 => now: " + now);
         TimeSpan timeLeft;
+        if(numberUsedToday == currentProgression.SnuffGoalAmount){
+            timeLeft = new TimeSpan(23, 59, 59) - now + wakeUpTime;
+            return timeLeft; 
+        }
         if (now > bedTime || now < wakeUpTime)
         {
             Console.WriteLine("WhenIsTheNextDoseAvailableV2 => (now > bedTime || now < wakeUpTime) == TRUE");
@@ -445,7 +451,7 @@ public class ProgressionService : IProgressionService
             }
             else // now > bedTime
             {
-            timeLeft = new TimeSpan(24, 0, 0) - now + wakeUpTime; // Time till midnight plus time from midnight to wake up
+            timeLeft = new TimeSpan(23, 59, 59) - now + wakeUpTime; // Time till midnight plus time from midnight to wake up
             }
 
             timeLeft = new TimeSpan(timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds) - currentProgression.RecommendedUsageInterval;

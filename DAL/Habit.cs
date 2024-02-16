@@ -11,9 +11,9 @@ public class Habit : Document
     public string ProgressionType { get; set; }
     public string Speed { get; set; }
     public int NumberOfHoursPerDay { get; set; }
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     internal DateTime EndDate { get; set; }
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     internal DateTime StartDate { get; set; }
     public string StringEndDate
     {

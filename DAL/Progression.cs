@@ -9,7 +9,7 @@ public class Progression : Document
     [BsonElement("UserId")]
     public string UserId { get; set; }
     [BsonElement("GoalStartDate")]
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     public DateTime GoalStartDate { get; set; }
 
     [BsonElement("StringGoalStartDate")]
@@ -22,7 +22,7 @@ public class Progression : Document
         private set { }
     }
     [BsonElement("GoalEndDate")]
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     public DateTime GoalEndDate { get; set; }
 
     [BsonElement("StringGoalEndDate")]

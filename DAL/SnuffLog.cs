@@ -6,7 +6,7 @@ namespace DAL;
 public class SnuffLog : Document
 {
     public string UserId { get; set; }
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     public DateTime SnuffLogDate { get; set; }
     public int AmountUsed { get; set; }
 }
