@@ -179,9 +179,9 @@ public class CurrentSnuffService : ICurrentSnuffService
         //skapa en ny logg via CreateSnuffLogAsync
         var createdNewLog = await _snuffLogService.CreateSnuffLogAsync(new SnuffLog
         {
-            CreatedAtUtc = DateTime.UtcNow,
+            CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             UserId = userId,
-            SnuffLogDate = DateTime.UtcNow,
+            SnuffLogDate = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             AmountUsed = amount,
         });
         //lägg till nya loggen i currentsnuff objektet
