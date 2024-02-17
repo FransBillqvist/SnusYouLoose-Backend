@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace DAL.Models;
 
 [BsonCollection("Statistics")]
-public class Statistics : Document
+public class Statistic : Document
 {
     public string UserId {get; set;}
     public List<Snuff> UsedSnuffSorts {get; set;} 

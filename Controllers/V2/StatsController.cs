@@ -12,12 +12,12 @@ namespace Controllers.V2;
 public class StatisticsController : ControllerBase
 {
     private readonly ILogger<StatisticsController> _logger;
-    private readonly IGenericMongoRepository<Statistics> _statsRepository;
+    private readonly IGenericMongoRepository<Statistic> _statsRepository;
     private readonly IStatisticsService _statsService;
 
     public StatisticsController(
         ILogger<StatisticsController> logger,
-        IGenericMongoRepository<Statistics> statsRepository,
+        IGenericMongoRepository<Statistic> statsRepository,
         IStatisticsService statsService)
         {
             _logger = logger;
@@ -28,10 +28,10 @@ public class StatisticsController : ControllerBase
     [MapToApiVersion("2.0")]
     [HttpGet]
     [Route("GetStatisticsForPeriod/{userId}/{from}/{to}")]
-    public async Task<List<Statistics>> StatisticsForUser(string userId, DateTime from, DateTime to)
+    public async Task<List<Statistic>> StatisticsForUser(string userId, DateTime from, DateTime to)
     {
-        var EmptyStats = new Statistics();
-        var result = new List<Statistics> { EmptyStats };
+        var EmptyStats = new Statistic();
+        var result = new List<Statistic> { EmptyStats };
         return result;
     }
 
@@ -47,7 +47,7 @@ public class StatisticsController : ControllerBase
     [MapToApiVersion("2.0")]
     [HttpGet]
     [Route("GetLatestStatistics/{userId}")]
-    public async Task<Statistics> GetLatestStatistics(string userId)
+    public async Task<Statistic> GetLatestStatistics(string userId)
     {
         var result = await _statsService.GetTemporaryStatisticsOfToday(userId);
         return result;

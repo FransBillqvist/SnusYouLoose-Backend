@@ -10,7 +10,7 @@ namespace Services;
 
 public class StatisticsService : IStatisticsService
 {
-    private readonly IGenericMongoRepository<Statistics> _statisticsRepo;
+    private readonly IGenericMongoRepository<Statistic> _statisticsRepo;
     private readonly IGenericMongoRepository<Progression> _progressionRepo;
     private readonly IGenericMongoRepository<CurrentSnuff> _currentSnuffRepo;
     private readonly IGenericMongoRepository<Snuff> _snuffRepo;
@@ -19,7 +19,7 @@ public class StatisticsService : IStatisticsService
 
     public StatisticsService(
         IOptions<MongoDbSettings> Settings,
-        IGenericMongoRepository<Statistics> statisticsRepository,
+        IGenericMongoRepository<Statistic> statisticsRepository,
         IGenericMongoRepository<Progression> progressionRepository,
         IGenericMongoRepository<CurrentSnuff> snufflogRepository,
         IGenericMongoRepository<Snuff> snuffRepository,
@@ -50,7 +50,7 @@ public class StatisticsService : IStatisticsService
 
         var accountCreationDate = user.First().CreatedAtUtc.Date;
         var today = DateTime.UtcNow.Date;
-        List<Statistics> statistics = GetUserStatistics(userId);
+        List<Statistic> statistics = GetUserStatistics(userId);
 
         var selectTheLatest = statistics.OrderByDescending(statistic => statistic.CreatedAtUtc).FirstOrDefault();
         if (selectTheLatest != null)
@@ -99,7 +99,7 @@ public class StatisticsService : IStatisticsService
                 }
             }
 
-            var newStatistics = new Statistics
+            var newStatistics = new Statistic
             {
                 CreatedAtUtc = DateTime.UtcNow,
                 UserId = userId,
@@ -114,7 +114,7 @@ public class StatisticsService : IStatisticsService
             Console.WriteLine("Statistics for the " + date + " Has been saved");
         }
 
-        List<Statistics> GetUserStatistics(string userId)
+        List<Statistic> GetUserStatistics(string userId)
         {
             return _statisticsRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
         }
@@ -135,12 +135,12 @@ public class StatisticsService : IStatisticsService
         return _currentSnuffRepo.SearchFor(x => x.UserId == userId && x.LogsOfBox.All(log => log.SnuffLogDate.Date == date));
     }
 
-    public Task<List<Statistics>> GetStaticsForPeriod(string userId, DateTime from, DateTime To)
+    public Task<List<Statistic>> GetStaticsForPeriod(string userId, DateTime from, DateTime To)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<Statistics> GetTemporaryStatisticsOfToday(string userId)
+    public async Task<Statistic> GetTemporaryStatisticsOfToday(string userId)
     {
         var date = DateTime.UtcNow.Date;
         var progression = GetActiveProgression(userId);
@@ -167,7 +167,7 @@ public class StatisticsService : IStatisticsService
             }
         }
 
-        var newStatistics = new Statistics
+        var newStatistics = new Statistic
         {
             CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             UserId = userId,
