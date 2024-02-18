@@ -12,6 +12,7 @@ public enum Flavor
         Cloudberry,
         Blackcurrant,
         Blackberry,
+        Juniper,
     Apple,
     Cherry,
     Citrus,
