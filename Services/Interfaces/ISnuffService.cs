@@ -1,5 +1,5 @@
-using DAl.Dto;
 using DAL;
+using DAL.Dto;
 
 namespace Services.Interfaces;
 
@@ -14,4 +14,5 @@ public interface ISnuffService
     Task<int> GetSnuffAmountAsync(string snuffId);
     Task<List<Snuff>> GetAllSnuffsAsync();
     Task<List<SnuffShopDto>> GetShopSnuffsAsync();
+    Task AddInfoToSnuffAsync(SnuffInfoReq snuffInfo);
 }
