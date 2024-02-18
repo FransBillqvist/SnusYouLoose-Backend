@@ -1,4 +1,4 @@
-namespace DAl.Dto;
+namespace DAL.Dto;
 
 public class SnuffShopDto 
 {
