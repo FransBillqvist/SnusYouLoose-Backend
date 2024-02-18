@@ -1,23 +1,27 @@
-using DAl.Dto;
+using DAL.Dto;
 using DAL;
 using DAL.Interfaces;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Services.Interfaces;
+using DAL.Enums;
 
 namespace Services;
 
 public class SnuffService : ISnuffService
 {
     private readonly IGenericMongoRepository<Snuff> _snuffRepository;
+    private readonly IGenericMongoRepository<SnuffInfo> _snuffInfoRepository;
 
     public SnuffService(
             IOptions<MongoDbSettings> Settings,
-            IGenericMongoRepository<Snuff> snuffRepository
+            IGenericMongoRepository<Snuff> snuffRepository,
+            IGenericMongoRepository<SnuffInfo> snuffInfoRepository
         )
     {
         _snuffRepository = snuffRepository;
+        _snuffInfoRepository = snuffInfoRepository;
         var mongoClient = new MongoClient(
             Settings.Value.ConnectionString);
 
@@ -115,5 +119,33 @@ public class SnuffService : ISnuffService
         }
         return result;
         
+    }
+
+    public async Task AddInfoToSnuffAsync(SnuffInfoReq snuffInfo)
+    {
+        var snuff = await _snuffRepository.FindOneAsync(x => x.Id == snuffInfo.SnusId);
+        if(snuff is null)
+        {
+            throw new Exception("Snuff not found");
+        }
+
+        var flavorList = new List<Flavor>();
+        var format = Enum.GetName(typeof(Fromat),snuffInfo.Format);
+        foreach (var item in snuffInfo.Flavors)
+        {
+            flavorList.Add((Flavor)item);
+        }
+        
+        var result = new SnuffInfo
+        {
+            CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
+            SnusId = snuffInfo.SnusId,
+            NicotinePerGram = snuffInfo.NicotinePerGram,
+            NicotinePerPortion = snuffInfo.NicotinePerPortion,
+            Flavors = flavorList,
+            Format = snuffInfo.Format
+        };
+        
+        await _snuffInfoRepository.InsertOneAsync(result);
     }
 }
