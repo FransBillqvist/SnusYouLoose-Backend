@@ -1,5 +1,5 @@
-using DAl.Dto;
 using DAL;
+using DAL.Dto;
 using DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
@@ -84,6 +84,23 @@ public class SnuffController : ControllerBase
         catch
         {
             return BadRequest();
+        }
+    }
+
+    [MapToApiVersion("2.0")]
+    [HttpPost]
+    [Route("AddInfoToSnuff")]
+    public async Task<IActionResult> AddInfoToSnuff([FromBody] SnuffInfoReq snuffInfo)
+    {
+        try
+        {
+            await _snuffService.AddInfoToSnuffAsync(snuffInfo);
+
+            return Ok();
+        }
+        catch
+        {
+            return BadRequest("");
         }
     }
 
