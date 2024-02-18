@@ -130,7 +130,6 @@ public class SnuffService : ISnuffService
         }
 
         var flavorList = new List<Flavor>();
-        var format = Enum.GetName(typeof(Fromat),snuffInfo.Format);
         foreach (var item in snuffInfo.Flavors)
         {
             flavorList.Add((Flavor)item);
