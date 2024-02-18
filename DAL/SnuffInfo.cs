@@ -2,6 +2,7 @@ using System.Reflection.Metadata;
 using DAL.Enums;
 
 namespace DAL;
+[BsonCollection("SnuffInfo")]
 public class SnuffInfo : Document
 {
     public string SnusId { get; set; }
