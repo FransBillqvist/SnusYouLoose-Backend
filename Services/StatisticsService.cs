@@ -221,10 +221,10 @@ public class StatisticsService : IStatisticsService
 
     public async Task<double> DailyRateStatitics(int limit, int used)
     {
-
     var theValueOfOneSnuff = 100 / limit;
     var diff = limit - used;
     double rating;
+
     if (used == limit)
     {
         rating = 100;
@@ -250,5 +250,33 @@ public class StatisticsService : IStatisticsService
     }
 
     return await Task.FromResult(rating);
+    }
+
+    public async Task<Statistic> GetFullUserStatic(string userId)
+    {
+        var allStatistics = _statisticsRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
+        var todaysStatistic = await GetTemporaryStatisticsOfToday(userId);
+        var firstDate = allStatistics.OrderBy(x => x.CreatedDate).FirstOrDefault();
+        var lastDate = allStatistics.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+        allStatistics.Add(todaysStatistic);
+        var totalLimit = allStatistics.Sum(x => x.LimitOfUse);
+        var totalUsed = allStatistics.Sum(x => x.TotalAmoutUsed);
+        var totalRatingPoints = allStatistics.Sum(x => x.Rating);
+        var numberOfDays = allStatistics.Count();
+        var finalRating = totalRatingPoints / numberOfDays;
+        var statisticsForDays = (lastDate.CreatedDate - firstDate.CreatedDate).Days;
+        var result = new Statistic
+        {
+            CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
+            UserId = userId,
+            UsedSnuffSorts = allStatistics.SelectMany(x => x.UsedSnuffSorts).ToList(),
+            UsedAmountOfSnuffs = allStatistics.SelectMany(x => x.UsedAmountOfSnuffs).ToList(),
+            TotalAmoutUsed = allStatistics.Sum(x => x.TotalAmoutUsed),
+            LimitOfUse = allStatistics.Sum(x => x.LimitOfUse),
+            Rating = Math.Round(finalRating, 2, MidpointRounding.AwayFromZero),
+            CreatedDate = DateTime.UtcNow.Date,
+            NumberOfDays = statisticsForDays
+        };
+        return result;
     }
 }
