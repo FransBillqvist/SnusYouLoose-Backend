@@ -107,7 +107,7 @@ public class StatisticsService : IStatisticsService
                 UsedAmountOfSnuffs = listOfUsages,
                 TotalAmoutUsed = totalUsedSnuff,
                 LimitOfUse = snuffGoalAmount,
-                Rating = DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
+                Rating = await DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
                 CreatedDate = date
             };
             await _statisticsRepo.InsertOneAsync(newStatistics);
@@ -135,9 +135,27 @@ public class StatisticsService : IStatisticsService
         return _currentSnuffRepo.SearchFor(x => x.UserId == userId && x.LogsOfBox.All(log => log.SnuffLogDate.Date == date));
     }
 
-    public Task<List<Statistic>> GetStaticsForPeriod(string userId, DateTime from, DateTime To)
+    public async  Task<Statistic> GetStaticsForPeriod(string userId, DateTime from, DateTime To)
     {
-        throw new NotImplementedException();
+        var allStatistics = _statisticsRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
+        var statisticsInPeriod = allStatistics.Where(x => x.CreatedDate.Date >= from.Date && x.CreatedDate.Date <= To.Date).ToList();
+        var totalLimit = statisticsInPeriod.Sum(x => x.LimitOfUse);
+        var totalUsed = statisticsInPeriod.Sum(x => x.TotalAmoutUsed);
+        var totalRatingPoints = statisticsInPeriod.Sum(x => x.Rating);
+        var numberOfDays = statisticsInPeriod.Count();
+        var finalRating = totalRatingPoints / numberOfDays;
+        var result = new Statistic
+        {
+            CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
+            UserId = userId,
+            UsedSnuffSorts = statisticsInPeriod.SelectMany(x => x.UsedSnuffSorts).ToList(),
+            UsedAmountOfSnuffs = statisticsInPeriod.SelectMany(x => x.UsedAmountOfSnuffs).ToList(),
+            TotalAmoutUsed = statisticsInPeriod.Sum(x => x.TotalAmoutUsed),
+            LimitOfUse = statisticsInPeriod.Sum(x => x.LimitOfUse),
+            Rating = Math.Round(finalRating, 2, MidpointRounding.AwayFromZero),
+            CreatedDate = DateTime.UtcNow.Date
+        };
+        return result;
     }
 
     public async Task<Statistic> GetTemporaryStatisticsOfToday(string userId)
@@ -175,7 +193,7 @@ public class StatisticsService : IStatisticsService
             UsedAmountOfSnuffs = listOfUsages,
             TotalAmoutUsed = totalUsedSnuff,
             LimitOfUse = snuffGoalAmount,
-            Rating = DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
+            Rating = await DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
             CreatedDate = DateTime.UtcNow.Date
         };
         return await Task.FromResult(newStatistics);
@@ -201,7 +219,7 @@ public class StatisticsService : IStatisticsService
         return result;
     }
 
-    public double DailyRateStatitics(int limit, int used)
+    public async Task<double> DailyRateStatitics(int limit, int used)
     {
 
     var theValueOfOneSnuff = 100 / limit;
@@ -231,6 +249,6 @@ public class StatisticsService : IStatisticsService
         }
     }
 
-    return rating;
+    return await Task.FromResult(rating);
     }
 }
