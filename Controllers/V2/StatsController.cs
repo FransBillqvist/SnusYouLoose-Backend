@@ -60,4 +60,14 @@ public class StatisticsController : ControllerBase
         var result = await _statsService.DailyRateStatitics(used, limit);
         return Ok(result);
     }
+
+    [MapToApiVersion("2.0")]
+    [HttpGet]
+    [Route("LifeTimeStatistic/{userId}")]
+
+    public async Task<Statistic> LifeTimeStatistic(string userId)
+    {
+        var result = await _statsService.GetFullUserStatic(userId);
+        return result;
+    }
 }
