@@ -9,4 +9,5 @@ public interface IStatisticsService
     Task<Statistic> GetTemporaryStatisticsOfToday(string userId);
 
     Task<double> DailyRateStatitics(int used, int limit);
+    Task<Statistic> GetFullUserStatic(string userId);
 }
