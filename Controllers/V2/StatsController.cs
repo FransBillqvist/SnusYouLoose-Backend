@@ -28,10 +28,9 @@ public class StatisticsController : ControllerBase
     [MapToApiVersion("2.0")]
     [HttpGet]
     [Route("GetStatisticsForPeriod/{userId}/{from}/{to}")]
-    public async Task<List<Statistic>> StatisticsForUser(string userId, DateTime from, DateTime to)
+    public async Task<Statistic> StatisticsForUser(string userId, DateTime from, DateTime to)
     {
-        var EmptyStats = new Statistic();
-        var result = new List<Statistic> { EmptyStats };
+        var result = await _statsService.GetStaticsForPeriod(userId, from, to);
         return result;
     }
 
@@ -51,5 +50,14 @@ public class StatisticsController : ControllerBase
     {
         var result = await _statsService.GetTemporaryStatisticsOfToday(userId);
         return result;
+    }
+
+    [MapToApiVersion("2.0")]
+    [HttpGet]
+    [Route("TestRating")]
+    public async Task<IActionResult> TestRating(int used, int limit)
+    {
+        var result = await _statsService.DailyRateStatitics(used, limit);
+        return Ok(result);
     }
 }
