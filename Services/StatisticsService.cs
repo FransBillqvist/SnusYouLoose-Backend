@@ -227,11 +227,11 @@ public class StatisticsService : IStatisticsService
 
     if (used == limit)
     {
-        rating = 100;
+        rating = 100.00;
     }
     else if(used == 0 && limit != 0)
     {
-        rating = 250;
+        rating = 250.00;
     }
     else if (used < limit)
     {
