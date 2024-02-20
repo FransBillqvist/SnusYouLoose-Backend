@@ -16,7 +16,8 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://192.168.0.10:5126",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "TZ": "Europe/Stockholm"
       }
     },
     "IIS Express": {
