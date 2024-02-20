@@ -194,7 +194,8 @@ public class StatisticsService : IStatisticsService
             TotalAmoutUsed = totalUsedSnuff,
             LimitOfUse = snuffGoalAmount,
             Rating = await DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
-            CreatedDate = DateTime.UtcNow.Date
+            CreatedDate = DateTime.UtcNow.Date,
+            Id = Guid.NewGuid().ToString()
         };
         return await Task.FromResult(newStatistics);
     }
