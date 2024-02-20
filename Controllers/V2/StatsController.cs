@@ -55,9 +55,9 @@ public class StatisticsController : ControllerBase
     [MapToApiVersion("2.0")]
     [HttpGet]
     [Route("TestRating")]
-    public async Task<IActionResult> TestRating(int used, int limit)
+    public async Task<IActionResult> TestRating(int limit, int used)
     {
-        var result = await _statsService.DailyRateStatitics(used, limit);
+        var result = await _statsService.DailyRateStatitics(limit, used);
         return Ok(result);
     }
 
