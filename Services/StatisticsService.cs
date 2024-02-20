@@ -160,11 +160,11 @@ public class StatisticsService : IStatisticsService
 
     public async Task<Statistic> GetTemporaryStatisticsOfToday(string userId)
     {
-        var date = DateTime.UtcNow.Date;
+        var date = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).Date : DateTime.UtcNow.AddHours(1).Date;
         var progression = GetActiveProgression(userId);
         var logList = GetLogList(userId, date);
-        var snuffGoalAmount = progression.SnuffGoalAmount;
 
+        var snuffGoalAmount = progression.SnuffGoalAmount;
         int totalUsedSnuff = 0;
         var listOfUsages = new List<int>();
         var usedSnuffSorts = new List<Snuff>();
@@ -172,6 +172,7 @@ public class StatisticsService : IStatisticsService
         foreach (var snuff in logList)
         {
             var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Date == date);
+
             if (logs != null)
             {
                 var usedSnuff = logs.Sum(log => log.AmountUsed);
