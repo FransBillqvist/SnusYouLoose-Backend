@@ -438,8 +438,9 @@ public class ProgressionService : IProgressionService
 
         Console.WriteLine("WhenIsTheNextDoseAvailableV2 => now: " + now);
         TimeSpan timeLeft;
-        if(numberUsedToday == currentProgression.SnuffGoalAmount){
+        if(numberUsedToday >= currentProgression.SnuffGoalAmount){
             timeLeft = new TimeSpan(23, 59, 59) - now + wakeUpTime;
+            timeLeft = new TimeSpan(timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds); 
             return timeLeft; 
         }
         if (now > bedTime || now < wakeUpTime)
