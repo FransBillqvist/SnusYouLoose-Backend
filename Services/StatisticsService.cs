@@ -153,7 +153,8 @@ public class StatisticsService : IStatisticsService
             TotalAmoutUsed = statisticsInPeriod.Sum(x => x.TotalAmoutUsed),
             LimitOfUse = statisticsInPeriod.Sum(x => x.LimitOfUse),
             Rating = Math.Round(finalRating, 2, MidpointRounding.AwayFromZero),
-            CreatedDate = DateTime.UtcNow.Date
+            CreatedDate = DateTime.UtcNow.Date,
+            NumberOfDays = numberOfDays
         };
         return result;
     }
