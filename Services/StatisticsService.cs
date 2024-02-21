@@ -49,7 +49,7 @@ public class StatisticsService : IStatisticsService
         }
 
         var accountCreationDate = user.First().CreatedAtUtc.Date;
-        var today = DateTime.UtcNow.Date;
+        var today = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).Date : DateTime.UtcNow.AddHours(1).Date;
         List<Statistic> statistics = GetUserStatistics(userId);
 
         var selectTheLatest = statistics.OrderByDescending(statistic => statistic.CreatedAtUtc).FirstOrDefault();
