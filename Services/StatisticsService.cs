@@ -144,12 +144,25 @@ public class StatisticsService : IStatisticsService
         var totalRatingPoints = statisticsInPeriod.Sum(x => x.Rating);
         var numberOfDays = statisticsInPeriod.Count();
         var finalRating = totalRatingPoints / numberOfDays;
+
+        var (snuffIds, amountOfSnuff) = AggregateSnuffData(statisticsInPeriod.SelectMany(x => x.UsedSnuffSorts).ToList(), statisticsInPeriod.SelectMany(x => x.UsedAmountOfSnuffs).ToList());
+        var destictSnuffList = new List<Snuff>();
+        foreach (var id in snuffIds)
+        {
+            var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
+            if (snuff != null)
+            {
+                destictSnuffList.Add(snuff);
+            }
+        }
+
+
         var result = new Statistic
         {
             CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             UserId = userId,
-            UsedSnuffSorts = statisticsInPeriod.SelectMany(x => x.UsedSnuffSorts).ToList(),
-            UsedAmountOfSnuffs = statisticsInPeriod.SelectMany(x => x.UsedAmountOfSnuffs).ToList(),
+            UsedSnuffSorts = destictSnuffList,
+            UsedAmountOfSnuffs = amountOfSnuff,
             TotalAmoutUsed = statisticsInPeriod.Sum(x => x.TotalAmoutUsed),
             LimitOfUse = statisticsInPeriod.Sum(x => x.LimitOfUse),
             Rating = Math.Round(finalRating, 2, MidpointRounding.AwayFromZero),
@@ -187,12 +200,23 @@ public class StatisticsService : IStatisticsService
             }
         }
 
+        var (snuffIds, amountOfSnuff) = AggregateSnuffData(usedSnuffSorts, listOfUsages);
+        var destictSnuffList = new List<Snuff>();
+        foreach (var id in snuffIds)
+        {
+            var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
+            if (snuff != null)
+            {
+                destictSnuffList.Add(snuff);
+            }
+        }
+
         var newStatistics = new Statistic
         {
             CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             UserId = userId,
-            UsedSnuffSorts = usedSnuffSorts,
-            UsedAmountOfSnuffs = listOfUsages,
+            UsedSnuffSorts = destictSnuffList,
+            UsedAmountOfSnuffs = amountOfSnuff,
             TotalAmoutUsed = totalUsedSnuff,
             LimitOfUse = snuffGoalAmount,
             Rating = await DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
@@ -269,12 +293,25 @@ public class StatisticsService : IStatisticsService
         var numberOfDays = allStatistics.Count();
         var finalRating = totalRatingPoints / numberOfDays;
         var statisticsForDays = (lastDate.CreatedDate - firstDate.CreatedDate).Days;
+
+
+        var (snuffIds, amountOfSnuff) = AggregateSnuffData(allStatistics.SelectMany(x => x.UsedSnuffSorts).ToList(), allStatistics.SelectMany(x => x.UsedAmountOfSnuffs).ToList());
+        var destictSnuffList = new List<Snuff>();
+        foreach (var id in snuffIds)
+        {
+            var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
+            if (snuff != null)
+            {
+                destictSnuffList.Add(snuff);
+            }
+        }
+
         var result = new Statistic
         {
             CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             UserId = userId,
-            UsedSnuffSorts = allStatistics.SelectMany(x => x.UsedSnuffSorts).ToList(),
-            UsedAmountOfSnuffs = allStatistics.SelectMany(x => x.UsedAmountOfSnuffs).ToList(),
+            UsedSnuffSorts = destictSnuffList,
+            UsedAmountOfSnuffs = amountOfSnuff,
             TotalAmoutUsed = allStatistics.Sum(x => x.TotalAmoutUsed),
             LimitOfUse = allStatistics.Sum(x => x.LimitOfUse),
             Rating = Math.Round(finalRating, 2, MidpointRounding.AwayFromZero),
@@ -282,5 +319,25 @@ public class StatisticsService : IStatisticsService
             NumberOfDays = statisticsForDays
         };
         return result;
+    }
+
+    private (List<string> SnuffIds, List<int> TotalAmounts) AggregateSnuffData(List<Snuff> snuffs, List<int> amounts)
+    {
+        var combined = snuffs.Zip(amounts, (s, a) => new { Snuff = s, Amount = a });
+
+        var aggregatedData = combined
+            .GroupBy(x => x.Snuff.Id)
+            .Select(g => new
+            {
+                SnuffId = g.Key,
+                TotalAmount = g.Sum(x => x.Amount)
+            })
+            .ToList();
+
+        // Separera den aggregerade datan till två listor
+        List<string> snuffIds = aggregatedData.Select(x => x.SnuffId).ToList();
+        List<int> totalAmounts = aggregatedData.Select(x => x.TotalAmount).ToList();
+
+        return (snuffIds, totalAmounts);
     }
 }
