@@ -77,13 +77,13 @@ public class ProgressionService : IProgressionService
 
         var selectProgressionWithInUseTrue = await FindUserActiveProgression(uid);
         Console.WriteLine("Object Time: " + selectProgressionWithInUseTrue.GoalEndDate);
-        Console.WriteLine("Date Time UTC: " + DateTime.UtcNow);
-        if (selectProgressionWithInUseTrue.GoalEndDate > DateTime.UtcNow)
+        Console.WriteLine("Date Time UTC: " + (DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1)));
+        if (selectProgressionWithInUseTrue.GoalEndDate > (DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1)))
         {
             Console.WriteLine("Progression already exists");
             return MapProgressionToDto(selectProgressionWithInUseTrue);
         }
-        else if (selectProgressionWithInUseTrue.GoalEndDate < DateTime.UtcNow)
+        else if (selectProgressionWithInUseTrue.GoalEndDate < (DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1)))
         {
             Console.WriteLine("Progression is old send it to the graveyard(UpdateProgressionStateAsync)");
             var updatedProgression = await UpdateProgressionStateAsync(selectProgressionWithInUseTrue);
@@ -198,10 +198,10 @@ public class ProgressionService : IProgressionService
             newProgression = new Progression
             {
                 Id = "",
-                CreatedAtUtc = DateTime.UtcNow,
+                CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
                 UserId = userId,
-                GoalStartDate = DateTime.UtcNow.Date,
-                GoalEndDate = DateTime.UtcNow.Date,
+                GoalStartDate = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).Date : DateTime.UtcNow.AddHours(1).Date,
+                GoalEndDate = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).Date : DateTime.UtcNow.AddHours(1).Date,
                 SnuffGoalAmount = habitData.DoseType == "dosor" ? habitData.DoseAmount * 20 - 1 : habitData.DoseAmount - 1,
                 RecommendedUsageInterval = new TimeSpan(),
                 ActualUsageInterval = new TimeSpan(),
@@ -214,7 +214,7 @@ public class ProgressionService : IProgressionService
             newProgression = new Progression
             {
                 Id = "",
-                CreatedAtUtc = DateTime.UtcNow,
+                CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
                 UserId = userId,
                 GoalStartDate = lastprogression.GoalEndDate.AddDays(1),
                 GoalEndDate = lastprogression.GoalEndDate.AddDays(1),
@@ -253,7 +253,7 @@ public class ProgressionService : IProgressionService
             newProgression = new Progression
             {
                 Id = "",
-                CreatedAtUtc = DateTime.UtcNow,
+                CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
                 UserId = uid,
                 GoalStartDate = DateTime.UtcNow.Date,
                 GoalEndDate = DateTime.UtcNow.Date,
@@ -269,7 +269,7 @@ public class ProgressionService : IProgressionService
             newProgression = new Progression
             {
                 Id = "",
-                CreatedAtUtc = DateTime.UtcNow,
+                CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
                 UserId = uid,
                 GoalStartDate = lastprogression.GoalEndDate.AddDays(1),
                 GoalEndDate = lastprogression.GoalEndDate.AddDays(1),
@@ -397,7 +397,7 @@ public class ProgressionService : IProgressionService
         var newTimeInterval = 0.0;
         var availableSnuffToday = 0;
         var usedSnuffToday = await CalculateRemainingSnuff(uid);
-        var timeLeftOfTheDate = DateTime.UtcNow.Date.AddHours(23).AddMinutes(59).AddSeconds(59) - DateTime.UtcNow;
+        var timeLeftOfTheDate = DateTime.UtcNow.Date.AddHours(23).AddMinutes(59).AddSeconds(59) - (DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1));
 
         var logDetails = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.Day && x.UserId == uid);
         var progressionDetails = _progressionRepository.FilterBy(x => x.UserId == uid && x.InUse == true).FirstOrDefault();
