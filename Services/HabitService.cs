@@ -35,7 +35,7 @@ public class HabitService : IHabitService
 
     public async Task CreateHabitAsync(Habit newHabit)
     {
-        newHabit.StartDate = DateTime.UtcNow;
+        newHabit.StartDate = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1);
         newHabit.EndDate = DateTime.UtcNow.AddTicks(1);
         await _habitRepository.InsertOneAsync(newHabit);
         await SetEndDateForHabitWithoutEndDate(newHabit);
@@ -136,7 +136,7 @@ public class HabitService : IHabitService
 
         }
         if(selectedMode == "date"){
-            var daysLeft = habit.EndDate - DateTime.UtcNow;
+            var daysLeft = habit.EndDate - (DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1));
             var days = daysLeft.Days / dosorAmount;
             while(days < 2.1){
                 dosorAmount = dosorAmount / 2;
@@ -178,14 +178,14 @@ public class HabitService : IHabitService
 
         var habit = new Habit
         {
-            CreatedAtUtc = DateTime.UtcNow,
+            CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             UserId = userId,
             DoseType = newHabit.DoseType,
             DoseAmount = newHabit.DoseAmount,
             ProgressionType = newHabit.ProgressionType,
             Speed = newHabit.Speed.ToString(),
             NumberOfHoursPerDay = newHabit.NumberOfHoursPerDay,
-            StartDate = DateTime.UtcNow,
+            StartDate = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             EndDate = newHabit.EndDate,
             WakeUpTime = newHabit.WakeUpTime,
             BedTime = newHabit.BedTime
