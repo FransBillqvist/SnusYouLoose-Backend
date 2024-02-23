@@ -66,8 +66,8 @@ public class CurrentSnuffService : ICurrentSnuffService
             var newSnuff = new CurrentSnuff
             {
                 SnusId = item.SnusId,
-                PurchaseDate = DateTime.UtcNow,
-                CreatedAtUtc = DateTime.UtcNow,
+                PurchaseDate = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
+                CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
                 UserId = item.UserId,
                 LogsOfBox = Array.Empty<SnuffLog>(),
                 IsEmpty = false,
@@ -133,9 +133,9 @@ public class CurrentSnuffService : ICurrentSnuffService
         //skapa en log via snufflogservice
         var createdNewLog = await _snuffLogService.CreateSnuffLogAsync(new SnuffLog
         {
-            CreatedAtUtc = DateTime.UtcNow,
+            CreatedAtUtc = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             UserId = userId,
-            SnuffLogDate = DateTime.UtcNow,
+            SnuffLogDate = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2) : DateTime.UtcNow.AddHours(1),
             AmountUsed = amount,
         });
         var yolo = _currentSnuffRepository.FilterBy(x => x.SnusId == id && x.UserId == userId);
