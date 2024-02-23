@@ -14,6 +14,7 @@ public class StatisticsService : IStatisticsService
     private readonly IGenericMongoRepository<Progression> _progressionRepo;
     private readonly IGenericMongoRepository<CurrentSnuff> _currentSnuffRepo;
     private readonly IGenericMongoRepository<Snuff> _snuffRepo;
+    private readonly IGenericMongoRepository<SnuffLog> _snufflogRepo;
     private readonly IGenericMongoRepository<User> _userRepo;
     private readonly ILogger<StatisticsService> _logger;
 
@@ -21,14 +22,16 @@ public class StatisticsService : IStatisticsService
         IOptions<MongoDbSettings> Settings,
         IGenericMongoRepository<Statistic> statisticsRepository,
         IGenericMongoRepository<Progression> progressionRepository,
-        IGenericMongoRepository<CurrentSnuff> snufflogRepository,
+        IGenericMongoRepository<CurrentSnuff> currentRepository,
+        IGenericMongoRepository<SnuffLog> snufflogRepository,
         IGenericMongoRepository<Snuff> snuffRepository,
         IGenericMongoRepository<User> userRepository,
         ILogger<StatisticsService> logger)
         {
             _statisticsRepo = statisticsRepository;
             _progressionRepo = progressionRepository;
-            _currentSnuffRepo = snufflogRepository;
+            _currentSnuffRepo = currentRepository;
+            _snufflogRepo = snufflogRepository;
             _snuffRepo = snuffRepository;
             _userRepo = userRepository;
             _logger = logger;
@@ -85,7 +88,7 @@ public class StatisticsService : IStatisticsService
 
             foreach (var snuff in logList)
             {
-                var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Date == date);
+                var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Date == date && log.SnuffLogDate.Month == date.Month && log.SnuffLogDate.Year == date.Year);
                 if (logs != null)
                 {
                     var usedSnuff = logs.Sum(log => log.AmountUsed);
@@ -169,9 +172,10 @@ public class StatisticsService : IStatisticsService
         var listOfUsages = new List<int>();
         var usedSnuffSorts = new List<Snuff>();
 
+
         foreach (var snuff in logList)
         {
-            var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Day == date.Day);
+            var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Day == date.Day && log.SnuffLogDate.Month == date.Month && log.SnuffLogDate.Year == date.Year);
 
             if (logs != null)
             {
@@ -343,7 +347,7 @@ public class StatisticsService : IStatisticsService
         {
             throw new Exception("No logs found");
         }
-        var result = getAllCurrentSnuff.Where(x => x.LogsOfBox.All(log => log.SnuffLogDate.Day == date.Day));
+        var result = getAllCurrentSnuff.Where(x => x.LogsOfBox.All(x => true)).ToList();
 
         //V1
         // var result = _currentSnuffRepo.SearchFor(x => x.UserId == userId && x.LogsOfBox.All(log => log.SnuffLogDate.Date == date));
