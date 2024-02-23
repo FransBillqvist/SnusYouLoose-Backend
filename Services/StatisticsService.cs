@@ -120,21 +120,7 @@ public class StatisticsService : IStatisticsService
         }
     }
 
-    private List<Progression> GetUserProgressions(string userId)
-    {
-        return _progressionRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
-    }
-
-    private static IEnumerable<object> GetUsedSnuffList(DateTime date, IEnumerable<CurrentSnuff> ListOfAllLogs)
-    {
-        return  ListOfAllLogs.GroupBy(x => x.SnusId).Select(x => new { SnusId = x.Key, Amount = x.Sum(y => y.LogsOfBox.Where(z => z.CreatedAtUtc.Date == date).Sum(z => z.AmountUsed)) });
-    }
-
-    private  IEnumerable<CurrentSnuff> GetLogList(string userId, DateTime date)
-    {
-        return _currentSnuffRepo.SearchFor(x => x.UserId == userId && x.LogsOfBox.All(log => log.SnuffLogDate.Date == date));
-    }
-
+    
     public async  Task<Statistic> GetStaticsForPeriod(string userId, DateTime from, DateTime To)
     {
         var allStatistics = _statisticsRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
@@ -177,7 +163,7 @@ public class StatisticsService : IStatisticsService
         var date = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).Date : DateTime.UtcNow.AddHours(1).Date;
         var progression = GetActiveProgression(userId);
         var logList = GetLogList(userId, date);
-
+        
         var snuffGoalAmount = progression.SnuffGoalAmount;
         int totalUsedSnuff = 0;
         var listOfUsages = new List<int>();
@@ -185,7 +171,7 @@ public class StatisticsService : IStatisticsService
 
         foreach (var snuff in logList)
         {
-            var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Date == date);
+            var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Day == date.Day);
 
             if (logs != null)
             {
@@ -227,25 +213,6 @@ public class StatisticsService : IStatisticsService
         return await Task.FromResult(newStatistics);
     }
 
-    private Snuff GetSnuffObject(CurrentSnuff snuff)
-    {
-        var result =_snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
-        if(result == null)
-        {
-            throw new Exception("No snuff found");
-        }
-        return result;
-    }
-
-    private  Progression GetActiveProgression(string userId)
-    {
-        var result = _progressionRepo.SearchFor(x => x.UserId == userId && x.InUse == true).FirstOrDefault();
-        if(result == null)
-        {
-            throw new Exception("No progression found");
-        }
-        return result;
-    }
 
     public async Task<double> DailyRateStatitics(int limit, int used)
     {
@@ -339,5 +306,51 @@ public class StatisticsService : IStatisticsService
         List<int> totalAmounts = aggregatedData.Select(x => x.TotalAmount).ToList();
 
         return (snuffIds, totalAmounts);
+    }
+    private List<Progression> GetUserProgressions(string userId)
+    {
+        return _progressionRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
+    }
+
+    private static IEnumerable<object> GetUsedSnuffList(DateTime date, IEnumerable<CurrentSnuff> ListOfAllLogs)
+    {
+        return  ListOfAllLogs.GroupBy(x => x.SnusId).Select(x => new { SnusId = x.Key, Amount = x.Sum(y => y.LogsOfBox.Where(z => z.CreatedAtUtc.Date == date).Sum(z => z.AmountUsed)) });
+    }
+    private Snuff GetSnuffObject(CurrentSnuff snuff)
+    {
+        var result =_snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
+        if(result == null)
+        {
+            throw new Exception("No snuff found");
+        }
+        return result;
+    }
+
+    private  Progression GetActiveProgression(string userId)
+    {
+        var result = _progressionRepo.SearchFor(x => x.UserId == userId && x.InUse == true).FirstOrDefault();
+        if(result == null)
+        {
+            throw new Exception("No progression found");
+        }
+        return result;
+    }
+
+    private  IEnumerable<CurrentSnuff> GetLogList(string userId, DateTime date)
+    {
+        var getAllCurrentSnuff = _currentSnuffRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
+        if(getAllCurrentSnuff == null)
+        {
+            throw new Exception("No logs found");
+        }
+        var result = getAllCurrentSnuff.Where(x => x.LogsOfBox.All(log => log.SnuffLogDate.Day == date.Day));
+
+        //V1
+        // var result = _currentSnuffRepo.SearchFor(x => x.UserId == userId && x.LogsOfBox.All(log => log.SnuffLogDate.Date == date));
+        // foreach (var item in result)
+        // {
+        //     Console.WriteLine("SnuffId: " + item.LogsOfBox.Select(x => x.SnuffLogDate.Date).FirstOrDefault());
+        // }
+        return result;
     }
 }
