@@ -348,13 +348,22 @@ public class StatisticsService : IStatisticsService
             throw new Exception("No logs found");
         }
         var result = getAllCurrentSnuff.Where(x => x.LogsOfBox.All(x => true)).ToList();
+        return result;
+    }
 
-        //V1
-        // var result = _currentSnuffRepo.SearchFor(x => x.UserId == userId && x.LogsOfBox.All(log => log.SnuffLogDate.Date == date));
-        // foreach (var item in result)
-        // {
-        //     Console.WriteLine("SnuffId: " + item.LogsOfBox.Select(x => x.SnuffLogDate.Date).FirstOrDefault());
-        // }
+    private decimal CalcualtePurschaseCost(List<CurrentSnuff> snuffList, DateTime date)
+    {
+        decimal result = 0.0m;
+        var boughtToday = snuffList.Where(x => x.PurchaseDate.Year == date.Year && x.PurchaseDate.Month == date.Month && x.PurchaseDate.Day == date.Day).ToList();
+        if(boughtToday != null)
+        {
+            foreach(var box in boughtToday)
+            {
+                var snuffBox =  _snuffRepo.AsQueryable().Where(x => x.Id == box.Id).FirstOrDefault();
+ 
+                result += snuffBox.Price;
+            }
+        }
         return result;
     }
 }
