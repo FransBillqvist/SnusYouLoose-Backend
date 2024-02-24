@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Services.Interfaces;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Services;
 
@@ -101,6 +102,9 @@ public class StatisticsService : IStatisticsService
                     }
                 }
             }
+            var (snuffIds, amountOfSnuff) = AggregateSnuffData(usedSnuffSorts, listOfUsages);
+            var costOfPurschase = Math.Round(await CalcualtePurschaseCost(logList.ToList(), date), 2, MidpointRounding.AwayFromZero);
+            var costOfDailyUsage = Math.Round(await SnuffUsageCost(snuffIds, amountOfSnuff), 2, MidpointRounding.AwayFromZero);
 
             var newStatistics = new Statistic
             {
@@ -111,6 +115,8 @@ public class StatisticsService : IStatisticsService
                 TotalAmoutUsed = totalUsedSnuff,
                 LimitOfUse = snuffGoalAmount,
                 Rating = await DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
+                PurchaseCost = costOfPurschase,
+                UsageCost = costOfDailyUsage,
                 CreatedDate = date
             };
             await _statisticsRepo.InsertOneAsync(newStatistics);
@@ -133,6 +139,9 @@ public class StatisticsService : IStatisticsService
         var totalRatingPoints = statisticsInPeriod.Sum(x => x.Rating);
         var numberOfDays = statisticsInPeriod.Count();
         var finalRating = totalRatingPoints / numberOfDays;
+        //temp Code
+        var costOfAllSnuffBought = statisticsInPeriod.Sum(x => x.PurchaseCost);
+        var totalCostOfUsage = statisticsInPeriod.Sum(x => x.UsageCost);
 
         var (snuffIds, amountOfSnuff) = AggregateSnuffData(statisticsInPeriod.SelectMany(x => x.UsedSnuffSorts).ToList(), statisticsInPeriod.SelectMany(x => x.UsedAmountOfSnuffs).ToList());
         var destictSnuffList = new List<Snuff>();
@@ -155,6 +164,8 @@ public class StatisticsService : IStatisticsService
             TotalAmoutUsed = statisticsInPeriod.Sum(x => x.TotalAmoutUsed),
             LimitOfUse = statisticsInPeriod.Sum(x => x.LimitOfUse),
             Rating = Math.Round(finalRating, 2, MidpointRounding.AwayFromZero),
+            PurchaseCost = Math.Round(costOfAllSnuffBought, 2, MidpointRounding.AwayFromZero),
+            UsageCost = Math.Round(totalCostOfUsage, 2, MidpointRounding.AwayFromZero),
             CreatedDate = DateTime.UtcNow.Date,
             NumberOfDays = numberOfDays
         };
@@ -211,8 +222,8 @@ public class StatisticsService : IStatisticsService
             LimitOfUse = snuffGoalAmount,
             Rating = await DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
             CreatedDate = DateTime.UtcNow.Date,
-            PurchaseCost = await CalcualtePurschaseCost(logList.ToList(), date),
-            UsageCost = await SnuffUsageCost(snuffIds, amountOfSnuff),
+            PurchaseCost = Math.Round(await CalcualtePurschaseCost(logList.ToList(), date), 2, MidpointRounding.AwayFromZero),
+            UsageCost = Math.Round(await SnuffUsageCost(snuffIds, amountOfSnuff), 2, MidpointRounding.AwayFromZero),
             Id = Guid.NewGuid().ToString(),
             NumberOfDays = 0
         };
@@ -266,6 +277,8 @@ public class StatisticsService : IStatisticsService
         var numberOfDays = allStatistics.Count();
         var finalRating = totalRatingPoints / numberOfDays;
         var statisticsForDays = (lastDate.CreatedDate - firstDate.CreatedDate).Days;
+        var totalPurchaseCost = allStatistics.Sum(x => x.PurchaseCost);
+        var totalUsageCost = allStatistics.Sum(x => x.UsageCost);
 
 
         var (snuffIds, amountOfSnuff) = AggregateSnuffData(allStatistics.SelectMany(x => x.UsedSnuffSorts).ToList(), allStatistics.SelectMany(x => x.UsedAmountOfSnuffs).ToList());
@@ -288,6 +301,8 @@ public class StatisticsService : IStatisticsService
             TotalAmoutUsed = allStatistics.Sum(x => x.TotalAmoutUsed),
             LimitOfUse = allStatistics.Sum(x => x.LimitOfUse),
             Rating = Math.Round(finalRating, 2, MidpointRounding.AwayFromZero),
+            PurchaseCost = Math.Round(totalPurchaseCost, 2, MidpointRounding.AwayFromZero),
+            UsageCost = Math.Round(totalUsageCost, 2, MidpointRounding.AwayFromZero),
             CreatedDate = DateTime.UtcNow.Date,
             NumberOfDays = statisticsForDays
         };
@@ -355,15 +370,17 @@ public class StatisticsService : IStatisticsService
 
     private async Task<decimal> CalcualtePurschaseCost(List<CurrentSnuff> snuffList, DateTime date)
     {
-        decimal result = 0.0m;
-        var boughtToday = snuffList.Where(x => x.PurchaseDate.Year == date.Year && x.PurchaseDate.Month == date.Month && x.PurchaseDate.Day == date.Day).ToList();
+        decimal result = 0m;
+        var boughtToday = snuffList.Where(x => x.PurchaseDate.Day == date.Day && x.PurchaseDate.Month == date.Month && x.PurchaseDate.Year == date.Year).ToList();
         if(boughtToday != null)
         {
             foreach(var box in boughtToday)
             {
-                var snuffBox =  _snuffRepo.AsQueryable().Where(x => x.Id == box.Id).FirstOrDefault();
- 
-                result += snuffBox.Price;
+                var snuffBox =  _snuffRepo.AsQueryable().Where(x => x.Id == box.SnusId).FirstOrDefault();
+                if(snuffBox != null)
+                {  
+                    result += snuffBox.Price;
+                }
             }
         }
         return await Task.FromResult(result);
