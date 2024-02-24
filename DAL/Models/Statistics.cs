@@ -14,5 +14,7 @@ public class Statistic : Document
     [BsonElement("CreatedDate")]
     [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     public DateTime CreatedDate { get; set;}
+    public double PurchaseCost {get; set;}
+    public double UsageCost {get; set;}
     public int? NumberOfDays {get; set;}
 }
