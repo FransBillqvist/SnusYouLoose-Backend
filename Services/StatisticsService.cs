@@ -211,6 +211,8 @@ public class StatisticsService : IStatisticsService
             LimitOfUse = snuffGoalAmount,
             Rating = await DailyRateStatitics(snuffGoalAmount, totalUsedSnuff),
             CreatedDate = DateTime.UtcNow.Date,
+            PurchaseCost = await CalcualtePurschaseCost(logList.ToList(), date),
+            UsageCost = await SnuffUsageCost(snuffIds, amountOfSnuff),
             Id = Guid.NewGuid().ToString(),
             NumberOfDays = 0
         };
@@ -351,7 +353,7 @@ public class StatisticsService : IStatisticsService
         return result;
     }
 
-    private decimal CalcualtePurschaseCost(List<CurrentSnuff> snuffList, DateTime date)
+    private async Task<decimal> CalcualtePurschaseCost(List<CurrentSnuff> snuffList, DateTime date)
     {
         decimal result = 0.0m;
         var boughtToday = snuffList.Where(x => x.PurchaseDate.Year == date.Year && x.PurchaseDate.Month == date.Month && x.PurchaseDate.Day == date.Day).ToList();
@@ -364,6 +366,29 @@ public class StatisticsService : IStatisticsService
                 result += snuffBox.Price;
             }
         }
-        return result;
+        return await Task.FromResult(result);
+    }
+
+    private async Task<decimal> SnuffUsageCost(List<string> ids, List<int> amount)
+    {
+        decimal result = 0.0m;
+        var length = amount.Count;
+        var snuffList = new List<Snuff>();
+        foreach(var id in ids)
+        {
+            var findSnuff = _snuffRepo.AsQueryable().Where(x => x.Id == id).FirstOrDefault();
+            if(findSnuff != null)
+            {
+                snuffList.Add(findSnuff);
+            }
+        }
+        for(var i = 0; i < length; i++)
+        {
+            var boxPrice = snuffList[i].Price;
+            var doses = snuffList[i].DefaultAmount;
+            var priceOfOneDose = boxPrice/doses;
+            result += priceOfOneDose * amount[i];
+        }
+        return await Task.FromResult(result);
     }
 }
