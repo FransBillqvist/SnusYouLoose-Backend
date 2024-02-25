@@ -3,6 +3,10 @@ using AspNetCore.Identity.MongoDbCore.Extensions;
 using AspNetCore.Identity.MongoDbCore.Infrastructure;
 using DAL;
 using DAL.Interfaces;
+using Hangfire;
+using Hangfire.Mongo;
+using Hangfire.Mongo.Migration.Strategies;
+using Hangfire.Mongo.Migration.Strategies.Backup;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -150,10 +154,34 @@ builder.Services.AddCors(options =>
     AllowCredentials());
 });
 
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseMongoStorage(mongoDbIdentitySettings.MongoDbSettings.ConnectionString, mongoDbIdentitySettings.MongoDbSettings.DatabaseName, new MongoStorageOptions
+    {
+        MigrationOptions = new MongoMigrationOptions
+        {
+            MigrationStrategy = new MigrateMongoMigrationStrategy(),
+            BackupStrategy = new CollectionMongoBackupStrategy()
+        },
+        Prefix = "Hangfire",
+        CheckConnection = true,
+        CheckQueuedJobsStrategy = CheckQueuedJobsStrategy.TailNotificationsCollection
+    }));
+
+builder.Services.AddHangfireServer();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 // builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSwaggerGen();
 var app = builder.Build();
+
+app.UseHangfireDashboard();
+var serviceProvider = app.Services.CreateScope().ServiceProvider;
+var recurringJobManager = serviceProvider.GetRequiredService<IRecurringJobManager>();
+recurringJobManager.AddOrUpdate<IStatisticsService>("DailyJob", x => x.CreateDailyStaticsForAllUsers(), Cron.Daily(0, 0));
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
