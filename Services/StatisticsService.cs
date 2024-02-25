@@ -43,8 +43,19 @@ public class StatisticsService : IStatisticsService
         var mongoDatabase = mongoClient.GetDatabase(
                 Settings.Value.DatabaseName);
         }
- public async Task CreateDailyStaticsForUser(string userId)
+
+
+    public async Task CreateDailyStaticsForAllUsers()
     {
+        var allUsers = _userRepo.AsQueryable().ToList();
+        foreach (var user in allUsers)
+        {
+            Console.WriteLine("Creating statistics for " + user.UserId);
+            await CreateDailyStaticsForUser(user.UserId);
+        }
+    }
+    public async Task CreateDailyStaticsForUser(string userId)
+    {            
         var user = _userRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
 
         if (user == null || !user.Any())
