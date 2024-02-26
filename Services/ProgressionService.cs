@@ -94,7 +94,8 @@ public class ProgressionService : IProgressionService
 
     public async Task<int> CalculateRemainingSnuff(string uid)
     {
-        var allLogsForUserToday = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.Day && x.UserId == uid);
+        var today = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).Date : DateTime.UtcNow.AddHours(1).Date;
+        var allLogsForUserToday = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == today.Day && x.SnuffLogDate.Month == today.Month && x.SnuffLogDate.Year == today.Year && x.UserId == uid);
         Console.WriteLine("CalculateRemainingSnuff value of allLogsForUserToday: " + allLogsForUserToday.Count());
         var activeProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
         Console.WriteLine("CalculateRemainingSnuff value of activeProgression: " + activeProgression);
@@ -426,10 +427,11 @@ public class ProgressionService : IProgressionService
 
     public async Task<TimeSpan> WhenIsTheNextDoseAvailableV2(string uid)
     {
+        var today = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).Date : DateTime.UtcNow.AddHours(1).Date;
 
         var snuffLeftToday = await CalculateRemainingSnuff(uid);
         var habit = await _habitRepository.FindOneAsync(x => x.UserId == uid);
-        var numberUsedToday =  _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.AddHours(1).Day && x.UserId == uid).Sum(x => x.AmountUsed);
+        var numberUsedToday =  _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == today.Day && x.SnuffLogDate.Month == today.Month && x.SnuffLogDate.Year == today.Year && x.UserId == uid).Sum(x => x.AmountUsed);
         var currentProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
 
         TimeSpan now = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).TimeOfDay : DateTime.UtcNow.AddHours(1).TimeOfDay;
@@ -507,7 +509,8 @@ public class ProgressionService : IProgressionService
 
     public async Task<List<int>> GetUsedAndAvailableSnuff(string uid)
     {
-        var usedSnuff = _snuffLogRepository.FilterBy(x => x.UserId == uid && x.SnuffLogDate.Day == DateTime.UtcNow.Day).Sum(x => x.AmountUsed);
+        var today = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).Date : DateTime.UtcNow.AddHours(1).Date;
+        var usedSnuff = _snuffLogRepository.FilterBy(x => x.UserId == uid && x.SnuffLogDate.Day == today.Day && x.SnuffLogDate.Month == today.Month && x.SnuffLogDate.Year == today.Year).Sum(x => x.AmountUsed);
         var availableSnuff = await CalculateRemainingSnuff(uid);
         List<int> result = [usedSnuff, availableSnuff];
         return result;
