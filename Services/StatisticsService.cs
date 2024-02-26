@@ -235,7 +235,7 @@ public class StatisticsService : IStatisticsService
             CreatedDate = DateTime.UtcNow.Date,
             PurchaseCost = Math.Round(await CalcualtePurschaseCost(logList.ToList(), date), 2, MidpointRounding.AwayFromZero),
             UsageCost = Math.Round(await SnuffUsageCost(snuffIds, amountOfSnuff), 2, MidpointRounding.AwayFromZero),
-            Id = Guid.NewGuid().ToString(),
+            Id = "Temporay",
             NumberOfDays = 0
         };
         return await Task.FromResult(newStatistics);
