@@ -150,4 +150,8 @@ public class MongoRepository<TDocument> : IGenericMongoRepository<TDocument> whe
            .AsQueryable<TDocument>()
            .Where(predicate.Compile())
            .ToList();
+    public async Task UpdateOneAsync(FilterDefinition<TDocument> filter, UpdateDefinition<TDocument> update)
+    {
+        await _collection.UpdateOneAsync(filter, update);
+    }
 }
