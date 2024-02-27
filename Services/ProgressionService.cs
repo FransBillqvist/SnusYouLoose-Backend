@@ -432,12 +432,13 @@ public class ProgressionService : IProgressionService
         var snuffLeftToday = await CalculateRemainingSnuff(uid);
         var habit = await _habitRepository.FindOneAsync(x => x.UserId == uid);
         var numberUsedToday =  _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == today.Day && x.SnuffLogDate.Month == today.Month && x.SnuffLogDate.Year == today.Year && x.UserId == uid).Sum(x => x.AmountUsed);
+        var lastCommsumed =  _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == today.Day && x.SnuffLogDate.Month == today.Month && x.SnuffLogDate.Year == today.Year && x.UserId == uid).OrderByDescending(x => x.SnuffLogDate).FirstOrDefault();
         var currentProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
 
         TimeSpan now = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).TimeOfDay : DateTime.UtcNow.AddHours(1).TimeOfDay;
         TimeSpan wakeUpTime = (TimeSpan)habit.WakeUpTime!;
         TimeSpan bedTime = (TimeSpan)habit.BedTime!;
-
+        Console.WriteLine("WhenIsTheNextDoseAvailableV2 =>  now: " + now);
         Console.WriteLine("WhenIsTheNextDoseAvailableV2 => now: " + now);
         TimeSpan timeLeft;
         if(numberUsedToday >= currentProgression.SnuffGoalAmount){
@@ -457,7 +458,7 @@ public class ProgressionService : IProgressionService
             timeLeft = new TimeSpan(23, 59, 59) - now + wakeUpTime; // Time till midnight plus time from midnight to wake up
             }
 
-            timeLeft = new TimeSpan(timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds) - currentProgression.RecommendedUsageInterval;
+            timeLeft = new TimeSpan(timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
             return timeLeft;
         }
         if(numberUsedToday == 0){
@@ -466,12 +467,23 @@ public class ProgressionService : IProgressionService
         }
         else
         {
+            var dateTimeofLastSnuff = lastCommsumed.SnuffLogDate.TimeOfDay;
+            var timePassedSinceLastSnuff = now - dateTimeofLastSnuff;
             Console.WriteLine("WhenIsTheNextDoseAvailableV2 => ELSE");
             var TimeLeftToday = bedTime - now;
+            Console.WriteLine("WhenIsTheNextDoseAvailableV2 => TimeLeftToday: " + TimeLeftToday);
+            Console.WriteLine("WhenIsTheNextDoseAvailableV2 => snuffLeftToday: " + snuffLeftToday);
             var timeToNextSnuff = TimeLeftToday / snuffLeftToday;
-
             timeToNextSnuff = new TimeSpan(timeToNextSnuff.Hours, timeToNextSnuff.Minutes, timeToNextSnuff.Seconds);
-            return timeToNextSnuff;
+            
+            if(timePassedSinceLastSnuff < timeToNextSnuff){
+                Console.WriteLine("WhenIsTheNextDoseAvailableV2 => timePassedSinceLastSnuff < timeToNextSnuff == TRUE");
+                return timeToNextSnuff - timePassedSinceLastSnuff;
+            }
+            else{
+                Console.WriteLine("WhenIsTheNextDoseAvailableV2 => timePassedSinceLastSnuff < timeToNextSnuff == FALSE");
+                return new TimeSpan(0, 0, 0);
+            }
 
         }
         // var wakeUpAsDateTime = DateTime.Today + habit.WakeUpTime;
@@ -491,9 +503,10 @@ public class ProgressionService : IProgressionService
 
     public async Task<string> LastConsumedSnuffAtUtc(string uid)
     {
+        var today = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).Date : DateTime.UtcNow.AddHours(1).Date;
         Console.WriteLine("ProgressionService Line 222: uid: " + uid);
-        Console.WriteLine("ProgressionService Line 223: DateTime.UtcNow.Date: " + DateTime.UtcNow.Date);
-        var allLogByUser = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == DateTime.UtcNow.Day && x.UserId == uid);
+        Console.WriteLine("ProgressionService Line 223: DateTime.UtcNow.Date: " + today);
+        var allLogByUser = _snuffLogRepository.FilterBy(x => x.SnuffLogDate.Day == today.Day && x.SnuffLogDate.Month == today.Month && x.SnuffLogDate.Year == today.Year &&  x.UserId == uid);
         if (allLogByUser == null) // du har inte snusat idag
         {
             Console.WriteLine("ProgressionService Line 227: allLogByUser == null");
