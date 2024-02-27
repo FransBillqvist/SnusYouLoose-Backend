@@ -293,6 +293,39 @@ public class CurrentSnuffService : ICurrentSnuffService
         return snuffList;
     }
 
+    public async Task DeleteLogFromCurrentSnuffAsync(string logId)
+    {
+        var log = await _snuffLogService.GetSnuffLogAsync(logId);
+        Console.WriteLine("I am here (Log) : "+log+" and my id is: " + logId);
+        var currentSnuff = await _currentSnuffRepository.FindOneAsync(x =>  x.LogsOfBox.Any(y => y.Id == log.Id));
+        Console.WriteLine("I am here (currentSnuff) : "+currentSnuff+" and my id is: " + currentSnuff.Id);
+
+        if (log != null && currentSnuff != null)
+        {
+            var amountUsed = log.AmountUsed;
+
+            try
+            {
+                var filter = Builders<CurrentSnuff>.Filter.Eq(x => x.Id, currentSnuff.Id);
+                var update = Builders<CurrentSnuff>.Update
+                    .Inc(x => x.RemainingAmount, amountUsed);
+
+                await _currentSnuffRepository.UpdateOneAsync(filter, update);
+
+                await _snuffLogService.RemoveSnuffLogAsync(logId);
+
+                update = Builders<CurrentSnuff>.Update
+                    .PullFilter(x => x.LogsOfBox, y => y.Id == logId);
+
+                await _currentSnuffRepository.UpdateOneAsync(filter, update);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+    }
+
     Task ICurrentSnuffService.CreateCurrentSnuffAsync(CurrentSnuff newCurrentSnuff)
     {
         throw new NotImplementedException();
