@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace DAL.Interfaces;
 
@@ -28,4 +29,5 @@ public interface IGenericMongoRepository<TDocument> where TDocument : IDocument
     void DeleteMany(Expression<Func<TDocument, bool>> filter);
     Task DeleteManyAsync(Expression<Func<TDocument, bool>> filter);
     IList<TDocument> SearchFor(Expression<Func<TDocument, bool>> predicate);
+    Task UpdateOneAsync(FilterDefinition<TDocument> filter, UpdateDefinition<TDocument> update);
 }
