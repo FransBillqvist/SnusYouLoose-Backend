@@ -88,7 +88,7 @@ public class CurrentSnuffController : ControllerBase
             await _csService.LogAdderV2(currentsnuffId, amount);
             Console.WriteLine("Log added");
             Console.WriteLine("--------------------------");
-            _logger.LogInformation($"Logger data: Amount: {amount} in CurrentSnuff: {currentsnuffId} @ {DateTime.UtcNow}");
+            _logger.LogInformation($"Logger data: Amount: {amount} in CurrentSnuff: {currentsnuffId} @ {DateTime.Now}");
             return Ok();
         }
 
@@ -180,5 +180,21 @@ public class CurrentSnuffController : ControllerBase
         var result = await _csService.GetCurrentSnuffInventoryAsync(uid);
         _logger.LogInformation($"Fetch data: {result} {DateTime.UtcNow}");
         return result;
+    }
+
+    [MapToApiVersion("2.0")]
+    [HttpDelete]
+    [Route("DeleteLogFromCurrentSnuff")]
+    public async Task<IActionResult> DeleteLogFromCurrentSnuff(string logId)
+    {
+        try
+        {
+            await _csService.DeleteLogFromCurrentSnuffAsync(logId);
+            return NoContent();
+        }
+        catch
+        {
+            return BadRequest();
+        }
     }
 }
