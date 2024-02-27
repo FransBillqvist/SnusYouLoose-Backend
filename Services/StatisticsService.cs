@@ -100,7 +100,7 @@ public class StatisticsService : IStatisticsService
 
             foreach (var snuff in logList)
             {
-                var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Date == date && log.SnuffLogDate.Month == date.Month && log.SnuffLogDate.Year == date.Year);
+                var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Day == date.Day && log.SnuffLogDate.Month == date.Month && log.SnuffLogDate.Year == date.Year);
                 if (logs != null)
                 {
                     var usedSnuff = logs.Sum(log => log.AmountUsed);
@@ -185,7 +185,8 @@ public class StatisticsService : IStatisticsService
 
     public async Task<Statistic> GetTemporaryStatisticsOfToday(string userId)
     {
-        var date = DateTime.UtcNow.IsDaylightSavingTime() ? DateTime.UtcNow.AddHours(2).Date : DateTime.UtcNow.AddHours(1).Date;
+        var date = DateTime.Now;
+        Console.WriteLine("Statistics for the " + date + " " + date.Day + " " + date.Month + " " + date.Year);
         var progression = GetActiveProgression(userId);
         var logList = GetLogList(userId, date);
         
@@ -198,7 +199,7 @@ public class StatisticsService : IStatisticsService
         foreach (var snuff in logList)
         {
             var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Day == date.Day && log.SnuffLogDate.Month == date.Month && log.SnuffLogDate.Year == date.Year);
-
+            Console.WriteLine("Logs for " + snuff.Id + " " + logs.Count());
             if (logs != null)
             {
                 var usedSnuff = logs.Sum(log => log.AmountUsed);
