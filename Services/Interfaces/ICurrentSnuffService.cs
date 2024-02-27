@@ -16,4 +16,5 @@ public interface ICurrentSnuffService
     Task<bool> ArchiveAUsersInventoryAsync(string userId);
     Task<int> GetAmountInBoxAsync(string csid);
     Task<List<CurrentSnuffDto>> GetCurrentSnuffInventoryAsync(string userId);
+    Task DeleteLogFromCurrentSnuffAsync(string logId);
 }
