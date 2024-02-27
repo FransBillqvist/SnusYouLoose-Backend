@@ -168,6 +168,7 @@ builder.Services.AddHangfire(configuration => configuration
         Prefix = "Hangfire",
         CheckConnection = true,
         CheckQueuedJobsStrategy = CheckQueuedJobsStrategy.TailNotificationsCollection
+
     }));
 
 builder.Services.AddHangfireServer();
@@ -179,9 +180,13 @@ builder.Services.AddHangfireServer();
 var app = builder.Build();
 
 app.UseHangfireDashboard();
+var stockholmTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Stockholm");
 var serviceProvider = app.Services.CreateScope().ServiceProvider;
 var recurringJobManager = serviceProvider.GetRequiredService<IRecurringJobManager>();
-recurringJobManager.AddOrUpdate<IStatisticsService>("DailyJob", x => x.CreateDailyStaticsForAllUsers(), Cron.Daily(0, 0));
+recurringJobManager.AddOrUpdate<IStatisticsService>("DailyJob", x => x.CreateDailyStaticsForAllUsers(), Cron.Daily, new RecurringJobOptions
+    {
+        TimeZone = stockholmTimeZone
+    });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
