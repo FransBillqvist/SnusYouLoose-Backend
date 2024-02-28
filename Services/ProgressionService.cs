@@ -478,7 +478,8 @@ public class ProgressionService : IProgressionService
             
             if(timePassedSinceLastSnuff < timeToNextSnuff){
                 Console.WriteLine("WhenIsTheNextDoseAvailableV2 => timePassedSinceLastSnuff < timeToNextSnuff == TRUE");
-                return timeToNextSnuff - timePassedSinceLastSnuff;
+                timeToNextSnuff = timeToNextSnuff - timePassedSinceLastSnuff;
+                return new TimeSpan(timeToNextSnuff.Hours, timeToNextSnuff.Minutes, timeToNextSnuff.Seconds);
             }
             else{
                 Console.WriteLine("WhenIsTheNextDoseAvailableV2 => timePassedSinceLastSnuff < timeToNextSnuff == FALSE");
