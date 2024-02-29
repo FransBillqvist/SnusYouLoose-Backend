@@ -300,7 +300,6 @@ public class ProgressionService : IProgressionService
         return newProgression;
     }
 
-    
     private async Task<Progression> SetUsageInterval(Progression progressionData)
     {
         var habitValue = await _habitRepository.FindOneAsync(x => x.UserId == progressionData.UserId);
