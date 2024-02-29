@@ -65,6 +65,15 @@ public class ProgressionService : IProgressionService
         return selectProgressionWithInUseTrue;
     }
 
+    public async Task CheckAllUsersProgression()
+    {
+        var allUsers = _userRepository.AsQueryable().ToList();
+        foreach (var user in allUsers)
+        {
+            Console.WriteLine("User: " + user.Id);
+            await AddNewProgressionV2(user.Id);
+        }
+    }
     public async Task<ProgressionDto> AddNewProgressionV2(string uid)
     {
         var selectOldProgression = await _progressionRepository.FindOneAsync(x => x.UserId == uid && x.InUse == true);
