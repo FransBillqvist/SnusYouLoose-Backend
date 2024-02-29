@@ -70,8 +70,16 @@ public class ProgressionService : IProgressionService
         var allUsers = _userRepository.AsQueryable().ToList();
         foreach (var user in allUsers)
         {
-            Console.WriteLine("User: " + user.Id);
-            await AddNewProgressionV2(user.Id);
+            var habit = await _habitRepository.FindOneAsync(x => x.UserId == user.UserId);
+            if(habit != null)
+            {
+                Console.WriteLine("User: " + user.UserId);
+                await AddNewProgressionV2(user.UserId);
+            }
+            else
+            {
+                Console.WriteLine("User: " + user.UserId + " has no habit");
+            }
         }
     }
     public async Task<ProgressionDto> AddNewProgressionV2(string uid)
