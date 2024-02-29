@@ -18,4 +18,5 @@ public interface IProgressionService
     Task<string> LastConsumedSnuffAtUtc(string uid);
     ProgressionDto MapProgressionToDto(Progression progression);
     Task<List<int>> GetUsedAndAvailableSnuff(string uid);
+    Task CheckAllUsersProgression();
 }
