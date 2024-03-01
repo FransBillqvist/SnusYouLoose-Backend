@@ -80,6 +80,7 @@ public class ProgressionService : IProgressionService
             {
                 Console.WriteLine("User: " + user.UserId + " has no habit");
             }
+            Console.WriteLine("------------------------");
         }
     }
     public async Task<ProgressionDto> AddNewProgressionV2(string uid)
