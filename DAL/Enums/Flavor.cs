@@ -22,6 +22,7 @@ public enum Flavor
     Cinnamon,
     Cranberry,
     Eucalyptus,
+    Fruit,
     Ginger,
     Grape,
     Honey,
@@ -46,5 +47,6 @@ public enum Flavor
     Pomegranate,
     Kiwi,
     Passionfruit,
-
+    Coconut,
+    Violet,
 }
