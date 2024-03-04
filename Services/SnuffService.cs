@@ -147,4 +147,25 @@ public class SnuffService : ISnuffService
         
         await _snuffInfoRepository.InsertOneAsync(result);
     }
+
+    public async Task<List<Snuff>> GetAllSnuffWithInfoAsync()
+    {
+        var response =  _snuffRepository.FilterBy(x => x.Id != null).ToList();
+        var result = new List<Snuff>();
+
+        foreach (var item in response)
+        {
+            var snuffInfo = await _snuffInfoRepository.FindOneAsync(x => x.SnusId == item.Id);
+            if(snuffInfo is not null)
+            {
+                item.SnuffInfo = snuffInfo;
+                result.Add(item);
+            }
+            else
+            {
+                result.Add(item);
+            }
+        }
+        return response;
+    }
 }
