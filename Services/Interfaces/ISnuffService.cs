@@ -15,4 +15,5 @@ public interface ISnuffService
     Task<List<Snuff>> GetAllSnuffsAsync();
     Task<List<SnuffShopDto>> GetShopSnuffsAsync();
     Task AddInfoToSnuffAsync(SnuffInfoReq snuffInfo);
+    Task<List<Snuff>> GetAllSnuffWithInfoAsync();
 }
