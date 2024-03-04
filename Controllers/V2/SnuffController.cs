@@ -156,5 +156,14 @@ public class SnuffController : ControllerBase
         var response = await _snuffService.GetShopSnuffsAsync();
         return response;
     }
+
+    [MapToApiVersion("2.0")]
+    [HttpGet]
+    [Route("GetAllSnuffWithInfo")]
+    public async Task<List<Snuff>> GetAllSnuffWithInfo()
+    {
+        var response = await _snuffService.GetAllSnuffWithInfoAsync();
+        return response;
+    }
   
 }
