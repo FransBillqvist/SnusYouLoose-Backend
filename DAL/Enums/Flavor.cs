@@ -49,4 +49,11 @@ public enum Flavor
     Passionfruit,
     Coconut,
     Violet,
+    Cactus,
+    Elderflower,
+    Cola,
+    Toffee,
+    Tropical,
+    Spearmint,
+    Jalapeno,
 }
