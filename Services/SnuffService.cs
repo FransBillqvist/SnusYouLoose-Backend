@@ -150,14 +150,27 @@ public class SnuffService : ISnuffService
 
     public async Task<List<Snuff>> GetAllSnuffWithInfoAsync()
     {
-        var response =  _snuffRepository.FilterBy(x => x.Id != null).ToList();
+        var response = _snuffRepository.FilterBy(x => x.Id != null).ToList();
         var result = new List<Snuff>();
 
         foreach (var item in response)
         {
             var snuffInfo = await _snuffInfoRepository.FindOneAsync(x => x.SnusId == item.Id);
-            if(snuffInfo is not null)
+            if (snuffInfo is not null)
             {
+                // Create a new list to store the enum values
+                var flavorEnums = new List<Flavor>();
+
+                // Convert each int to its enum value
+                foreach (var flavor in snuffInfo.Flavors)
+                {
+                    var flavorEnum = (Flavor)flavor;
+                    flavorEnums.Add(flavorEnum);
+                }
+
+                // Replace the Flavors list with the list of enum values
+                snuffInfo.Flavors = flavorEnums;
+
                 item.SnuffInfo = snuffInfo;
                 result.Add(item);
             }
