@@ -1,6 +1,6 @@
 namespace DAL.Enums;
 
-public enum Fromat
+public enum Format
 {
     Normal,
     Large,
