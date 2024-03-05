@@ -9,6 +9,6 @@ public class SnuffInfo : Document
     public double NicotinePerGram { get; set; }
     public double NicotinePerPortion { get; set; }
     public List<Flavor> Flavors { get; set; }
-    public Fromat Format { get; set; }
+    public Format Format { get; set; }
 
 }
