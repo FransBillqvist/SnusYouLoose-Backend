@@ -15,6 +15,7 @@ public class StatisticsService : IStatisticsService
     private readonly IGenericMongoRepository<Progression> _progressionRepo;
     private readonly IGenericMongoRepository<CurrentSnuff> _currentSnuffRepo;
     private readonly IGenericMongoRepository<Snuff> _snuffRepo;
+    private readonly IGenericMongoRepository<SnuffInfo> _snuffInfoRepo;
     private readonly IGenericMongoRepository<SnuffLog> _snufflogRepo;
     private readonly IGenericMongoRepository<User> _userRepo;
     private readonly ILogger<StatisticsService> _logger;
@@ -26,6 +27,7 @@ public class StatisticsService : IStatisticsService
         IGenericMongoRepository<CurrentSnuff> currentRepository,
         IGenericMongoRepository<SnuffLog> snufflogRepository,
         IGenericMongoRepository<Snuff> snuffRepository,
+        IGenericMongoRepository<SnuffInfo> snuffInfoRepository,
         IGenericMongoRepository<User> userRepository,
         ILogger<StatisticsService> logger)
         {
@@ -34,6 +36,7 @@ public class StatisticsService : IStatisticsService
             _currentSnuffRepo = currentRepository;
             _snufflogRepo = snufflogRepository;
             _snuffRepo = snuffRepository;
+            _snuffInfoRepo = snuffInfoRepository;
             _userRepo = userRepository;
             _logger = logger;
 
@@ -354,9 +357,14 @@ public class StatisticsService : IStatisticsService
     private Snuff GetSnuffObject(CurrentSnuff snuff)
     {
         var result =_snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
+        var snuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(s => s.SnusId == snuff.SnusId);
         if(result == null)
         {
             throw new Exception("No snuff found");
+        }
+        if(snuffInfo != null && result != null)
+        {
+            result.SnuffInfo = snuffInfo;
         }
         return result;
     }
