@@ -98,10 +98,10 @@ builder.Services.AddScoped<IProgressionService, ProgressionService>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
 builder.Services.AddControllers();
-builder.Services.AddControllers().AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); //remove this line for int values in enum
-    });
+// builder.Services.AddControllers().AddJsonOptions(options =>
+//     {
+//         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); //remove this line for int values in enum
+//     });
 builder.Services.AddApiVersioning(opt =>
 {
     opt.DefaultApiVersion = new ApiVersion(1, 0);
