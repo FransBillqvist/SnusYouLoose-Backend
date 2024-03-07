@@ -167,6 +167,12 @@ public class StatisticsService : IStatisticsService
             var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
             if (snuff != null)
             {
+                var snuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(x => x.SnusId == id);
+
+                if(snuffInfo != null)
+                {
+                    snuff.SnuffInfo = snuffInfo;
+                }
                 destictSnuffList.Add(snuff);
             }
         }
@@ -198,43 +204,24 @@ public class StatisticsService : IStatisticsService
         var snuffGoalAmount = progression.SnuffGoalAmount;
 
         var (usedSnuffSorts, listOfUsages, totalUsedSnuff) = GetSnuffAmountAndTotaltUsage(logList.ToList(), date);
-        // int totalUsedSnuff = 0;
-        // var listOfUsages = new List<int>();
-        // var usedSnuffSorts = new List<Snuff>();
-
-
-        // foreach (var snuff in logList)
-        // {
-        //     var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Day == date.Day && log.SnuffLogDate.Month == date.Month && log.SnuffLogDate.Year == date.Year);
-
-        //     if (logs != null)
-        //     {
-        //         var usedSnuff = logs.Sum(log => log.AmountUsed);
-        //         var snuffObject = GetSnuffObject(snuff);
-        //         if (usedSnuff >= 1)
-        //         {
-        //             listOfUsages.Add(usedSnuff);
-        //             totalUsedSnuff += usedSnuff;
-        //             usedSnuffSorts.Add(snuffObject);
-        //         }
-        //     }
-        // }
 
         var (snuffIds, amountOfSnuff) = AggregateSnuffData(usedSnuffSorts, listOfUsages);
-        var destictSnuffList = new List<Snuff>();
-        foreach (var id in snuffIds)
-        {
-            var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
-            var snuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(x => x.SnusId == id);
-            if (snuff != null)
-            {
-                if(snuffInfo != null)
-                {
-                    snuff.SnuffInfo = snuffInfo;
-                }
-                destictSnuffList.Add(snuff);
-            }
-        }
+        
+        var destictSnuffList = await GetCompletedSnuffList(snuffIds);
+        // var destictSnuffList = new List<Snuff>();
+        // foreach (var id in snuffIds)
+        // {
+        //     var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
+        //     var snuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(x => x.SnusId == id);
+        //     if (snuff != null)
+        //     {
+        //         if(snuffInfo != null)
+        //         {
+        //             snuff.SnuffInfo = snuffInfo;
+        //         }
+        //         destictSnuffList.Add(snuff);
+        //     }
+        // }
 
         var newStatistics = new Statistic
         {
@@ -361,7 +348,7 @@ public class StatisticsService : IStatisticsService
     {
         return  ListOfAllLogs.GroupBy(x => x.SnusId).Select(x => new { SnusId = x.Key, Amount = x.Sum(y => y.LogsOfBox.Where(z => z.CreatedAtUtc.Date == date).Sum(z => z.AmountUsed)) });
     }
-    private Snuff GetSnuffObject(CurrentSnuff snuff)
+    private Snuff GetASnuffObject(CurrentSnuff snuff)
     {
         var result =_snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
         var snuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(s => s.SnusId == snuff.SnusId);
@@ -452,7 +439,7 @@ public class StatisticsService : IStatisticsService
                 if (logs != null)
                 {
                     var usedSnuff = logs.Sum(log => log.AmountUsed);
-                    var snuffObject = GetSnuffObject(snuff);
+                    var snuffObject = GetASnuffObject(snuff);
                     if (usedSnuff >= 1)
                     {
                         listOfUsages.Add(usedSnuff);
@@ -465,5 +452,23 @@ public class StatisticsService : IStatisticsService
                 }
             }
         return (usedSnuffSorts, listOfUsages, totalUsedSnuff);
+    }
+    private async Task<List<Snuff>> GetCompletedSnuffList(List<string> ids)
+    {
+        var destictSnuffList = new List<Snuff>();
+        foreach (var id in ids)
+        {
+            var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
+            var snuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(x => x.SnusId == id);
+            if (snuff != null)
+            {
+                if(snuffInfo != null)
+                {
+                    snuff.SnuffInfo = snuffInfo;
+                }
+                destictSnuffList.Add(snuff);
+            }
+        }
+        return await Task.FromResult(destictSnuffList);
     }
 }
