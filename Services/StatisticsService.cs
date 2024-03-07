@@ -196,35 +196,42 @@ public class StatisticsService : IStatisticsService
         var logList = GetLogList(userId, date);
         
         var snuffGoalAmount = progression.SnuffGoalAmount;
-        int totalUsedSnuff = 0;
-        var listOfUsages = new List<int>();
-        var usedSnuffSorts = new List<Snuff>();
+
+        var (usedSnuffSorts, listOfUsages, totalUsedSnuff) = GetSnuffAmountAndTotaltUsage(logList.ToList(), date);
+        // int totalUsedSnuff = 0;
+        // var listOfUsages = new List<int>();
+        // var usedSnuffSorts = new List<Snuff>();
 
 
-        foreach (var snuff in logList)
-        {
-            var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Day == date.Day && log.SnuffLogDate.Month == date.Month && log.SnuffLogDate.Year == date.Year);
+        // foreach (var snuff in logList)
+        // {
+        //     var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Day == date.Day && log.SnuffLogDate.Month == date.Month && log.SnuffLogDate.Year == date.Year);
 
-            if (logs != null)
-            {
-                var usedSnuff = logs.Sum(log => log.AmountUsed);
-                var snuffObject = GetSnuffObject(snuff);
-                if (usedSnuff >= 1)
-                {
-                    listOfUsages.Add(usedSnuff);
-                    totalUsedSnuff += usedSnuff;
-                    usedSnuffSorts.Add(snuffObject);
-                }
-            }
-        }
+        //     if (logs != null)
+        //     {
+        //         var usedSnuff = logs.Sum(log => log.AmountUsed);
+        //         var snuffObject = GetSnuffObject(snuff);
+        //         if (usedSnuff >= 1)
+        //         {
+        //             listOfUsages.Add(usedSnuff);
+        //             totalUsedSnuff += usedSnuff;
+        //             usedSnuffSorts.Add(snuffObject);
+        //         }
+        //     }
+        // }
 
         var (snuffIds, amountOfSnuff) = AggregateSnuffData(usedSnuffSorts, listOfUsages);
         var destictSnuffList = new List<Snuff>();
         foreach (var id in snuffIds)
         {
             var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
+            var snuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(x => x.SnusId == id);
             if (snuff != null)
             {
+                if(snuffInfo != null)
+                {
+                    snuff.SnuffInfo = snuffInfo;
+                }
                 destictSnuffList.Add(snuff);
             }
         }
@@ -366,6 +373,10 @@ public class StatisticsService : IStatisticsService
         {
             result.SnuffInfo = snuffInfo;
         }
+        else
+        {
+            result.SnuffInfo = new SnuffInfo();
+        }
         return result;
     }
 
@@ -441,7 +452,7 @@ public class StatisticsService : IStatisticsService
                 if (logs != null)
                 {
                     var usedSnuff = logs.Sum(log => log.AmountUsed);
-                    var snuffObject = _snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
+                    var snuffObject = GetSnuffObject(snuff);
                     if (usedSnuff >= 1)
                     {
                         listOfUsages.Add(usedSnuff);
