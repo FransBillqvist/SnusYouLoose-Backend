@@ -293,15 +293,7 @@ public class StatisticsService : IStatisticsService
 
 
         var (snuffIds, amountOfSnuff) = AggregateSnuffData(allStatistics.SelectMany(x => x.UsedSnuffSorts).ToList(), allStatistics.SelectMany(x => x.UsedAmountOfSnuffs).ToList());
-        var destictSnuffList = new List<Snuff>();
-        foreach (var id in snuffIds)
-        {
-            var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
-            if (snuff != null)
-            {
-                destictSnuffList.Add(snuff);
-            }
-        }
+        var destictSnuffList = await GetCompletedSnuffList(snuffIds);
 
         var result = new Statistic
         {
@@ -350,20 +342,13 @@ public class StatisticsService : IStatisticsService
     }
     private Snuff GetASnuffObject(CurrentSnuff snuff)
     {
-        var result =_snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
-        var snuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(s => s.SnusId == snuff.SnusId);
+        var result = _snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
         if(result == null)
         {
             throw new Exception("No snuff found");
         }
-        if(snuffInfo != null && result != null)
-        {
-            result.SnuffInfo = snuffInfo;
-        }
-        else
-        {
-            result.SnuffInfo = new SnuffInfo();
-        }
+
+        result.SnuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(s => s.SnusId == snuff.SnusId) ?? new SnuffInfo();
         return result;
     }
 
