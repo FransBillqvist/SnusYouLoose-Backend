@@ -99,26 +99,6 @@ public class StatisticsService : IStatisticsService
 
 
             var (usedSnuffSorts, listOfUsages, totalUsedSnuff) = GetSnuffAmountAndTotaltUsage(logList.ToList(), date);
-            // int totalUsedSnuff = 0;
-            // var listOfUsages = new List<int>();
-            // var usedSnuffSorts = new List<Snuff>();
-
-            // foreach (var snuff in logList)
-            // {
-            //     var logs = snuff.LogsOfBox.Where(log => log.SnuffLogDate.Day == date.Day && log.SnuffLogDate.Month == date.Month && log.SnuffLogDate.Year == date.Year);
-            //     if (logs != null)
-            //     {
-            //         var usedSnuff = logs.Sum(log => log.AmountUsed);
-            //         var snuffObject = _snuffRepo.AsQueryable().FirstOrDefault(s => s.Id == snuff.SnusId);
-            //         if (usedSnuff >= 1)
-            //         {
-            //             listOfUsages.Add(usedSnuff);
-            //             totalUsedSnuff += usedSnuff;
-            //             usedSnuffSorts.Add(snuffObject);
-            //         }
-            //     }
-            // }
-
             var (snuffIds, amountOfSnuff) = AggregateSnuffData(usedSnuffSorts, listOfUsages);
             var costOfPurschase = Math.Round(await CalcualtePurschaseCost(logList.ToList(), date), 2, MidpointRounding.AwayFromZero);
             var costOfDailyUsage = Math.Round(await SnuffUsageCost(snuffIds, amountOfSnuff), 2, MidpointRounding.AwayFromZero);
@@ -154,29 +134,12 @@ public class StatisticsService : IStatisticsService
         var totalLimit = statisticsInPeriod.Sum(x => x.LimitOfUse);
         var totalUsed = statisticsInPeriod.Sum(x => x.TotalAmoutUsed);
         var totalRatingPoints = statisticsInPeriod.Sum(x => x.Rating);
-        var numberOfDays = statisticsInPeriod.Count();
+        var numberOfDays = statisticsInPeriod.Select(x => x.CreatedDate.Date).Distinct().Count();
         var finalRating = totalRatingPoints / numberOfDays;
-        //temp Code
         var costOfAllSnuffBought = statisticsInPeriod.Sum(x => x.PurchaseCost);
         var totalCostOfUsage = statisticsInPeriod.Sum(x => x.UsageCost);
-
         var (snuffIds, amountOfSnuff) = AggregateSnuffData(statisticsInPeriod.SelectMany(x => x.UsedSnuffSorts).ToList(), statisticsInPeriod.SelectMany(x => x.UsedAmountOfSnuffs).ToList());
-        var destictSnuffList = new List<Snuff>();
-        foreach (var id in snuffIds)
-        {
-            var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
-            if (snuff != null)
-            {
-                var snuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(x => x.SnusId == id);
-
-                if(snuffInfo != null)
-                {
-                    snuff.SnuffInfo = snuffInfo;
-                }
-                destictSnuffList.Add(snuff);
-            }
-        }
-
+        var destictSnuffList = await GetCompletedSnuffList(snuffIds);
 
         var result = new Statistic
         {
@@ -192,7 +155,7 @@ public class StatisticsService : IStatisticsService
             CreatedDate = DateTime.UtcNow.Date,
             NumberOfDays = numberOfDays
         };
-        return result;
+        return await Task.FromResult(result);
     }
 
     public async Task<Statistic> GetTemporaryStatisticsOfToday(string userId)
@@ -200,28 +163,10 @@ public class StatisticsService : IStatisticsService
         var date = DateTime.Now;
         var progression = GetActiveProgression(userId);
         var logList = GetLogList(userId, date);
-        
         var snuffGoalAmount = progression.SnuffGoalAmount;
-
         var (usedSnuffSorts, listOfUsages, totalUsedSnuff) = GetSnuffAmountAndTotaltUsage(logList.ToList(), date);
-
         var (snuffIds, amountOfSnuff) = AggregateSnuffData(usedSnuffSorts, listOfUsages);
-        
         var destictSnuffList = await GetCompletedSnuffList(snuffIds);
-        // var destictSnuffList = new List<Snuff>();
-        // foreach (var id in snuffIds)
-        // {
-        //     var snuff = _snuffRepo.AsQueryable().FirstOrDefault(x => x.Id == id);
-        //     var snuffInfo = _snuffInfoRepo.AsQueryable().FirstOrDefault(x => x.SnusId == id);
-        //     if (snuff != null)
-        //     {
-        //         if(snuffInfo != null)
-        //         {
-        //             snuff.SnuffInfo = snuffInfo;
-        //         }
-        //         destictSnuffList.Add(snuff);
-        //     }
-        // }
 
         var newStatistics = new Statistic
         {
@@ -307,7 +252,7 @@ public class StatisticsService : IStatisticsService
             PurchaseCost = Math.Round(totalPurchaseCost, 2, MidpointRounding.AwayFromZero),
             UsageCost = Math.Round(totalUsageCost, 2, MidpointRounding.AwayFromZero),
             CreatedDate = DateTime.UtcNow.Date,
-            NumberOfDays = statisticsForDays
+            NumberOfDays = statisticsForDays+1
         };
         return result;
     }
