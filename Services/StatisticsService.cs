@@ -401,4 +401,77 @@ public class StatisticsService : IStatisticsService
         }
         return await Task.FromResult(destictSnuffList);
     }
+
+    
+
+    public async Task<NicotineStats> NicotineUsageOverPeriodCompair(string userId, string period)
+    {
+       switch(period)
+        {
+            case "today":
+                return await CreateNicotineUsageStats(userId, DateTime.Now.Date.AddDays(-1), DateTime.Now.Date);
+            case "week":
+                return await CreateNicotineUsageStats(userId, DateTime.Now.Date.AddDays(-8), DateTime.Now.Date.AddDays(-1));
+            case "month":
+                return await CreateNicotineUsageStats(userId, DateTime.Now.Date.AddDays(-31), DateTime.Now.Date.AddDays(-1));
+            case "quarter":
+                return await CreateNicotineUsageStats(userId, DateTime.Now.Date.AddDays(-91), DateTime.Now.Date.AddDays(-1));
+            case "year":
+                return await CreateNicotineUsageStats(userId, DateTime.Now.Date.AddDays(-366), DateTime.Now.Date.AddDays(-1));
+            default:
+                throw new ArgumentException("Invalid period value.");
+        }
+    }
+
+    private async Task<NicotineStats> CreateNicotineUsageStats(string userId, DateTime from, DateTime to)
+    {
+
+        var lengthOfPeriod = (to - from).Days;
+        var secondaryFrom = from.AddDays(-lengthOfPeriod-1);
+        var secondaryto = from.AddDays(-1);
+
+        var result = new NicotineStats();
+        
+        var allOfUserStatistics = _statisticsRepo.AsQueryable().Where(x => x.UserId == userId).ToList();
+        var statisticsInPrimaryPeriod = allOfUserStatistics.Where(x => x.CreatedDate.Date >= from.Date && x.CreatedDate.Date <= to.Date).ToList();
+        var (primarySnuffIds, primaryAmountList) = AggregateSnuffData(statisticsInPrimaryPeriod.SelectMany(x => x.UsedSnuffSorts).ToList(), statisticsInPrimaryPeriod.SelectMany(x => x.UsedAmountOfSnuffs).ToList());
+        var snuffList = await GetCompletedSnuffList(primarySnuffIds);
+
+        
+        var (UsageInMgPrimary, primaryDays) = CalculateNicotineUsage(snuffList, primaryAmountList);
+        result.PrimaryNicotineUse = UsageInMgPrimary;
+        result.PrimaryNumberOfDays = primaryDays;
+
+        var statisticsInSecondaryPeriod = allOfUserStatistics.Where(x => x.CreatedDate.Date >= secondaryFrom.Date && x.CreatedDate.Date <= secondaryto.Date).ToList();
+        var (secondarySnuffIds, secondaryAmountList) = AggregateSnuffData(statisticsInSecondaryPeriod.SelectMany(x => x.UsedSnuffSorts).ToList(), statisticsInSecondaryPeriod.SelectMany(x => x.UsedAmountOfSnuffs).ToList());
+        var secondarySnuffList = await GetCompletedSnuffList(secondarySnuffIds);
+
+        var (UsageInMgSecoundary, secoundaryDays) = CalculateNicotineUsage(secondarySnuffList, secondaryAmountList);
+        result.SecondaryNicotineUse = UsageInMgSecoundary;
+        result.SecondaryNumberOfDays = secoundaryDays;
+        
+        result.IndecationScore = CalculateIndicationScore(result.PrimaryNicotineUse, result.SecondaryNicotineUse);
+
+        return await Task.FromResult(result); 
+    }
+
+    private decimal CalculateIndicationScore(decimal primary, decimal secondary)
+    {
+        return secondary / primary;
+    }
+
+    private (decimal, int) CalculateNicotineUsage(List<Snuff> snuffs, List<int> amounts)
+    {
+        decimal UsageInMg = 0.0m;
+        var days = 0;
+        var length = amounts.Count;
+        for (var i = 0; i < length; i++)
+        {
+            var nicotine = snuffs[i].SnuffInfo!.NicotinePerPortion;
+            UsageInMg+= (decimal)nicotine * amounts[i];
+            days++;
+        }
+        return (UsageInMg, days);
+    }
+
 }
