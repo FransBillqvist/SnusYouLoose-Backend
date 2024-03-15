@@ -412,6 +412,8 @@ public class StatisticsService : IStatisticsService
                 return await CreateNicotineUsageStats(userId, DateTime.Now.Date.AddDays(-1), DateTime.Now.Date);
             case "week":
                 return await CreateNicotineUsageStats(userId, DateTime.Now.Date.AddDays(-8), DateTime.Now.Date.AddDays(-1));
+            case "twoweek":
+                return await CreateNicotineUsageStats(userId, DateTime.Now.Date.AddDays(-15), DateTime.Now.Date.AddDays(-1));
             case "month":
                 return await CreateNicotineUsageStats(userId, DateTime.Now.Date.AddDays(-31), DateTime.Now.Date.AddDays(-1));
             case "quarter":
