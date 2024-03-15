@@ -404,7 +404,7 @@ public class StatisticsService : IStatisticsService
 
     
 
-    public async Task<NicotineStats> NicotineUsageOverPeriodCompair(string userId, string period)
+    public async Task<NicotineStats> NicotineUsageOverPeriodCompare(string userId, string period)
     {
        switch(period)
         {
