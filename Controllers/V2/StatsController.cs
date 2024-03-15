@@ -35,6 +35,16 @@ public class StatisticsController : ControllerBase
     }
 
     [MapToApiVersion("2.0")]
+    [HttpGet]
+    [Route("GetNicotineUsage/{userId}/{period}/")]
+    public async Task<NicotineStats> GetNicotineUsage(string userId, string period)
+    {
+        var result = await _statsService.NicotineUsageOverPeriodCompare(userId, period);
+        return result;
+    }
+    
+
+    [MapToApiVersion("2.0")]
     [HttpPost]
     [Route("CreateDailyStatistics/{userId}")]
     public async Task<IActionResult> CreateDailyStatistics(string userId)
