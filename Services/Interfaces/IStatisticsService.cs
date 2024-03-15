@@ -11,4 +11,5 @@ public interface IStatisticsService
 
     Task<double> DailyRateStatitics(int used, int limit);
     Task<Statistic> GetFullUserStatic(string userId);
+    Task<NicotineStats> NicotineUsageOverPeriodCompare(string userId, string period);
 }
