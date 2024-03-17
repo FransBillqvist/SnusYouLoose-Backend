@@ -3,5 +3,5 @@ public class NicotineStats {
     public int PrimaryNumberOfDays { get; set; }
     public decimal SecondaryNicotineUse { get; set; }
     public int SecondaryNumberOfDays { get; set; }
-    public decimal IndecationScore { get; set; }
+    public decimal IndicationScore { get; set; }
 }
