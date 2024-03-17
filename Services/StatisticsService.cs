@@ -452,7 +452,7 @@ public class StatisticsService : IStatisticsService
         result.SecondaryNicotineUse = UsageInMgSecoundary;
         result.SecondaryNumberOfDays = secoundaryDays;
         
-        result.IndecationScore = CalculateIndicationScore(result.PrimaryNicotineUse, result.SecondaryNicotineUse);
+        result.IndicationScore = CalculateIndicationScore(result.PrimaryNicotineUse, result.SecondaryNicotineUse);
 
         return await Task.FromResult(result); 
     }
