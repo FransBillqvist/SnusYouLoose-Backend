@@ -10,5 +10,6 @@ public interface IHabitService
     Task RemoveHabitAsync(string id);
     Task<HabitDto> GetHabitDtoAsync(string id);
     Task<HabitDto> CreateHabitFromRequestAsync(HabitDto newHabit, string userId);
+    Task<HabitDto> SetRulesForUsersProgression(HabitDto habit,  string userId);
 
 }
