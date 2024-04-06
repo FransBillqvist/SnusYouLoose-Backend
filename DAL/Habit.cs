@@ -14,7 +14,7 @@ public class Habit : Document
     [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
     internal DateTime EndDate { get; set; }
     [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-    internal DateTime StartDate { get; set; }
+    public DateTime StartDate { get; set; }
     public string StringEndDate
     {
         get
