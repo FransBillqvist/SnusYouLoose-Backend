@@ -1,0 +1,960 @@
+[{
+  "_id": {
+    "$oid": "6588cd8f2115f521930f8396"
+  },
+  "CreatedAtUtc": {
+    "$date": "2023-12-25T00:32:15.362Z"
+  },
+  "StringCreatedAtUtc": "2023-12-25 00:32:15",
+  "Brand": "Swedish Match",
+  "Type": "Göteborgs Rapé Vit portion",
+  "Price": "52",
+  "DefaultAmount": 24,
+  "ImageUrl": "goteborgsrapewhiteportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5ef95e363ce4c43a3a631"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:09:25.426Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:09:25",
+  "Brand": "Ace X",
+  "Type": "Black Raspberry Chili Strong",
+  "Price": "45",
+  "DefaultAmount": 20,
+  "ImageUrl": "acexraspberrychilistrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f005e363ce4c43a3a632"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:11:17.771Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:11:17",
+  "Brand": "Après",
+  "Type": "Ice Tea Peach",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "apresiceteapeach",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f082e363ce4c43a3a633"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:13:22.520Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:13:22",
+  "Brand": "FIX",
+  "Type": "Pineapple Rum Coconut #4",
+  "Price": "35",
+  "DefaultAmount": 20,
+  "ImageUrl": "fixpineapplerumcoconut4",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f0bfe363ce4c43a3a634"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:14:23.840Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:14:23",
+  "Brand": "Helwit",
+  "Type": "Cherry Slim",
+  "Price": "41",
+  "DefaultAmount": 20,
+  "ImageUrl": "helwitcherryslim",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f0efe363ce4c43a3a635"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:15:11.272Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:15:11",
+  "Brand": "Helwit",
+  "Type": "Mint Slim",
+  "Price": "41",
+  "DefaultAmount": 20,
+  "ImageUrl": "helwitmintslim",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f11fe363ce4c43a3a636"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:15:59.269Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:15:59",
+  "Brand": "Helwit",
+  "Type": "Mocha Slim",
+  "Price": "41",
+  "DefaultAmount": 20,
+  "ImageUrl": "helwitmochaslim",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f1eee363ce4c43a3a637"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:19:26.185Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:19:26",
+  "Brand": "Helwit",
+  "Type": "Orange Slim",
+  "Price": "20",
+  "DefaultAmount": 20,
+  "ImageUrl": "helwitorangeslim",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f235e363ce4c43a3a638"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:20:37.832Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:20:37",
+  "Brand": "Helwit",
+  "Type": "Blueberry Slim",
+  "Price": "41",
+  "DefaultAmount": 20,
+  "ImageUrl": "helwitslimblueberry",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f25ae363ce4c43a3a639"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:21:14.081Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:21:14",
+  "Brand": "Helwit",
+  "Type": "Violet Slim",
+  "Price": "41",
+  "DefaultAmount": 20,
+  "ImageUrl": "helwitslimviolet",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f2b9e363ce4c43a3a63a"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:22:49.859Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:22:49",
+  "Brand": "Kelly white",
+  "Type": "Raspberry lemon mini",
+  "Price": "43",
+  "DefaultAmount": 20,
+  "ImageUrl": "kellywhiteraspberrylemonmini",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f32ae363ce4c43a3a63b"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:24:42.395Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:24:42",
+  "Brand": "Kelly white",
+  "Type": "Sparkling strawberry slim",
+  "Price": "43",
+  "DefaultAmount": 20,
+  "ImageUrl": "kellywhitesparklingstrawberryslim",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f376e363ce4c43a3a63c"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:25:58.672Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:25:58",
+  "Brand": "Lundgrens",
+  "Type": "Vågsvall all white",
+  "Price": "36",
+  "DefaultAmount": 20,
+  "ImageUrl": "lundgrensvagsvallallwhite",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f3e8e363ce4c43a3a63d"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:27:52.350Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:27:52",
+  "Brand": "Ström",
+  "Type": "Iced coffee slim",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "stromicedcoffeeslim",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f467e363ce4c43a3a63e"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:29:59.676Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:29:59",
+  "Brand": "Velo",
+  "Type": "Breezy Mango 14mg",
+  "Price": "40",
+  "DefaultAmount": 20,
+  "ImageUrl": "velo14mgbreezymango",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f4d1e363ce4c43a3a63f"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:31:45.621Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:31:45",
+  "Brand": "Velo",
+  "Type": "Orange spark",
+  "Price": "40",
+  "DefaultAmount": 20,
+  "ImageUrl": "veloorangespark",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f4f9e363ce4c43a3a640"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:32:25.730Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:32:25",
+  "Brand": "Velo",
+  "Type": "Tangled berry",
+  "Price": "40",
+  "DefaultAmount": 20,
+  "ImageUrl": "velotangledberry",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f5b4e363ce4c43a3a641"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:35:32.100Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:35:32",
+  "Brand": "Velo",
+  "Type": "Tropic breeze zero nicotine free",
+  "Price": "40",
+  "DefaultAmount": 20,
+  "ImageUrl": "velotropicbreezezeronfsnuff",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f5e5e363ce4c43a3a642"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:36:21.989Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:36:21",
+  "Brand": "Velo",
+  "Type": "Zest flame",
+  "Price": "40",
+  "DefaultAmount": 20,
+  "ImageUrl": "velozestflame",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f69ce363ce4c43a3a643"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:39:24.029Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:39:24",
+  "Brand": "Xqs",
+  "Type": "Black cherry slim strong",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqsblackcherryslimstrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f767e363ce4c43a3a644"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:42:47.285Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:42:47",
+  "Brand": "Xqs",
+  "Type": "Blueberry Mint Slim",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqsblueberrymintlightallwhiteportion",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f7f4e363ce4c43a3a645"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:45:08.423Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:45:08",
+  "Brand": "Xqs",
+  "Type": "Cactus Sour Slim",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqscactussourlightallwhiteportion",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5f9ace363ce4c43a3a646"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:52:28.068Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:52:28",
+  "Brand": "Xqs",
+  "Type": "Cactus Sour Slim Strong",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqscactussourslimstrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fa0de363ce4c43a3a647"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:54:05.139Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:54:05",
+  "Brand": "Xqs",
+  "Type": "Citrus Cooling Slim",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqscitruscoolingslim",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fa31e363ce4c43a3a648"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:54:41.490Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:54:41",
+  "Brand": "Xqs",
+  "Type": "Elderflower Slim Strong",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqselderflowerslimstrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fa53e363ce4c43a3a649"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:55:15.703Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:55:15",
+  "Brand": "Xqs",
+  "Type": "Fizzy Cola",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqsfizzycolaallwhiteportion",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fa7be363ce4c43a3a64a"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:55:55.846Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:55:55",
+  "Brand": "Xqs",
+  "Type": "Fizzy Cola Strong",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqsfizzycolastrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fadbe363ce4c43a3a64b"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:57:31.882Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:57:31",
+  "Brand": "Xqs",
+  "Type": "Orange Apple Slim Strong",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqsorangeappleslimstrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fb11e363ce4c43a3a64c"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:58:25.420Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:58:25",
+  "Brand": "Xqs",
+  "Type": "Blueberry Mint Slim Strong",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqsslimstrongblueberrymint",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fb40e363ce4c43a3a64d"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T06:59:12.139Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 06:59:12",
+  "Brand": "Xqs",
+  "Type": "Wintergreen Slim Strong",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqsslimstrongwintergreen",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fba7e363ce4c43a3a64e"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:00:55.230Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:00:55",
+  "Brand": "Xqs",
+  "Type": "Soft Toffee Slim Strong",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqssofttoffeeslimstrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fc34e363ce4c43a3a64f"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:03:16.238Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:03:16",
+  "Brand": "Xqs",
+  "Type": "Tropical Slim Strong",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqstropicalslimextrastrongallwhiteportion",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fc6ae363ce4c43a3a650"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:04:10.300Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:04:10",
+  "Brand": "Xqs",
+  "Type": "Tropical Slim",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqstropicalslimnormalallwhiteportion",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fcece363ce4c43a3a651"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:06:20.770Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:06:20",
+  "Brand": "Xqs",
+  "Type": "Twin Apple Slim Strong",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqstwinappleslimstrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fd28e363ce4c43a3a652"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:07:20.946Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:07:20",
+  "Brand": "Xqs",
+  "Type": "Wintergreen Slim",
+  "Price": "42",
+  "DefaultAmount": 20,
+  "ImageUrl": "xqswintergreenslim",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fd94e363ce4c43a3a653"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:09:08.869Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:09:08",
+  "Brand": "XR",
+  "Type": "General Slim White Portion",
+  "Price": "40",
+  "DefaultAmount": 20,
+  "ImageUrl": "xrgeneralslimwhiteportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fdf5e363ce4c43a3a654"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:10:45.777Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:10:45",
+  "Brand": "Zone X",
+  "Type": "Cold Blast Slim Extra Strong",
+  "Price": "41",
+  "DefaultAmount": 24,
+  "ImageUrl": "zonexcoldblastslimextrastrongallwhiteport",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fe2ce363ce4c43a3a655"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:11:40.337Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:11:40",
+  "Brand": "Zone X",
+  "Type": "Cosmic Blast Slim Extra Strong",
+  "Price": "41",
+  "DefaultAmount": 24,
+  "ImageUrl": "zonexcoldblastslimextrastrongallwhiteport",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5fee2e363ce4c43a3a656"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:14:42.759Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:14:42",
+  "Brand": "Zyn",
+  "Type": "Mini Black Cherry 3 mg",
+  "Price": "43",
+  "DefaultAmount": 20,
+  "ImageUrl": "zynminiblackcherry3mg",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b5ffe9e363ce4c43a3a657"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:19:05.132Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:19:05",
+  "Brand": "Zyn",
+  "Type": "Mini Citrus 3 mg",
+  "Price": "43",
+  "DefaultAmount": 20,
+  "ImageUrl": "zynminicitrus3mg",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b60011e363ce4c43a3a658"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:19:45.118Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:19:45",
+  "Brand": "Zyn",
+  "Type": "Mini Cool Mint 3 mg",
+  "Price": "43",
+  "DefaultAmount": 20,
+  "ImageUrl": "zynminicoolmint3mg",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b6003be363ce4c43a3a659"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:20:27.687Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:20:27",
+  "Brand": "Zyn",
+  "Type": "Mini Espressino",
+  "Price": "43",
+  "DefaultAmount": 20,
+  "ImageUrl": "zynminiespressino",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b600ace363ce4c43a3a65a"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:22:20.055Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:22:20",
+  "Brand": "Zyn",
+  "Type": "Slim Spearmint Strong",
+  "Price": "43",
+  "DefaultAmount": 21,
+  "ImageUrl": "zynslimspearmintstrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b60104e363ce4c43a3a65b"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:23:48.285Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:23:48",
+  "Brand": "Zyn",
+  "Type": "Slim Strong Apple Mint",
+  "Price": "43",
+  "DefaultAmount": 21,
+  "ImageUrl": "zynslimstrongapplemint",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b60163e363ce4c43a3a65c"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:25:23.367Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:25:23",
+  "Brand": "Zyn",
+  "Type": "Spearmint Mini Dry",
+  "Price": "43",
+  "DefaultAmount": 20,
+  "ImageUrl": "zynspearmintminidry",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65b60195e363ce4c43a3a65d"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-01-28T07:26:13.221Z"
+  },
+  "StringCreatedAtUtc": "2024-01-28 07:26:13",
+  "Brand": "Zyn",
+  "Type": "Violet Licorice Slim",
+  "Price": "43",
+  "DefaultAmount": 21,
+  "ImageUrl": "zynvioletlicoriceslim",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c895a8e17d4d92eaa34a48"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:38:48.783Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:38:48",
+  "Brand": "Kapten",
+  "Type": "Vit Portion",
+  "Price": "33",
+  "DefaultAmount": 20,
+  "ImageUrl": "kaptenvitportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89655e17d4d92eaa34a49"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:41:41.344Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:41:41",
+  "Brand": "One",
+  "Type": "Grå White Portion",
+  "Price": "39",
+  "DefaultAmount": 20,
+  "ImageUrl": "onegrawhiteportion",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c896b4e17d4d92eaa34a4a"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:43:16.681Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:43:16",
+  "Brand": "LD",
+  "Type": "Original Stark Portion",
+  "Price": "34",
+  "DefaultAmount": 20,
+  "ImageUrl": "ldoriginalstarkportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89728e17d4d92eaa34a4b"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:45:12.291Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:45:12",
+  "Brand": "One",
+  "Type": "blå white portion",
+  "Price": "39",
+  "DefaultAmount": 20,
+  "ImageUrl": "oneblawhiteportion",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89787e17d4d92eaa34a4c"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:46:47.841Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:46:47",
+  "Brand": "LD",
+  "Type": "Whiskey original limited edition",
+  "Price": "34",
+  "DefaultAmount": 20,
+  "ImageUrl": "ldwhiskeyoriginallimitededition",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89807e17d4d92eaa34a4d"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:48:55.797Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:48:55",
+  "Brand": "Knox",
+  "Type": "White Portion",
+  "Price": "39",
+  "DefaultAmount": 24,
+  "ImageUrl": "knoxwhiteportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89842e17d4d92eaa34a4e"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:49:54.939Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:49:54",
+  "Brand": "Knox",
+  "Type": "White Stark Portion",
+  "Price": "39",
+  "DefaultAmount": 24,
+  "ImageUrl": "knoxwhitestarkportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89884e17d4d92eaa34a4f"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:51:00.557Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:51:00",
+  "Brand": "Knox",
+  "Type": "Portion",
+  "Price": "39",
+  "DefaultAmount": 24,
+  "ImageUrl": "knoxportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c898bee17d4d92eaa34a50"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:51:58.733Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:51:58",
+  "Brand": "Knox",
+  "Type": "Karaktär Blue White",
+  "Price": "39",
+  "DefaultAmount": 22,
+  "ImageUrl": "knoxkaraktarbluewhiteportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c8990ee17d4d92eaa34a51"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:53:18.613Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:53:18",
+  "Brand": "Knox",
+  "Type": "Lös",
+  "Price": "56",
+  "DefaultAmount": 15,
+  "ImageUrl": "knoxlossnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89958e17d4d92eaa34a52"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:54:32.390Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:54:32",
+  "Brand": "Loop",
+  "Type": "Jalapeno Lime Strong",
+  "Price": "41",
+  "DefaultAmount": 22,
+  "ImageUrl": "loopjalapenolimestrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c899a1e17d4d92eaa34a53"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:55:45.897Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:55:45",
+  "Brand": "Loop",
+  "Type": "Jalapeno Lime Slim Hyper Strong",
+  "Price": "41",
+  "DefaultAmount": 22,
+  "ImageUrl": "loopjalapenolimeslimhyperstrong",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89a38e17d4d92eaa34a54"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:58:16.127Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:58:16",
+  "Brand": "Lundgrens",
+  "Type": "Skåne",
+  "Price": "43",
+  "DefaultAmount": 20,
+  "ImageUrl": "lundgrensskanevitportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89a81e17d4d92eaa34a55"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T09:59:29.647Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 09:59:29",
+  "Brand": "Lundgrens",
+  "Type": "Skåne Stark vit portion",
+  "Price": "43",
+  "DefaultAmount": 22,
+  "ImageUrl": "lundgrensskanestarkvitportion",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89ab7e17d4d92eaa34a56"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T10:00:23.400Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 10:00:23",
+  "Brand": "Lundgrens",
+  "Type": "Norrland",
+  "Price": "43",
+  "DefaultAmount": 22,
+  "ImageUrl": "lundgrensnorrlandvitportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89ae7e17d4d92eaa34a57"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T10:01:11.593Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 10:01:11",
+  "Brand": "Lundgrens",
+  "Type": "Fjällen",
+  "Price": "43",
+  "DefaultAmount": 22,
+  "ImageUrl": "lundgrensfjallenvitportion",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89b1ee17d4d92eaa34a58"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T10:02:06.055Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 10:02:06",
+  "Brand": "Kaliber",
+  "Type": "Original Portion",
+  "Price": "34",
+  "DefaultAmount": 20,
+  "ImageUrl": "kaliberoriginalportionssnus",
+  "Size": 200
+},
+{
+  "_id": {
+    "$oid": "65c89b4de17d4d92eaa34a59"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-11T10:02:53.180Z"
+  },
+  "StringCreatedAtUtc": "2024-02-11 10:02:53",
+  "Brand": "Kaliber",
+  "Type": "Vit Salmiak Portion",
+  "Price": "34",
+  "DefaultAmount": 20,
+  "ImageUrl": "kalibervitsalmiakportionssnus",
+  "Size": 200
+}]

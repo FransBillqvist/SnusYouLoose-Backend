@@ -1,0 +1,1074 @@
+[{
+  "_id": {
+    "$oid": "65d161c5de522dded104a55c"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-02-18T02:47:49.930Z"
+  },
+  "StringCreatedAtUtc": "2024-02-18 02:47:49",
+  "SnusId": "6588cd8f2115f521930f8396",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 7.2,
+  "Flavors": [
+    10
+  ],
+  "Format": 1
+},
+{
+  "_id": {
+    "$oid": "65e3f0ef31481f7ffab6ef20"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T04:39:27.511Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 04:39:27",
+  "SnusId": "65b5ef95e363ce4c43a3a631",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    4
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e3f5c531481f7ffab6ef21"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T05:00:05.474Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 05:00:05",
+  "SnusId": "65b5f2b9e363ce4c43a3a63a",
+  "NicotinePerGram": 12,
+  "NicotinePerPortion": 6,
+  "Flavors": [
+    34,
+    24
+  ],
+  "Format": 3
+},
+{
+  "_id": {
+    "$oid": "65e3f68e31481f7ffab6ef22"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T05:03:26.778Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 05:03:26",
+  "SnusId": "65b5f376e363ce4c43a3a63c",
+  "NicotinePerGram": 10,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    20
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e3f6e631481f7ffab6ef23"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T05:04:54.356Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 05:04:54",
+  "SnusId": "65b5f3e8e363ce4c43a3a63d",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 10,
+  "Flavors": [
+    16
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e3f74031481f7ffab6ef24"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T05:06:24.878Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 05:06:24",
+  "SnusId": "65b5f467e363ce4c43a3a63e",
+  "NicotinePerGram": 20,
+  "NicotinePerPortion": 14,
+  "Flavors": [
+    20
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e3f86a31481f7ffab6ef25"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T05:11:22.141Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 05:11:22",
+  "SnusId": "65b5f5b4e363ce4c43a3a641",
+  "NicotinePerGram": 0,
+  "NicotinePerPortion": 0,
+  "Flavors": [
+    20
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e3f8f431481f7ffab6ef26"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T05:13:40.353Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 05:13:40",
+  "SnusId": "65b5f69ce363ce4c43a3a643",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    4,
+    12
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4f5c731481f7ffab6ef27"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:12:23.982Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:12:23",
+  "SnusId": "65b5f767e363ce4c43a3a644",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 4,
+  "Flavors": [
+    4,
+    5,
+    1
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4f6e931481f7ffab6ef28"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:17:13.678Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:17:13",
+  "SnusId": "65b5f7f4e363ce4c43a3a645",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 4,
+  "Flavors": [
+    47,
+    40
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4f72131481f7ffab6ef29"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:18:09.662Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:18:09",
+  "SnusId": "65b5f9ace363ce4c43a3a646",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    47,
+    40
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4f78031481f7ffab6ef2a"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:19:44.953Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:19:44",
+  "SnusId": "65b5fa0de363ce4c43a3a647",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 4,
+  "Flavors": [
+    13
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4f7fc31481f7ffab6ef2b"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:21:48.047Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:21:48",
+  "SnusId": "65b5fa31e363ce4c43a3a648",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    48
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4f86431481f7ffab6ef2c"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:23:32.328Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:23:32",
+  "SnusId": "65b5fa53e363ce4c43a3a649",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 4,
+  "Flavors": [
+    49
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4f88031481f7ffab6ef2d"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:24:00.719Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:24:00",
+  "SnusId": "65b5fa7be363ce4c43a3a64a",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    49
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4f8b131481f7ffab6ef2e"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:24:49.484Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:24:49",
+  "SnusId": "65b5fadbe363ce4c43a3a64b",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    11,
+    29
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4f8db31481f7ffab6ef2f"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:25:31.039Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:25:31",
+  "SnusId": "65b5fb11e363ce4c43a3a64c",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    1,
+    5
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4f90a31481f7ffab6ef30"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:26:18.353Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:26:18",
+  "SnusId": "65b5fb40e363ce4c43a3a64d",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    2
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e4fde431481f7ffab6ef31"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-03T23:47:00.846Z"
+  },
+  "StringCreatedAtUtc": "2024-03-03 23:47:00",
+  "SnusId": "65b5fba7e363ce4c43a3a64e",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    50
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e501a531481f7ffab6ef4e"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:03:01.673Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:03:01",
+  "SnusId": "65b5fc34e363ce4c43a3a64f",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    51
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e501b631481f7ffab6ef4f"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:03:18.809Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:03:18",
+  "SnusId": "65b5fc6ae363ce4c43a3a650",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 4,
+  "Flavors": [
+    51
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e501f531481f7ffab6ef50"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:04:21.461Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:04:21",
+  "SnusId": "65b5fcece363ce4c43a3a651",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    11
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e5045f31481f7ffab6ef51"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:14:39.649Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:14:39",
+  "SnusId": "65b5fd28e363ce4c43a3a652",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 4,
+  "Flavors": [
+    1
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e504ec31481f7ffab6ef52"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:17:00.171Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:17:00",
+  "SnusId": "65b5fdf5e363ce4c43a3a654",
+  "NicotinePerGram": 15,
+  "NicotinePerPortion": 10,
+  "Flavors": [
+    1
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e5051c31481f7ffab6ef53"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:17:48.180Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:17:48",
+  "SnusId": "65b5fe2ce363ce4c43a3a655",
+  "NicotinePerGram": 15,
+  "NicotinePerPortion": 10,
+  "Flavors": [
+    4
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e506fe31481f7ffab6ef54"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:25:50.616Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:25:50",
+  "SnusId": "65b600ace363ce4c43a3a65a",
+  "NicotinePerGram": 13,
+  "NicotinePerPortion": 9,
+  "Flavors": [
+    52
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e50abe31481f7ffab6ef55"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:41:50.563Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:41:50",
+  "SnusId": "65b60104e363ce4c43a3a65b",
+  "NicotinePerGram": 13,
+  "NicotinePerPortion": 9,
+  "Flavors": [
+    11,
+    1,
+    20
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e50c1e31481f7ffab6ef56"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:47:42.220Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:47:42",
+  "SnusId": "65b60195e363ce4c43a3a65d",
+  "NicotinePerGram": 9,
+  "NicotinePerPortion": 6,
+  "Flavors": [
+    3,
+    46
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e50cb431481f7ffab6ef57"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:50:12.683Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:50:12",
+  "SnusId": "65c89655e17d4d92eaa34a49",
+  "NicotinePerGram": 13,
+  "NicotinePerPortion": 13,
+  "Flavors": [
+    0
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e50e8a31481f7ffab6ef58"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T00:58:02.053Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 00:58:02",
+  "SnusId": "65c89787e17d4d92eaa34a4c",
+  "NicotinePerGram": 10,
+  "NicotinePerPortion": 9,
+  "Flavors": [
+    38
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e50f0631481f7ffab6ef59"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T01:00:06.672Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 01:00:06",
+  "SnusId": "65c89842e17d4d92eaa34a4e",
+  "NicotinePerGram": 16,
+  "NicotinePerPortion": 13,
+  "Flavors": [
+    0
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e513bf31481f7ffab6ef5a"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T01:20:15.538Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 01:20:15",
+  "SnusId": "65c89958e17d4d92eaa34a52",
+  "NicotinePerGram": 15,
+  "NicotinePerPortion": 9,
+  "Flavors": [
+    53,
+    14
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e518ec31481f7ffab6ef5b"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T01:42:20.142Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 01:42:20",
+  "SnusId": "65c89a81e17d4d92eaa34a55",
+  "NicotinePerGram": 17.3,
+  "NicotinePerPortion": 15.2,
+  "Flavors": [
+    10
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e5190331481f7ffab6ef5c"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T01:42:43.065Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 01:42:43",
+  "SnusId": "65c89a38e17d4d92eaa34a54",
+  "NicotinePerGram": 10,
+  "NicotinePerPortion": 8.8,
+  "Flavors": [
+    10
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e5197d31481f7ffab6ef5d"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T01:44:45.411Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 01:44:45",
+  "SnusId": "65c899a1e17d4d92eaa34a53",
+  "NicotinePerGram": 25,
+  "NicotinePerPortion": 15.6,
+  "Flavors": [
+    53,
+    14
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e519a531481f7ffab6ef5e"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T01:45:25.704Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 01:45:25",
+  "SnusId": "65c89958e17d4d92eaa34a52",
+  "NicotinePerGram": 10,
+  "NicotinePerPortion": 26.6,
+  "Flavors": [
+    0
+  ],
+  "Format": 4
+},
+{
+  "_id": {
+    "$oid": "65e51c8331481f7ffab6ef5f"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-04T01:57:39.684Z"
+  },
+  "StringCreatedAtUtc": "2024-03-04 01:57:39",
+  "SnusId": "65c89884e17d4d92eaa34a4f",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 7.2,
+  "Flavors": [
+    0
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e9130ca6745148fd08da11"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T02:06:20.287Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 02:06:20",
+  "SnusId": "65c89ab7e17d4d92eaa34a56",
+  "NicotinePerGram": 10,
+  "NicotinePerPortion": 8,
+  "Flavors": [
+    0
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e9e67c824eb55662059317"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:08:28.633Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:08:28",
+  "SnusId": "65b5f005e363ce4c43a3a632",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 5.2,
+  "Flavors": [
+    20
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9e875824eb55662059318"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:16:53.843Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:16:53",
+  "SnusId": "65b5f082e363ce4c43a3a633",
+  "NicotinePerGram": 14,
+  "NicotinePerPortion": 9.8,
+  "Flavors": [
+    20,
+    45
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9e9b4824eb5566205931a"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:22:12.128Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:22:12",
+  "SnusId": "65b5f0bfe363ce4c43a3a634",
+  "NicotinePerGram": 9,
+  "NicotinePerPortion": 4.5,
+  "Flavors": [
+    12
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9e9f4824eb5566205931b"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:23:16.096Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:23:16",
+  "SnusId": "65b5f0efe363ce4c43a3a635",
+  "NicotinePerGram": 7,
+  "NicotinePerPortion": 3.5,
+  "Flavors": [
+    1
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9ea2c824eb5566205931c"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:24:12.272Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:24:12",
+  "SnusId": "65b5f11fe363ce4c43a3a636",
+  "NicotinePerGram": 9,
+  "NicotinePerPortion": 4.5,
+  "Flavors": [
+    16
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9ea5c824eb5566205931d"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:25:00.926Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:25:00",
+  "SnusId": "65b5f1eee363ce4c43a3a637",
+  "NicotinePerGram": 9,
+  "NicotinePerPortion": 4.5,
+  "Flavors": [
+    29
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9ea9c824eb5566205931e"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:26:04.503Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:26:04",
+  "SnusId": "65b5f235e363ce4c43a3a638",
+  "NicotinePerGram": 9,
+  "NicotinePerPortion": 4.5,
+  "Flavors": [
+    5
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9eae4824eb5566205931f"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:27:16.249Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:27:16",
+  "SnusId": "65b5f25ae363ce4c43a3a639",
+  "NicotinePerGram": 7,
+  "NicotinePerPortion": 3.5,
+  "Flavors": [
+    46
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9ecdd824eb55662059320"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:35:41.317Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:35:41",
+  "SnusId": "65b5f32ae363ce4c43a3a63b",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 4.8,
+  "Flavors": [
+    4,
+    36
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9ed33824eb55662059321"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:37:07.208Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:37:07",
+  "SnusId": "65b5f4d1e363ce4c43a3a63f",
+  "NicotinePerGram": 15.6,
+  "NicotinePerPortion": 10.9,
+  "Flavors": [
+    4,
+    36
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9eda3824eb55662059322"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:38:59.982Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:38:59",
+  "SnusId": "65b5f4f9e363ce4c43a3a640",
+  "NicotinePerGram": 14.3,
+  "NicotinePerPortion": 10,
+  "Flavors": [
+    4
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9ee1c824eb55662059323"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:41:00.793Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:41:00",
+  "SnusId": "65b5f5e5e363ce4c43a3a642",
+  "NicotinePerGram": 14.3,
+  "NicotinePerPortion": 10,
+  "Flavors": [
+    13,
+    14
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9eec4824eb55662059324"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:43:48.878Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:43:48",
+  "SnusId": "65b5fd94e363ce4c43a3a653",
+  "NicotinePerGram": 8.5,
+  "NicotinePerPortion": 6.8,
+  "Flavors": [
+    0
+  ],
+  "Format": 2
+},
+{
+  "_id": {
+    "$oid": "65e9f006824eb55662059325"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:49:10.507Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:49:10",
+  "SnusId": "65b5fee2e363ce4c43a3a656",
+  "NicotinePerGram": 7.5,
+  "NicotinePerPortion": 3,
+  "Flavors": [
+    9
+  ],
+  "Format": 3
+},
+{
+  "_id": {
+    "$oid": "65e9f02b824eb55662059326"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:49:47.940Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:49:47",
+  "SnusId": "65b5fee2e363ce4c43a3a656",
+  "NicotinePerGram": 7.5,
+  "NicotinePerPortion": 3,
+  "Flavors": [
+    9
+  ],
+  "Format": 3
+},
+{
+  "_id": {
+    "$oid": "65e9f05b824eb55662059327"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:50:35.543Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:50:35",
+  "SnusId": "65b5ffe9e363ce4c43a3a657",
+  "NicotinePerGram": 7.5,
+  "NicotinePerPortion": 3,
+  "Flavors": [
+    13
+  ],
+  "Format": 3
+},
+{
+  "_id": {
+    "$oid": "65e9f23a824eb55662059328"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:58:34.671Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:58:34",
+  "SnusId": "65b60011e363ce4c43a3a658",
+  "NicotinePerGram": 7.5,
+  "NicotinePerPortion": 3,
+  "Flavors": [
+    1
+  ],
+  "Format": 3
+},
+{
+  "_id": {
+    "$oid": "65e9f258824eb55662059329"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T17:59:04.761Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 17:59:04",
+  "SnusId": "65b6003be363ce4c43a3a659",
+  "NicotinePerGram": 7.5,
+  "NicotinePerPortion": 3,
+  "Flavors": [
+    16
+  ],
+  "Format": 3
+},
+{
+  "_id": {
+    "$oid": "65e9f2d0824eb5566205932a"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T18:01:04.910Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 18:01:04",
+  "SnusId": "65b60163e363ce4c43a3a65c",
+  "NicotinePerGram": 4,
+  "NicotinePerPortion": 1.6,
+  "Flavors": [
+    52
+  ],
+  "Format": 3
+},
+{
+  "_id": {
+    "$oid": "65e9f57f824eb5566205932b"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T18:12:31.821Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 18:12:31",
+  "SnusId": "65c895a8e17d4d92eaa34a48",
+  "NicotinePerGram": 12.4,
+  "NicotinePerPortion": 11.2,
+  "Flavors": [
+    0
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e9f6ce824eb5566205932c"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T18:18:06.128Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 18:18:06",
+  "SnusId": "65c896b4e17d4d92eaa34a4a",
+  "NicotinePerGram": 14,
+  "NicotinePerPortion": 12.6,
+  "Flavors": [
+    0
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e9f711824eb5566205932d"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T18:19:13.848Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 18:19:13",
+  "SnusId": "65c89728e17d4d92eaa34a4b",
+  "NicotinePerGram": 13,
+  "NicotinePerPortion": 9.3,
+  "Flavors": [
+    10
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e9f7a0824eb5566205932e"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T18:21:36.805Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 18:21:36",
+  "SnusId": "65c89807e17d4d92eaa34a4d",
+  "NicotinePerGram": 13,
+  "NicotinePerPortion": 11,
+  "Flavors": [
+    0
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e9f9e8824eb5566205932f"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T18:31:20.359Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 18:31:20",
+  "SnusId": "65c898bee17d4d92eaa34a50",
+  "NicotinePerGram": 12,
+  "NicotinePerPortion": 10.4,
+  "Flavors": [
+    0,
+    10
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e9fa5c824eb55662059330"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T18:33:16.296Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 18:33:16",
+  "SnusId": "65c8990ee17d4d92eaa34a51",
+  "NicotinePerGram": 10,
+  "NicotinePerPortion": 26.6,
+  "Flavors": [
+    0
+  ],
+  "Format": 4
+},
+{
+  "_id": {
+    "$oid": "65e9fb59824eb55662059331"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T18:37:29.277Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 18:37:29",
+  "SnusId": "65c89ae7e17d4d92eaa34a57",
+  "NicotinePerGram": 10,
+  "NicotinePerPortion": 8.8,
+  "Flavors": [
+    4
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e9fd09824eb55662059332"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T18:44:41.039Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 18:44:41",
+  "SnusId": "65c89b1ee17d4d92eaa34a58",
+  "NicotinePerGram": 8.5,
+  "NicotinePerPortion": 7.7,
+  "Flavors": [
+    0
+  ],
+  "Format": 0
+},
+{
+  "_id": {
+    "$oid": "65e9fd94824eb55662059334"
+  },
+  "CreatedAtUtc": {
+    "$date": "2024-03-07T18:47:00.073Z"
+  },
+  "StringCreatedAtUtc": "2024-03-07 18:47:00",
+  "SnusId": "65c89b4de17d4d92eaa34a59",
+  "NicotinePerGram": 8,
+  "NicotinePerPortion": 6.4,
+  "Flavors": [
+    3
+  ],
+  "Format": 0
+}]
