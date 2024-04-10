@@ -98,7 +98,7 @@ public class UtilityService : IUtilityService
         var minNicotine = avgNicotinePerPortion * 0.8;
         var maxNicotine = avgNicotinePerPortion * 1.2;
         var listOfAllSnus = _snuffRepository.FilterBy(x => x.SnuffInfo!.NicotinePerPortion >= minNicotine && x.SnuffInfo.NicotinePerPortion <= maxNicotine).ToList();
-        return listOfAllSnus;   
+        return listOfAllSnus;
     }
 
     public async void BuySnuff(string snuffId, string userId, DateTime purchaseDate)
@@ -118,7 +118,6 @@ public class UtilityService : IUtilityService
     public async void MakeLogOfUsage(string userId, string csId, int amount, DateTime date)
     {
         var currentSnuff = _currentsnuffRepository.FindOneAsync(x => x.UserId == userId && x.Id == csId).Result;
-        var snuffDefaultAmount = await _snuffService.GetSnuffAmountAsync(currentSnuff.SnusId);
         if (currentSnuff == null)
         {
             throw new Exception("Current snuff does not exist");
@@ -142,6 +141,7 @@ public class UtilityService : IUtilityService
             AmountUsed = amount,
             SnuffLogDate = date
         };
+        var snuffDefaultAmount = await _snuffService.GetSnuffAmountAsync(currentSnuff.SnusId);
         var log = currentSnuff.LogsOfBox.Append(snuffLog).ToArray();
         var replaceCurrentSnuff = new CurrentSnuff
         {
